@@ -7,9 +7,9 @@ const addUserRoutes = require('./routes/user-routes');
 const addImageRoutes = require('./routes/image-routes');
 
 const cors = require('cors');
-// const bodyParser = require('body-parser');
-// const cookieParser = require('cookie-parser');
-// const session = require('express-session');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 
 // const addUserRoutes = require('./routes/user-route')
@@ -22,14 +22,14 @@ app.use(cors({
 
 mongoService.connect();
 
-// app.use(bodyParser.json())
-// app.use(cookieParser());
-// app.use(session({
-//   secret: 'puki muki',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: false }
-// }))
+app.use(bodyParser.json())
+app.use(cookieParser());
+app.use(session({
+  secret: 'puki muki',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
 
 addUserRoutes(app);
 addImageRoutes(app);

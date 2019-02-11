@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="chosenImage">
+  <transition name="modal" v-if="chosenImage && postOwner">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -10,13 +10,19 @@
           <img :src="chosenImage.image" class="currImage" alt>
 
           <div class="modal-body">
-            <div class="user-info bold">
-              <img :src="postOwner.profilePic" alt class="profile-pic">
-              {{postOwner.userName}}
+            <div class="user-info bold-reg">
+              <img :src="postOwner.profilePic" alt class="profile-pic btn">
+              <h3 class="btn">
+                {{postOwner.userName}}
+                <span
+                  @click="emit('updateFollowers', postOwner._id)"
+                  :class="{ 'following': following==='notFollowing', 'displayNone':following === 'loggedInUserPage'}"
+                >{{followingStatus}}</span>
+              </h3>
             </div>
-           <div class="comments">
-             <user-comment v-for="comment in chosenImage.comments"  :comment="comment" ></user-comment>
-           </div>
+            <div class="comments">
+              <user-comment v-for="comment in chosenImage.comments" :comment="comment"></user-comment>
+            </div>
             <div class="likes-and-followers">
               <div class="icons">
                 <i class="far fa-heart btn btn"></i>
@@ -24,10 +30,8 @@
                 <i class="fas fa-share-alt btn"></i>
                 <i class="far fa-bookmark btn"></i>
               </div>
-              <p class="num-of-likes bold">{{chosenImage.likes.length+" "}}Likes</p>
-              <p
-                class="time-posted"
-              >{{ chosenImage.timePosted | moment }}</p>
+              <p class="num-of-likes bold-reg">{{chosenImage.likes.length+" "}}Likes</p>
+              <p class="time-posted">{{ chosenImage.timePosted | moment }}</p>
             </div>
             <div class="add-a-comment">
               <textarea placeholder="Add a comment....." name id></textarea>
@@ -42,65 +46,72 @@
 
 <script>
 import moment from "moment";
-import userComment from "./comment.vue"
+import userComment from "./comment.vue";
 export default {
   name: "view-image",
   props: ["chosenImage"],
   data() {
     return {
-      postOwner: {
-        firstName: null,
-        lastName: null,
-        profilePic: null,
-        userName: null
-      }
+      postOwner: null,
+      following: "following"
     };
   },
   created() {
-    console.log(this.chosenImage);
     //Todo - write a function that gets image and owner details
     // this.getImageById(this.postId);
-    this.getViewedPostOwner();
+    this.getViewedPostOwner(this.chosenImage.ownerId);
   },
-  computed: {
-    viewedPost() {
-      return this.$store.getters.viewedPost;
-    }
-  },
-  filters: {
-    moment: function(date) {
-      return moment(date)
-        .fromNow();
-  //TODO - write date if over certain date - to be decided
 
-    }
-  },
-  methods: {
-    // getImageById(postId) {
-    //   this.$store.dispatch({ type: "getPostById", id: postId });
-    // },
-    getViewedPostOwner() {
+    filters: {
+      moment: function(date) {
+        return moment(date).fromNow();
+        //TODO - write date if over certain date - to be decided
+      }
+    },
+  methods:{
+    getViewedPostOwner(userId) {
       this.$store
         .dispatch({
           type: "getUserById",
-          userId: this.chosenImage.ownerId
+          userId
         })
         .then(owner => {
-          console.log("cmp owner", owner);
-          this.postOwner.firstName = owner.firstName;
-          this.postOwner.lastName = owner.lastName;
-          this.postOwner.profilePic = owner.profilePic;
-          this.postOwner.userName = owner.userName;
+          this.postOwner = owner;
         });
     }
   },
-  components:{
+  computed: {
+        viewedPost() {
+      return this.$store.getters.viewedPost;
+        },
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    },
+    followingStatus() {
+      if (this.loggedInUser._id === this.postOwner._id) {
+        this.following = "loggedInUserPage";
+        return "Nothing";
+      } else if (this.loggedInUser.followees.includes(this.postOwner._id)) {
+        this.following = "following";
+
+        return "Following";
+      } else {
+        this.following = "notFollowing";
+
+        return "Follow";
+      }
+    }
+  },
+
+  components: {
     userComment
   }
 };
 </script>
 
 <style <style lang="scss" scoped>
-
+.following {
+  color: blue;
+}
 </style>
 

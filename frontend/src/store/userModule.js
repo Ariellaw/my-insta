@@ -10,7 +10,7 @@ export default {
             firstName : "Olivier",
             lastName : "Da silva",
             userName : "sadbird972",
-            followees : [],
+            followees : ["5c5fecdbd16a8d56eaca3c9b"],
             followers : [],
             profilePic : "https://randomuser.me/api/portraits/men/6.jpg",
             backgroundPic : "https://randomuser.me/api/portraits/men/6.jpg",
@@ -31,14 +31,7 @@ export default {
 
 
         updateFollowers(state, { users }) {
-            var visitedUser = users[0].value;
-            var loggedInUser = users[1].value;
-
-            var followees = loggedInUser.followees
-            state.loggedInUser.followees = followees;
-
-            var followers = visitedUser.followers
-            state.visitedUser.followers = followers;
+            console.log("followers test", users[0].value, users[1].value)
 
         },
         updateUserFavorites(state, { user }) {
@@ -94,8 +87,8 @@ export default {
                 })
         },
 
-        updateFollowers(context, { visitedUser, loggedInUser }) {
-            userServices.updateFollowers(visitedUser, loggedInUser)
+        updateFollowers(context, { followeeId }) {
+            userServices.updateFollowers(followeeId, context.state.loggedInUser._id)
                 .then(users => {
                     context.commit({ type: 'updateFollowers', users })
                 })

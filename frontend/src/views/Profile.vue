@@ -5,21 +5,27 @@
       <div class="loggedin-user-details">
         <div class="username">
           {{visitedUser.userName}}
-          <button class="edit-profile">Edit Profile</button>
-          <i class="fas fa-cog btn"></i>
+          <div class="right">
+            
+            <button v-if="this.loggedInUser._id === this.visitedUser._id" class="edit-profile-or-following">Edit Profile</button>
+            <button @click="updateFollowers(visitedUser._id)" v-else class="edit-profile-or-following">{{followingButton}}</button>
+            
+            <i class="fas fa-cog btn"></i>
+          </div>
         </div>
-        <div class="numbers">
+        <!-- <div class="numbers">
           <p>
-            <span class="bold" v-if="usersCreatedImages">{{usersCreatedImages.length+" "}}</span>posts
+            <span class="bold-reg" v-if="usersCreatedImages">{{usersCreatedImages.length+" "}}</span>posts
           </p>
           <p>
-            <span class="bold">{{visitedUser.followers.length+" "}}</span>followers
+            <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
           </p>
           <p>
-            <span class="bold">{{visitedUser.followees.length+" "}}</span>following
+            <span class="bold-reg">{{visitedUser.followees.length+" "}}</span>following
           </p>
-        </div>
-        <div class="fullname bold">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
+        </div> -->
+        <div class="fullname bold-reg">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
+        <div class="bio">{{visitedUser.bio}}</div>
       </div>
     </section>
     <section class="posts-container">
@@ -48,7 +54,12 @@
         </span>
       </div>
 
-      <viewImage v-if="showModal"  :chosenImage="chosenImage" @close="showModal = false"></viewImage>
+      <viewImage
+        @updateFollowers="updateFollowers"
+        v-if="showModal"
+        :chosenImage="chosenImage"
+        @close="showModal = false"
+      ></viewImage>
 
       <h1 v-if="isLoadingImages">Loading...</h1>
       <div v-else class="user-posts">
@@ -71,7 +82,6 @@ export default {
   name: "user-profile",
   data() {
     return {
-      visitedUser: null,
       displayedSection: "album",
       showModal: false,
       chosenImage: null
@@ -87,6 +97,9 @@ export default {
     displayChosenImage(image) {
       this.showModal = true;
       this.chosenImage = image;
+    },
+    updateFollowers(followeeId) {
+      this.$store.dispatch({ type: "updateFollowers", followeeId });
     }
   },
   computed: {
@@ -95,13 +108,22 @@ export default {
     },
     usersCreatedImages() {
       return this.$store.getters.visitedUserImages;
+    },
+    followingButton() {
+      if (this.loggedInUser.followees.includes(this.visitedUser._id)) {
+        return "Following";
+      } else return "Follow";
+    },
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    },
+    visitedUser() {
+      return this.$store.getters.visitedUser;
     }
   },
   created() {
     const userId = this.$route.params.userId;
-    this.$store.dispatch({ type: "getVisitedUser", userId }).then(res => {
-      this.visitedUser = res;
-    });
+    this.$store.dispatch({ type: "getVisitedUser", userId });
     this.getVisitedUserImages(userId);
   },
   components: {
@@ -111,85 +133,4 @@ export default {
 </script>
 
 <style lang="scss" >
-// $darker-layout-clr: darken(#fafafa, 2%);
-// $lighter: #fafafa;
-// .profile {
-//   display: flex;
-//   flex-direction: column;
-//   height: 100vh;
-//   width: 70%;
-//   margin: 0 auto;
-//   .profile-pic-container {
-//     height: 30%;
-//     padding: 4rem;
-//     display: flex;
-//     align-items: center;
-//     justify-content: flex-start;
-
-//     .profile-pic {
-//       border-radius: 50%;
-//       border: 1px solid black;
-//       height: 15rem;
-//       margin-right: 10rem;
-//     }
-//     .loggedin-user-details {
-//       display: flex;
-//       flex-direction: column;
-//       line-height: 3.5rem;
-//       width: 40%;
-//       div {
-//         display: flex;
-//         flex-direction: row;
-//         justify-content: space-between;
-//       }
-//       .username {
-//         font-size: 2.5rem;
-//         .edit-profile {
-//           border-radius: 11%;
-//           padding: 1rem;
-//           height: 34px;
-//           background-color: $darker-layout-clr;
-//           border: 1px solid darkgray;
-//           width: 89px;
-//           height: 30px;
-//         }
-//       }
-//       .numbers {
-//         font-size: 1.5rem;
-//       }
-//       .fullname {
-//         font-size: 2rem;
-//         font-family: monst-bold;
-//       }
-//     }
-//   }
-//   .posts-container {
-//     color: darkgray;
-//     height: 70%;
-//     .filter-nav {
-//       border-top: 1px solid lightgray;
-//       display: flex;
-//       justify-content: center;
-//       span {
-//         margin: 1rem 9rem;
-//         font-size: 1.5rem;
-//       }
-//     }
-//     .user-posts {
-//       display: grid;
-//       grid-template-columns: 33% 33% 33%;
-//       grid-gap: 1rem;
-//       padding: 1rem;
-
-//       .visitedUserImg {
-//         height: 300px;
-//         object-fit: cover;
-//         width: 100%;
-//       }
-//     }
-//     .chosen-filter {
-//       color: black;
-//     }
-//   }
-// }
 </style>

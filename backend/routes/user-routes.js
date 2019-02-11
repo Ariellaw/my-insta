@@ -11,6 +11,15 @@ function addUserRoutes(app) {
                 return res.json(user);
             })
     })
+
+    app.put(`${BASE}/updateFollowers`, (req,res) =>{
+        const followeeId = req.body.followeeId;
+        const followerId = req.body.followerId;
+            userService.updateFollowers(followeeId, followerId)
+                .then(users => {
+                    return res.json(users);
+                })
+    })
 }
 
 module.exports = addUserRoutes;

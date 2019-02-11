@@ -30,14 +30,14 @@
         }
         .username {
           font-size: 2.5rem;
-          .edit-profile {
+          .edit-profile-or-following {
             border-radius: 11%;
-            padding: 1rem;
-            height: 34px;
-            background-color: $darker-layout-clr;
-            border: 1px solid $darker-font-color;
+            background-color: whitesmoke;
+            border: 1px solid darkgray;
             width: 89px;
             height: 30px;
+            margin-right: 1rem;
+        
           }
         }
         .numbers {
@@ -45,6 +45,12 @@
         }
         .fullname {
           font-size: 2rem;
+        }
+        .bio{
+          font-size: 1.5rem;
+          line-height: 1;
+          margin-top: 1rem;
+          font-weight: 500;
         }
       }
     }

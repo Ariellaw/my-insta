@@ -24,7 +24,6 @@ export default {
             state.isLoadingImages = isLoading;
         },
         setVisitedUserImages(state, {images}){
-            console.log(images);
             state.visitedUserImages = images;
         },
         setViewedPost(state, {post}){

@@ -32,7 +32,7 @@
         <i class="fas fa-user-friends btn"></i>
         <i class="fas fa-comment btn"></i>
         <i class="far fa-heart btn"></i>
-        <i class="far fa-user btn"></i>
+        <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i>
       </div>
       <uploadPost v-if="showModal" :post="post.file" @close="showModal = false"></uploadPost>
     </div>
@@ -66,7 +66,12 @@ export default {
         .then(url => {
           this.post.file = url;
         });
-    }
+    },
+    goToLoggedInUserProfile() {
+      var loggedInUserId = this.loggedInUser._id;
+      this.$router.push(`/user/${loggedInUserId}`);
+      this.$router.go(); 
+    },
   },
   computed:{
      loggedInUser() {
