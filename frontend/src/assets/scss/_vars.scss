@@ -1,3 +1,23 @@
-$lighter-background-color:#fafafa;
+$lighter-layout-color:#fafafa;
 $darker-layout-clr: darken(#fafafa, 2%);
-$lighter: #fafafa;
+$darker-font-color:darkgray;
+$lighter-font-color: lightgray;
+
+
+@mixin popup-button{
+    float: right;
+    background-color: rgba(0, 0, 0, 0);
+    height: 70px;
+    width: 70px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: white;
+    font-size:5rem;
+    position: relative;
+}
+
+@mixin textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    resize: none;
+}

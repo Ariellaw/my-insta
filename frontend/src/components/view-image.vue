@@ -10,7 +10,7 @@
           <img :src="chosenImage.image" class="currImage" alt>
 
           <div class="modal-body">
-            <div class="user-info">
+            <div class="user-info bold">
               <img :src="postOwner.profilePic" alt class="profile-pic">
               {{postOwner.userName}}
             </div>
@@ -24,7 +24,7 @@
                 <i class="fas fa-share-alt btn"></i>
                 <i class="far fa-bookmark btn"></i>
               </div>
-              <p class="num-of-likes">{{chosenImage.likes.length+" "}}Likes</p>
+              <p class="num-of-likes bold">{{chosenImage.likes.length+" "}}Likes</p>
               <p
                 class="time-posted"
               >{{ chosenImage.timePosted | moment }}</p>
@@ -101,143 +101,6 @@ export default {
 </script>
 
 <style <style lang="scss" scoped>
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease;
-}
 
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  color: black;
-  font-size: 1.5rem;
-  width: 1100px;
-  max-width: 95vw;
-  height: 700px;
-  margin: 0px auto;
-  display: flex;
-  flex-direction: row;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
-}
-
-.modal-default-button {
-  float: right;
-  background-color: rgba(0, 0, 0, 0);
-  height: 70px;
-  width: 70px;
-  border: 1px solid rgba(0, 0, 0, 0);
-  color: white;
-  font-size: 5rem;
-  position: relative;
-}
-
-.currImage {
-  width: 65%;
-  height: auto;
-  object-fit: cover;
-}
-.modal-body {
-  height: 100%;
-  width: 35%;
-  padding: 1rem;
-  div {
-    display: flex;
-    padding: 0.5rem;
-  }
-  .user-info {
-    font-family: monst-bold;
-    padding: 1rem;
-    height: 10%;
-    justify-content: flex-start;
-    align-items: center;
-    border-bottom: 1px solid lightgray;
-
-    .profile-pic {
-      height: 40px;
-      width: 40px;
-      border-radius: 50%;
-      flex-direction: row;
-      margin: 1rem;
-    }
-  }
-  .comments {
-    height: 63%;
-    border-bottom: 1px solid lightgray;
-    flex-direction: column;
-    overflow-y: auto;
-
-  }
-  .likes-and-followers {
-    height: 15%;
-    border-bottom: 1px solid lightgray;
-    display: flex;
-    flex-direction: column;
-    .icons {
-      width: 100%;
-      margin-bottom: 0.5rem;
-
-      i {
-        font-size: 2.5rem;
-        margin: 0.5rem;
-      }
-      .fa-bookmark {
-        float: right;
-        //ToDo - put on right side of box
-      }
-    }
-    .num-of-likes {
-      font-family: monst-bold;
-      margin-bottom: 0.5rem;
-    }
-    .time-posted {
-      color: darkgray;
-    }
-  }
-  .add-a-comment {
-    height: 12%;
-    textarea {
-      width: 100%;
-      height: 100%;
-      border: none;
-      resize: none;
-    }
-  }
-  // }
-}
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
 </style>
 

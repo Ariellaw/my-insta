@@ -10,7 +10,7 @@
         </div>
         <div class="numbers">
           <p>
-            <span class="bold">2</span>posts
+            <span class="bold" v-if="usersCreatedImages">{{usersCreatedImages.length+" "}}</span>posts
           </p>
           <p>
             <span class="bold">{{visitedUser.followers.length+" "}}</span>followers
@@ -19,7 +19,7 @@
             <span class="bold">{{visitedUser.followees.length+" "}}</span>following
           </p>
         </div>
-        <div class="fullname">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
+        <div class="fullname bold">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
       </div>
     </section>
     <section class="posts-container">
@@ -110,86 +110,86 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-$darker-layout-clr: darken(#fafafa, 2%);
-$lighter: #fafafa;
-.profile {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 70%;
-  margin: 0 auto;
-  .profile-pic-container {
-    height: 30%;
-    padding: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+<style lang="scss" >
+// $darker-layout-clr: darken(#fafafa, 2%);
+// $lighter: #fafafa;
+// .profile {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100vh;
+//   width: 70%;
+//   margin: 0 auto;
+//   .profile-pic-container {
+//     height: 30%;
+//     padding: 4rem;
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
 
-    .profile-pic {
-      border-radius: 50%;
-      border: 1px solid black;
-      height: 15rem;
-      margin-right: 10rem;
-    }
-    .loggedin-user-details {
-      display: flex;
-      flex-direction: column;
-      line-height: 3.5rem;
-      width: 40%;
-      div {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-      .username {
-        font-size: 2.5rem;
-        .edit-profile {
-          border-radius: 11%;
-          padding: 1rem;
-          height: 34px;
-          background-color: $darker-layout-clr;
-          border: 1px solid darkgray;
-          width: 89px;
-          height: 30px;
-        }
-      }
-      .numbers {
-        font-size: 1.5rem;
-      }
-      .fullname {
-        font-size: 2rem;
-        font-family: monst-bold;
-      }
-    }
-  }
-  .posts-container {
-    color: darkgray;
-    height: 70%;
-    .filter-nav {
-      border-top: 1px solid lightgray;
-      display: flex;
-      justify-content: center;
-      span {
-        margin: 1rem 9rem;
-        font-size: 1.5rem;
-      }
-    }
-    .user-posts {
-      display: grid;
-      grid-template-columns: 33% 33% 33%;
-      grid-gap: 1rem;
-      padding: 1rem;
+//     .profile-pic {
+//       border-radius: 50%;
+//       border: 1px solid black;
+//       height: 15rem;
+//       margin-right: 10rem;
+//     }
+//     .loggedin-user-details {
+//       display: flex;
+//       flex-direction: column;
+//       line-height: 3.5rem;
+//       width: 40%;
+//       div {
+//         display: flex;
+//         flex-direction: row;
+//         justify-content: space-between;
+//       }
+//       .username {
+//         font-size: 2.5rem;
+//         .edit-profile {
+//           border-radius: 11%;
+//           padding: 1rem;
+//           height: 34px;
+//           background-color: $darker-layout-clr;
+//           border: 1px solid darkgray;
+//           width: 89px;
+//           height: 30px;
+//         }
+//       }
+//       .numbers {
+//         font-size: 1.5rem;
+//       }
+//       .fullname {
+//         font-size: 2rem;
+//         font-family: monst-bold;
+//       }
+//     }
+//   }
+//   .posts-container {
+//     color: darkgray;
+//     height: 70%;
+//     .filter-nav {
+//       border-top: 1px solid lightgray;
+//       display: flex;
+//       justify-content: center;
+//       span {
+//         margin: 1rem 9rem;
+//         font-size: 1.5rem;
+//       }
+//     }
+//     .user-posts {
+//       display: grid;
+//       grid-template-columns: 33% 33% 33%;
+//       grid-gap: 1rem;
+//       padding: 1rem;
 
-      .visitedUserImg {
-        height: 300px;
-        object-fit: cover;
-        width: 100%;
-      }
-    }
-    .chosen-filter {
-      color: black;
-    }
-  }
-}
+//       .visitedUserImg {
+//         height: 300px;
+//         object-fit: cover;
+//         width: 100%;
+//       }
+//     }
+//     .chosen-filter {
+//       color: black;
+//     }
+//   }
+// }
 </style>

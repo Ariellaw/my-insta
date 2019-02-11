@@ -5,11 +5,22 @@ export default {
     state: {
 
         visitedUser: null,
-
+        loggedInUser:{
+            _id : "5c5fecdbd16a8d56eaca3c96",
+            firstName : "Olivier",
+            lastName : "Da silva",
+            userName : "sadbird972",
+            followees : [],
+            followers : [],
+            profilePic : "https://randomuser.me/api/portraits/men/6.jpg",
+            backgroundPic : "https://randomuser.me/api/portraits/men/6.jpg",
+            email : "olivier.dasilva@example.com"
+        }
 
     },
     getters: {
         visitedUser: state => { return state.visitedUser },
+        loggedInUser: state => { return state.loggedInUser }
 
 
     },
@@ -54,24 +65,10 @@ export default {
 
 
 
-
-        // getVisitedUser(context, { userId }) {
-        //     // context.commit({ type: 'setIsLoading', isLoading: true })
-        //     var user = userServices.getVisitedUser(userId);
-        //     return Promise.resolve(user);
-        //         // .then(data => {
-        //         //     context.commit({ type: 'getVisitedUser', data })
-        //         //     context.commit({ type: 'setIsLoading', isLoading: false })
-        //         //     return data;
-        //         // })
-        // },
         getVisitedUser(context, { userId }) {
-            // context.commit({ type: 'setIsLoading', isLoading: true })
-
             return userServices.getUserById(userId)
                 .then(user => {
                     context.commit({ type: 'getVisitedUser', user })
-                    // context.commit({ type: 'setIsLoading', isLoading: false })
                     return user;
                 })
         },

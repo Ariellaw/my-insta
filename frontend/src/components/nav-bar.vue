@@ -65,8 +65,12 @@ export default {
         })
         .then(url => {
           this.post.file = url;
-          // this.updateUserDetails();
         });
+    }
+  },
+  computed:{
+     loggedInUser() {
+      return this.$store.getters.loggedInUser;
     }
   },
   components: {
@@ -76,35 +80,6 @@ export default {
 </script>
 
  <style lang="scss" scoped>
-.image-upload > input {
-  display: none;
-}
 
-.main-nav-bar {
-  height: 8rem;
-  border-bottom: 1px solid lightgray;
-  border-top: 1px solid darkgray;
-  background-color: #fafafa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2.5rem;
-
-  .nav-buttons-container {
-    width: 70%;
-    max-width: 115rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    .menu-icons {
-      width: 18rem;
-      display: flex;
-      justify-content: space-between;
-    }
-    .instagram-logo {
-      font-family: lily;
-    }
-  }
-}
 </style>
 
