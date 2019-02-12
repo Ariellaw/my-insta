@@ -6,14 +6,25 @@
         <div class="username">
           {{visitedUser.userName}}
           <div class="right">
-            
-            <button v-if="this.loggedInUser._id === this.visitedUser._id" class="edit-profile-or-following">Edit Profile</button>
-            <button @click="updateFollowers(visitedUser._id)" v-else class="edit-profile-or-following">{{followingButton}}</button>
+            <button
+              v-if="loggedInUser && loggedInUser._id === visitedUser._id"
+              class="edit-profile-or-following"
+            >Edit Profile</button>
+            <button
+              @click="removeFollowers(visitedUser._id)"
+              v-else-if="followingVisitedUser"
+              class="edit-profile-or-following"
+            >Following</button>
+            <button
+              @click="addFollowers(visitedUser._id)"
+              v-else
+              class="edit-profile-or-following"
+            >Follow</button>
             
             <i class="fas fa-cog btn"></i>
           </div>
         </div>
-        <!-- <div class="numbers">
+        <div class="numbers">
           <p>
             <span class="bold-reg" v-if="usersCreatedImages">{{usersCreatedImages.length+" "}}</span>posts
           </p>
@@ -23,7 +34,7 @@
           <p>
             <span class="bold-reg">{{visitedUser.followees.length+" "}}</span>following
           </p>
-        </div> -->
+        </div>
         <div class="fullname bold-reg">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
         <div class="bio">{{visitedUser.bio}}</div>
       </div>
@@ -33,14 +44,14 @@
         <span
           class="btn"
           @click="changeFilter('album')"
-          :class="{ 'chosen-filter': displayedSection==='album'}"
+          :class="{ 'chosen-filter': filter==='album'}"
         >
           <i class="far fa-images"></i> Posts
         </span>
         <span
           class="btn"
           @click="changeFilter('favorites')"
-          :class="{ 'chosen-filter': displayedSection==='favorites'}"
+          :class="{ 'chosen-filter': filter==='favorites'}"
         >
           <i class="far fa-star"></i> Favorites
         </span>
@@ -48,7 +59,7 @@
         <span
           class="btn"
           @click="changeFilter('tagged')"
-          :class="{ 'chosen-filter': displayedSection==='tagged'}"
+          :class="{ 'chosen-filter': filter==='tagged'}"
         >
           <i class="fas fa-camera-retro"></i> Tagged
         </span>
@@ -82,14 +93,15 @@ export default {
   name: "user-profile",
   data() {
     return {
-      displayedSection: "album",
+      filter: "album",
       showModal: false,
-      chosenImage: null
+      chosenImage: null,
+      loggedInUserId: "5c5fecdbd16a8d56eaca3c96"
     };
   },
   methods: {
     changeFilter(filter) {
-      this.displayedSection = filter;
+      this.filter = filter;
     },
     getVisitedUserImages(userId) {
       this.$store.dispatch({ type: "getVisitedUserImages", userId });
@@ -98,8 +110,12 @@ export default {
       this.showModal = true;
       this.chosenImage = image;
     },
-    updateFollowers(followeeId) {
-      this.$store.dispatch({ type: "updateFollowers", followeeId });
+
+    addFollowers(followeeId) {
+      this.$store.dispatch({ type: "addFollowers", followeeId });
+    },
+    removeFollowers(followeeId) {
+      this.$store.dispatch({ type: "removeFollowers", followeeId });
     }
   },
   computed: {
@@ -109,10 +125,10 @@ export default {
     usersCreatedImages() {
       return this.$store.getters.visitedUserImages;
     },
-    followingButton() {
-      if (this.loggedInUser.followees.includes(this.visitedUser._id)) {
-        return "Following";
-      } else return "Follow";
+    followingVisitedUser() {
+      if (this.loggedInUser && this.loggedInUser.followees.includes(this.visitedUser._id)) {
+        return true;
+      } else return false;
     },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
@@ -125,6 +141,7 @@ export default {
     const userId = this.$route.params.userId;
     this.$store.dispatch({ type: "getVisitedUser", userId });
     this.getVisitedUserImages(userId);
+    this.$store.dispatch({type:"getLoggedInUser", userId:this.loggedInUserId});
   },
   components: {
     viewImage

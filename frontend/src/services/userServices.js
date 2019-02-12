@@ -16,7 +16,22 @@ function updateFollowers(followeeId, followerId){
    })
 }
 
+function addFollowers(followeeId, followerId){
+    return axios.put(`${BASE_URL}/${followeeId}/followers`, {followeeId, followerId})
+    .then(res => {
+        return res.data
+    })
+}
+function removeFollowers(followeeId, followerId){
+
+    return axios.delete(`${BASE_URL}/${followeeId}/${followerId}/followers`)
+    .then(res => {
+        return res.data
+    })
+}
 export default {
     getUserById,
-    updateFollowers
+    updateFollowers,
+    addFollowers,
+    removeFollowers
 }

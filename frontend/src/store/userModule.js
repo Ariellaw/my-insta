@@ -5,17 +5,7 @@ export default {
     state: {
 
         visitedUser: null,
-        loggedInUser:{
-            _id : "5c5fecdbd16a8d56eaca3c96",
-            firstName : "Olivier",
-            lastName : "Da silva",
-            userName : "sadbird972",
-            followees : ["5c5fecdbd16a8d56eaca3c9b"],
-            followers : [],
-            profilePic : "https://randomuser.me/api/portraits/men/6.jpg",
-            backgroundPic : "https://randomuser.me/api/portraits/men/6.jpg",
-            email : "olivier.dasilva@example.com"
-        }
+        loggedInUser: null,
 
     },
     getters: {
@@ -28,18 +18,20 @@ export default {
         setIsLoading(state, { isLoading }) {
             state.isLoadingSamples = isLoading;
         },
-
-
-        updateFollowers(state, { users }) {
-            console.log("followers test", users[0].value, users[1].value)
-
+        updateUsers(state, {users}){
+            state.loggedInUser = users[1].value;
+            state.visitedUser =  users[0].value;
         },
+        setLoggedInUser(state, { user }) {
+            state.loggedInUser = user;
+        },
+
         // updateUserFavorites(state, { user }) {
         //     var favorites = user.favorites;
         //     state.loggedInUser.favorites = favorites;
         // },
 
-        getVisitedUser(state, { user }) {
+        setVisitedUser(state, { user }) {
             state.visitedUser = user;
             // state.visitedUserSamples = data.samples;
             // state.visitedUserFavorites = data.favorites;
@@ -61,7 +53,14 @@ export default {
         getVisitedUser(context, { userId }) {
             return userServices.getUserById(userId)
                 .then(user => {
-                    context.commit({ type: 'getVisitedUser', user })
+                    context.commit({ type: 'setVisitedUser', user })
+                    return user;
+                })
+        },
+        getLoggedInUser(context, { userId }) {
+            return userServices.getUserById(userId)
+                .then(user => {
+                    context.commit({ type: 'setLoggedInUser', user })
                     return user;
                 })
         },
@@ -71,6 +70,21 @@ export default {
                     return user
                 })
         },
+        addFollowers(context, { followeeId }) {
+            return userServices.addFollowers(followeeId, context.state.loggedInUser._id)
+                .then(users => {
+                    context.commit({ type: 'updateUsers', users })
+                    return users;
+                })
+        },
+        removeFollowers(context, { followeeId }) {
+
+            return userServices.removeFollowers(followeeId, context.state.loggedInUser._id)
+                .then(users => {
+                    context.commit({ type: 'updateUsers', users })
+                    return users;
+                })
+        }
 
         // signUp(context, userDetails) {
         //     return userServices.registration(userDetails)
@@ -87,34 +101,29 @@ export default {
         //         })
         // },
 
-        updateFollowers(context, { followeeId }) {
-            userServices.updateFollowers(followeeId, context.state.loggedInUser._id)
-                .then(users => {
-                    context.commit({ type: 'updateFollowers', users })
-                })
-        },
-    //     addSamplesToFavorites(context, { sampleId, userId }) {
 
-    //         userServices.addSamplesToFavorites(sampleId, userId)
-    //             .then(user => {
-    //                 context.commit({ type: 'updateUserFavorites', user })
-    //             })
-    //     },
-    //     removeSamplesFromFavorites(context, { sampleId, userId }) {
+        //     addSamplesToFavorites(context, { sampleId, userId }) {
 
-    //         userServices.removeSamplesFromFavorites(sampleId, userId)
-    //             .then(user => {
-    //                 context.commit({ type: 'updateUserFavorites', user })
-    //             })
-    //     },
-    //     updateUserDetails(context, { newUserDetails, loggedInUserId }) {
+        //         userServices.addSamplesToFavorites(sampleId, userId)
+        //             .then(user => {
+        //                 context.commit({ type: 'updateUserFavorites', user })
+        //             })
+        //     },
+        //     removeSamplesFromFavorites(context, { sampleId, userId }) {
 
-    //         return userServices.updateUserDetails(newUserDetails, loggedInUserId)
-    //             .then(newUser => {
-    //                 context.commit({ type: 'updateUserDetails', newUser });
-    //                 return newUser
-    //             })
-    //     }
+        //         userServices.removeSamplesFromFavorites(sampleId, userId)
+        //             .then(user => {
+        //                 context.commit({ type: 'updateUserFavorites', user })
+        //             })
+        //     },
+        //     updateUserDetails(context, { newUserDetails, loggedInUserId }) {
+
+        //         return userServices.updateUserDetails(newUserDetails, loggedInUserId)
+        //             .then(newUser => {
+        //                 context.commit({ type: 'updateUserDetails', newUser });
+        //                 return newUser
+        //             })
+        //     }
 
     }
 

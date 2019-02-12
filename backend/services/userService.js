@@ -6,53 +6,99 @@ const ObjectId = require('mongodb').ObjectId;
 function getById(userId) {
     const _id = new ObjectId(userId);
     return mongoService.connect()
-        .then(db =>
-            db.collection(userDb).findOne({ "_id": _id })
-        )
-}
-function updateFollowers(followeeId, followerId) {
-    var prms = [];
-    var followers = getUpdateFollowers(followeeId, followerId, "followers");
-    var followees = getUpdateFollowers(followerId, followeeId, "followees");
-
-
-    return mongoService.connect()
         .then(db => {
-            const collection = db.collection(userDb);
-            prms.push(collection.findOneAndUpdate({ "_id": ObjectId(followeeId) },
-                { $set: { 'followers': followers } },
-                { returnOriginal: false }))
-            prms.push(collection.findOneAndUpdate({ "_id": ObjectId(followerId) },
-                { $set: { 'followees': followees } },
-                { returnOriginal: false }))
-                return Promise.all(prms)
-        })
-        .then(results => {
-            return results;
+            db.collection(userDb).findOne({ "_id": _id })
         })
 }
 
-function getFollowers()
+//TODO -mongoDB connection pool
 
-// function getUpdateFollowers(user1Id, user2Id, listToCheck) {
+function addFollowers(followeeId, followerId) {
 
-//      getById(user1Id).then(user1 => {
+    var prms = [];
+    prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
+        if (followerIds.findIndex(id => id === followerId) === -1) {
+            followerIds.push(followerId);
+        }
+        return mongoService.connect()
+            .then(db => {
+                const collection = db.collection(userDb);
+                const newLocal = collection.findOneAndUpdate({ "_id": ObjectId(followeeId) },
+                    { $set: { 'followers': followerIds } }, { returnOriginal: false });
+                return newLocal;
 
-//         if (user1[listToCheck].includes(user2Id)) {
-//             var idx = user1[listToCheck].findIndex(user => user._id === user2Id);
-//             user1[listToCheck].splice(idx, 1);
+            })
+    }))
+    prms.push(_getListProperty(followerId, 'followees').then(followeeIds => {
 
-//         } else {
-//             user1[listToCheck].push(user2Id);
-//         }
-//          user1[listToCheck];
-        
-//     })
+        if (followeeIds.findIndex(id => id === followeeId) === -1) {
+            followeeIds.push(followeeId);
 
-// }
+        }
+        return mongoService.connect()
+            .then(db => {
+                const collection = db.collection(userDb);
+                const newLocal = collection.findOneAndUpdate({ "_id": ObjectId(followerId) },
+                    { $set: { 'followees': followeeIds } }, { returnOriginal: false });
+                return newLocal;
+
+            })
+    }))
+    return Promise.all(prms);
+}
+function removeFollowers(followeeId, followerId) {
+    var prms = [];
+    prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
+        var idx = followerIds.findIndex(id => {
+            return id === followerId
+        });
+
+        if (idx !== -1) {
+            followerIds.splice(idx, 1);
+        }
+
+        return mongoService.connect()
+            .then(db => {
+                const collection = db.collection(userDb);
+                const newLocal = collection.findOneAndUpdate({ "_id": ObjectId(followeeId) },
+                    { $set: { 'followers': followerIds } }, { returnOriginal: false });
+                return newLocal;
+
+            })
+    }))
+    prms.push(_getListProperty(followerId, 'followees').then(followeeIds => {
+
+        var idx = followeeIds.findIndex(id => {
+            return id === followeeId
+        });
+
+        if (idx !== -1) {
+            followeeIds.splice(idx, 1);
+
+        }
+        return mongoService.connect()
+            .then(db => {
+                const collection = db.collection(userDb);
+                const newLocal = collection.findOneAndUpdate({ "_id": ObjectId(followerId) },
+                    { $set: { 'followees': followeeIds } }, { returnOriginal: false });
+                return newLocal;
+
+            })
+    }))
+    return Promise.all(prms);
+}
+
+function _getListProperty(userId, listName) {
+    return getById(userId).then(user => {
+        return user[listName];
+    })
+        .then(res => { return res; })
+}
+
+
 module.exports = {
     getById,
-    updateFollowers,
-    getUpdateFollowers
+    removeFollowers,
+    addFollowers
 
 }
