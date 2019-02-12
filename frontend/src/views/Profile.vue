@@ -108,6 +108,7 @@ export default {
     displayViewedImage(image) {
       this.showModal = true;
       this.viewedImage = image;
+       this.$store.dispatch({ type: "setViewedImage", image });
     },
 
     addFollowers(followeeId) {

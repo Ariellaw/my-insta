@@ -28,7 +28,11 @@
               </h3>
             </div>
             <div class="comments">
-              <user-comment v-for="comment in viewedImage.comments" :comment="comment" ></user-comment>
+              <user-comment
+                v-for="comment in viewedImageComments"
+                :comment="comment"
+                :key="comment.id"
+              ></user-comment>
             </div>
             <div class="likes-and-followers">
               <div class="icons">
@@ -41,7 +45,12 @@
               <p class="time-posted">{{ viewedImage.timePosted | moment }}</p>
             </div>
             <div class="add-a-comment">
-              <textarea placeholder="Add a comment....." name  v-on:keyup.enter="addUserComment(userComment, viewedImage._id, loggedInUserId)" v-model="userComment"></textarea>
+              <textarea
+                placeholder="Add a comment....."
+                name
+                v-on:keyup.enter="addUserComment(userComment, viewedImage._id, loggedInUserId)"
+                v-model="userComment"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -60,12 +69,11 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      userComment:null,
+      userComment: null
     };
   },
   created() {
     this.getViewedImageOwner(this.viewedImage.ownerId);
-
   },
 
   filters: {
@@ -88,17 +96,16 @@ export default {
       });
     },
 
-    addUserComment(userComment, imageId, commentWriterId ){
-            this.$store.dispatch({
+    addUserComment(userComment, imageId, commentWriterId) {
+      this.$store.dispatch({
         type: "addUserComment",
         userComment,
         imageId,
         commentWriterId
-      });
+      }).then(()=>this.userComment = null)
     }
   },
   computed: {
-
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -114,6 +121,9 @@ export default {
       return {
         displayNone: this.loggedInUserId === this.imageOwner._id
       };
+    },
+    viewedImageComments() {
+      return this.$store.getters.viewedImageComments;
     }
   },
   components: {

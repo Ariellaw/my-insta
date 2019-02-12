@@ -12,14 +12,26 @@ function getImagesByUserId(userId) {
         )
 }
 function getImageById(imageId) {
-    console.log("backend", imageId)
     const _id = new ObjectId(imageId);
     return mongoService.connect()
         .then(db =>
             db.collection(imagesDb).findOne({ "_id": _id })
         )
 }
+function addComments(imageId, userComment){
+    const _id = new ObjectId(imageId);
+    return getImageById(imageId).then(image =>{
+        var comments = image.comments;
+        comments.push(userComment);
+   return mongoService.connect()
+    .then(db =>
+            db.collection(imagesDb).findOneAndUpdate({ "_id": _id },
+            { $set: { 'comments': comments } }, { returnOriginal: false }))
+
+        })
+}
 module.exports = {
     getImagesByUserId,
-    getImageById
+    getImageById,
+    addComments
 }

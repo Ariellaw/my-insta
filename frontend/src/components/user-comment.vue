@@ -15,6 +15,7 @@ export default {
     };
   },
   created() {
+    console.log("comment", this.comment)
     this.$store.dispatch({ type: "getUserById", userId:this.comment.commentOwnerId }).then(res => {
       this.commentOwner = res;
     });

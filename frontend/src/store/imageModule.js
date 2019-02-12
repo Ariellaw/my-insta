@@ -6,59 +6,65 @@ import userServices from '../services/userServices.js'
 
 export default {
 
-    state:{
-        pictures:null,
+    state: {
+        pictures: null,
         isLoadingImages: false,
-        visitedUserImages:null,
-        // viewedImage:null,
-        viewedImageOwner:null
+        visitedUserImages: null,
+        viewedImage: null,
+        viewedImageOwner: null,
+        viewedImageComments: null,
     },
-    getters:{
+    getters: {
         visitedUserImages: state => { return state.visitedUserImages },
-        isLoadingImages: state =>  {return state.isLoadingImages},
-        viewedImage: state =>  {return state.viewedImage},
-        viewedImageOwner:state => {return state.viewedImageOwner}
+        isLoadingImages: state => { return state.isLoadingImages },
+        viewedImage: state => { return state.viewedImage },
+        viewedImageOwner: state => { return state.viewedImageOwner },
+        viewedImageComments: state => { return state.viewedImage.comments }
+
 
 
     },
-    mutations:{
+    mutations: {
         setIsLoading(state, { isLoading }) {
             state.isLoadingImages = isLoading;
         },
-        setVisitedUserImages(state, {images}){
+        setVisitedUserImages(state, { images }) {
             state.visitedUserImages = images;
         },
-        setViewedImage(state, {image}){
+        setViewedImage(state, { image }) {
             state.viewedImage = image;
         },
-        setVisitedImageOwner(state, {user}){
+        setVisitedImageOwner(state, { user }) {
             state.viewedImageOwner = user;
+        },
+        setUserCommentsAndImage(state, { res }) {
+            var image = res.value;
+            state.viewedImage = image;
+            state.viewedImageComments = image.comments;
+            console.log('actions', image.comments)
         }
     },
-    actions:{
-        getVisitedUserImages(context, {userId}) {
+    actions: {
+        getVisitedUserImages(context, { userId }) {
             context.commit({ type: 'setIsLoading', isLoading: true })
 
             return imageServices.getUserImages(userId)
                 .then(images => {
                     context.commit({ type: 'setIsLoading', isLoading: false })
-                    context.commit({type:'setVisitedUserImages', images})
+                    context.commit({ type: 'setVisitedUserImages', images })
                     return images;
                 })
         },
-        getViewedImageOwner(context, {userId}){
+        getViewedImageOwner(context, { userId }) {
             return userServices.getUserById(userId)
-            .then(user => {
-                context.commit({type:'setVisitedImageOwner', user})
-            })
+                .then(user => {
+                    context.commit({ type: 'setVisitedImageOwner', user })
+                })
         },
-        getViewedImage(context, {imageId}){
-            return imageServices.getImageById(imageId)
-            .then(image => {
-                context.commit({type:'setViewedImage', image})
-                console.log('actions', image)
-                return image;
-            })
+        setViewedImage(context, { image }) {
+            context.commit({ type: 'setViewedImage', image })
+            return image;
+
         },
         // getPostById(context,{id}){
         //     return imageServices.getPostById(id)
@@ -69,17 +75,17 @@ export default {
 
         //     })
         // },
-        getCloudinaryPicUrl(context,{elForm}){
+        getCloudinaryPicUrl(context, { elForm }) {
             return cloudinaryService.uploadImg(elForm)
                 .then(res => {
                     return res.url;
                 })
         },
-        addUserComment(context, {userComment, imageId}){
-            return userServices.addUserComment(userComment, imageId, commentWriterId)
-                .then(comments =>{
-                    context.commit({type:'setUserComments', comments, imageId})
-            })
+        addUserComment(context, { userComment, imageId, commentWriterId }) {
+            return imageServices.addUserComment(userComment, imageId, commentWriterId)
+                .then(res => {
+                    context.commit({ type: 'setUserCommentsAndImage', res })
+                })
         }
 
     }
