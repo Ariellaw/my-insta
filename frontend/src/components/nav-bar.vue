@@ -34,7 +34,7 @@
         <i class="far fa-heart btn"></i>
         <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i>
       </div>
-      <uploadPost v-if="showModal" :post="post.file" @close="showModal = false"></uploadPost>
+      <uploadPost v-if="showModal" :image="image.file" @close="showModal = false"></uploadPost>
     </div>
   </nav>
 </template>
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       showModal: false,
-      post: {
+      image: {
         file: null
       }
     };
@@ -64,7 +64,7 @@ export default {
           elForm
         })
         .then(url => {
-          this.post.file = url;
+          this.image.file = url;
         });
     },
     goToLoggedInUserProfile() {

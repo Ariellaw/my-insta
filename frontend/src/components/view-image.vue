@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="chosenImage && postOwner">
+  <transition name="modal" v-if="chosenImage && imageOwner">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -11,11 +11,11 @@
 
           <div class="modal-body">
             <div class="user-info bold-reg">
-              <img :src="postOwner.profilePic" alt class="profile-pic btn">
+              <img :src="imageOwner.profilePic" alt class="profile-pic btn">
               <h3 class="btn">
-                {{postOwner.userName}}
+                {{imageOwner.userName}}
                 <span
-                  @click="emit('updateFollowers', postOwner._id)"
+                  @click="emit('updateFollowers', imageOwner._id)"
                   :class="{ 'following': following==='notFollowing', 'displayNone':following === 'loggedInUserPage'}"
                 >{{followingStatus}}</span>
               </h3>
@@ -52,46 +52,43 @@ export default {
   props: ["chosenImage"],
   data() {
     return {
-      postOwner: null,
       following: "following"
     };
   },
   created() {
-    //Todo - write a function that gets image and owner details
-    // this.getImageById(this.postId);
-    this.getViewedPostOwner(this.chosenImage.ownerId);
+
+    this.getViewedImageOwner(this.chosenImage.ownerId);
   },
 
-    filters: {
-      moment: function(date) {
-        return moment(date).fromNow();
-        //TODO - write date if over certain date - to be decided
-      }
-    },
-  methods:{
-    getViewedPostOwner(userId) {
-      this.$store
-        .dispatch({
-          type: "getUserById",
-          userId
-        })
-        .then(owner => {
-          this.postOwner = owner;
-        });
+  filters: {
+    moment: function(date) {
+      return moment(date).fromNow();
+      //TODO - write date if over certain date - to be decided
+    }
+  },
+  methods: {
+    getViewedImageOwner(userId) {
+      this.$store.dispatch({
+        type: "getViewedImageOwner",
+        userId
+      });
     }
   },
   computed: {
-        viewedPost() {
+    viewedPost() {
       return this.$store.getters.viewedPost;
-        },
+    },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
+    imageOwner() {
+      return this.$store.getters.viewedImageOwner;
+    },
     followingStatus() {
-      if (this.loggedInUser._id === this.postOwner._id) {
+      if (this.loggedInUser._id === this.imageOwner._id) {
         this.following = "loggedInUserPage";
         return "Nothing";
-      } else if (this.loggedInUser.followees.includes(this.postOwner._id)) {
+      } else if (this.loggedInUser.followees.includes(this.imageOwner._id)) {
         this.following = "following";
 
         return "Following";

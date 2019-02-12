@@ -6,7 +6,7 @@
 
         <div class="modal-container">
 
-                  <img class="viewed-image" :src="post" alt="">
+                  <img class="viewed-image" :src="image" alt="">
                   <div class="new-post-comments">
                     <textarea placeholder="Say something about this photo................." name="" ></textarea>
                   </div>
@@ -23,7 +23,7 @@
 <script>
 export default {
   name: "upload-post-",
-  props: ["post"],
+  props: ["image"],
   created() {
   },
   computed: {

@@ -10,12 +10,14 @@ export default {
         pictures:null,
         isLoadingImages: false,
         visitedUserImages:null,
-        viewedPost:null,
+        viewedImage:null,
+        viewedImageOwner:null
     },
     getters:{
         visitedUserImages: state => { return state.visitedUserImages },
         isLoadingImages: state =>  {return state.isLoadingImages},
-        viewedPost: state =>  {return state.viewedPost}
+        viewedImage: state =>  {return state.viewedPost},
+        viewedImageOwner:state => {return state.viewedImageOwner}
 
 
     },
@@ -26,8 +28,11 @@ export default {
         setVisitedUserImages(state, {images}){
             state.visitedUserImages = images;
         },
-        setViewedPost(state, {post}){
-            state.viewedPost = post;
+        setViewedPost(state, {image}){
+            state.viewedImage = image;
+        },
+        setVisitedImageOwner(state, {user}){
+            state.viewedImageOwner = user;
         }
     },
     actions:{
@@ -41,14 +46,21 @@ export default {
                     return images;
                 })
         },
-        getPostById(context,{id}){
-            return imageServices.getPostById(id)
-            .then(post => {
-              context.commit({type:'setViewedPost', post});
-              return post;
-
+        getViewedImageOwner(context, {userId}){
+            return userServices.getUserById(userId)
+            .then(user => {
+                context.commit({type:'setVisitedImageOwner', user})
             })
         },
+        // getPostById(context,{id}){
+        //     return imageServices.getPostById(id)
+        //     .then(image => {
+        //       context.commit({type:'setViewedPost', image});  
+        //       userServices.getUserById(image.owenerId) 
+        //       return image;
+
+        //     })
+        // },
         getCloudinaryPicUrl(context,{elForm}){
             return cloudinaryService.uploadImg(elForm)
                 .then(res => {

@@ -1,6 +1,6 @@
 <template>
   <li class="comment" v-if="commentOwner">
-    <span class="comment-owner">{{commentOwner.userName}}:</span>
+    <span class="comment-owner bold-reg">{{commentOwner.userName}}:</span>
     {{comment.comment}}
   </li>
 </template>
@@ -29,9 +29,6 @@ export default {
   list-style: none;
   margin-bottom: 2px;
 
-  .comment-owner {
-    font-family: monst-bold;
-  }
 }
 </style>
 >
