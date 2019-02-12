@@ -11,7 +11,15 @@ function getImagesByUserId(userId) {
             db.collection(imagesDb).find({ "ownerId": _id }).sort({timePosted:-1}).toArray()
         )
 }
-
+function getImageById(imageId) {
+    console.log("backend", imageId)
+    const _id = new ObjectId(imageId);
+    return mongoService.connect()
+        .then(db =>
+            db.collection(imagesDb).findOne({ "_id": _id })
+        )
+}
 module.exports = {
-    getImagesByUserId
+    getImagesByUserId,
+    getImageById
 }

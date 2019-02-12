@@ -10,13 +10,13 @@ export default {
         pictures:null,
         isLoadingImages: false,
         visitedUserImages:null,
-        viewedImage:null,
+        // viewedImage:null,
         viewedImageOwner:null
     },
     getters:{
         visitedUserImages: state => { return state.visitedUserImages },
         isLoadingImages: state =>  {return state.isLoadingImages},
-        viewedImage: state =>  {return state.viewedPost},
+        viewedImage: state =>  {return state.viewedImage},
         viewedImageOwner:state => {return state.viewedImageOwner}
 
 
@@ -28,7 +28,7 @@ export default {
         setVisitedUserImages(state, {images}){
             state.visitedUserImages = images;
         },
-        setViewedPost(state, {image}){
+        setViewedImage(state, {image}){
             state.viewedImage = image;
         },
         setVisitedImageOwner(state, {user}){
@@ -52,6 +52,14 @@ export default {
                 context.commit({type:'setVisitedImageOwner', user})
             })
         },
+        getViewedImage(context, {imageId}){
+            return imageServices.getImageById(imageId)
+            .then(image => {
+                context.commit({type:'setViewedImage', image})
+                console.log('actions', image)
+                return image;
+            })
+        },
         // getPostById(context,{id}){
         //     return imageServices.getPostById(id)
         //     .then(image => {
@@ -67,6 +75,12 @@ export default {
                     return res.url;
                 })
         },
+        addUserComment(context, {userComment, imageId}){
+            return userServices.addUserComment(userComment, imageId, commentWriterId)
+                .then(comments =>{
+                    context.commit({type:'setUserComments', comments, imageId})
+            })
+        }
 
     }
 

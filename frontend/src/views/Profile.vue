@@ -67,7 +67,7 @@
 
       <viewImage
         v-if="showModal"
-        :chosenImage="chosenImage"
+        :viewedImage="viewedImage"
         @close="showModal = false"
       ></viewImage>
 
@@ -78,8 +78,8 @@
           :key="image._id"
           :src="image.image"
           alt="oh noo!"
-          class="visitedUserImg"
-          @click="displayChosenImage(image)"
+          class="visitedUserImg btn"
+          @click="displayViewedImage(image)"
         >
       </div>
     </section>
@@ -94,7 +94,7 @@ export default {
     return {
       filter: "album",
       showModal: false,
-      chosenImage: null,
+      viewedImage: null,
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96"
     };
   },
@@ -105,9 +105,9 @@ export default {
     getVisitedUserImages(userId) {
       this.$store.dispatch({ type: "getVisitedUserImages", userId });
     },
-    displayChosenImage(image) {
+    displayViewedImage(image) {
       this.showModal = true;
-      this.chosenImage = image;
+      this.viewedImage = image;
     },
 
     addFollowers(followeeId) {

@@ -12,6 +12,14 @@ function addImageRoutes(app) {
                 return res.json(images);
             })
     })
+    app.get(`${BASE}/image/:imageId`, (req, res) => {
+        const imageId = req.params.imageId;
+        imageService.getImageById(imageId)
+            .then(image => {
+                console.log("routes",image)
+                return res.json(image);
+            })
+    })
 }
 
 module.exports = addImageRoutes;

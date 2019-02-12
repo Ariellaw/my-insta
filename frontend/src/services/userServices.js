@@ -1,4 +1,5 @@
 import axios from 'axios';
+import utilService from './utilServices'
 const BASE_URL = 'http://localhost:3003/user'
 
 function getUserById(userId) {
