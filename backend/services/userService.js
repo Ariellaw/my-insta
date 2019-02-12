@@ -6,14 +6,15 @@ const ObjectId = require('mongodb').ObjectId;
 function getById(userId) {
     const _id = new ObjectId(userId);
     return mongoService.connect()
-        .then(db => {
+        .then(db =>
             db.collection(userDb).findOne({ "_id": _id })
-        })
+        )
 }
 
-//TODO -mongoDB connection pool
+//find out w
 
 function addFollowers(followeeId, followerId) {
+    console.log(Date.now(),"addFollowers - start");
 
     var prms = [];
     prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
@@ -49,9 +50,8 @@ function addFollowers(followeeId, followerId) {
 function removeFollowers(followeeId, followerId) {
     var prms = [];
     prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
-        var idx = followerIds.findIndex(id => {
-            return id === followerId
-        });
+        var idx = followerIds.findIndex(id=>  {
+            return id === followerId});
 
         if (idx !== -1) {
             followerIds.splice(idx, 1);
@@ -69,8 +69,7 @@ function removeFollowers(followeeId, followerId) {
     prms.push(_getListProperty(followerId, 'followees').then(followeeIds => {
 
         var idx = followeeIds.findIndex(id => {
-            return id === followeeId
-        });
+            return id === followeeId} );
 
         if (idx !== -1) {
             followeeIds.splice(idx, 1);

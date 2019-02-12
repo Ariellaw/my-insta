@@ -66,7 +66,6 @@
       </div>
 
       <viewImage
-        @updateFollowers="updateFollowers"
         v-if="showModal"
         :chosenImage="chosenImage"
         @close="showModal = false"

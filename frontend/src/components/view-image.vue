@@ -15,9 +15,16 @@
               <h3 class="btn">
                 {{imageOwner.userName}}
                 <span
-                  @click="emit('updateFollowers', imageOwner._id)"
-                  :class="{ 'following': following==='notFollowing', 'displayNone':following === 'loggedInUserPage'}"
-                >{{followingStatus}}</span>
+                  v-if="isFollowing"
+                  :class="followingStatusClass"
+                  @click="removeFollowers(chosenImage.ownerId)"
+                >Following</span>
+                <span
+                  v-else
+                  :class="followingStatusClass"
+                  class="follow"
+                  @click="addFollowers(chosenImage.ownerId)"
+                >Follow</span>
               </h3>
             </div>
             <div class="comments">
@@ -46,17 +53,16 @@
 
 <script>
 import moment from "moment";
-import userComment from "./comment.vue";
+import userComment from "./user-comment.vue";
 export default {
   name: "view-image",
   props: ["chosenImage"],
   data() {
     return {
-      following: "following"
+      loggedInUserId: "5c5fecdbd16a8d56eaca3c96"
     };
   },
   created() {
-
     this.getViewedImageOwner(this.chosenImage.ownerId);
   },
 
@@ -67,6 +73,12 @@ export default {
     }
   },
   methods: {
+    addFollowers(followeeId) {
+      this.$store.dispatch({ type: "addFollowers", followeeId });
+    },
+    removeFollowers(followeeId) {
+      this.$store.dispatch({ type: "removeFollowers", followeeId });
+    },
     getViewedImageOwner(userId) {
       this.$store.dispatch({
         type: "getViewedImageOwner",
@@ -84,22 +96,17 @@ export default {
     imageOwner() {
       return this.$store.getters.viewedImageOwner;
     },
-    followingStatus() {
-      if (this.loggedInUser._id === this.imageOwner._id) {
-        this.following = "loggedInUserPage";
-        return "Nothing";
-      } else if (this.loggedInUser.followees.includes(this.imageOwner._id)) {
-        this.following = "following";
-
-        return "Following";
-      } else {
-        this.following = "notFollowing";
-
-        return "Follow";
-      }
+    isFollowing() {
+      if (this.loggedInUser.followees.includes(this.imageOwner._id)) {
+        return true;
+      } else return false;
+    },
+    followingStatusClass() {
+      return {
+        displayNone: this.loggedInUserId === this.imageOwner._id
+      };
     }
   },
-
   components: {
     userComment
   }
@@ -107,7 +114,7 @@ export default {
 </script>
 
 <style <style lang="scss" scoped>
-.following {
+.follow {
   color: blue;
 }
 </style>
