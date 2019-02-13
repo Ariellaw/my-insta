@@ -6,50 +6,46 @@ export default {
 
         visitedUser: null,
         loggedInUser: null,
+        userFavoriteImages: null,
+        // isLoadingImages: false,
+
 
     },
     getters: {
         visitedUser: state => { return state.visitedUser },
-        loggedInUser: state => { return state.loggedInUser }
+        loggedInUser: state => { return state.loggedInUser },
+        userFavoriteImages: state => { return state.userFavoriteImages },
+        // isLoadingImages: state => { return state.isLoadingImages },
+
 
 
     },
     mutations: {
         setIsLoading(state, { isLoading }) {
-            state.isLoadingSamples = isLoading;
+            state.isLoadingImages = isLoading;
         },
-        updateUsers(state, {users}){
+        updateUsers(state, { users }) {
             state.loggedInUser = users[1].value;
-            state.visitedUser =  users[0].value;
+            state.visitedUser = users[0].value;
         },
         setLoggedInUser(state, { user }) {
             state.loggedInUser = user;
         },
+        updateLoggedInUser(state, { user }) {
+            state.loggedInUser = user.value;
+        },
 
-        // updateUserFavorites(state, { user }) {
-        //     var favorites = user.favorites;
-        //     state.loggedInUser.favorites = favorites;
-        // },
 
         setVisitedUser(state, { user }) {
             state.visitedUser = user;
             // state.visitedUserSamples = data.samples;
             // state.visitedUserFavorites = data.favorites;
         },
-        // updateUserDetails(state, { newUser }) {
-        //     state.loggedInUser = newUser;
-        // }
+        setUserFavoriteImages(state, { images }) {
+            state.userFavoriteImages = images;
+        }
     },
     actions: {
-        // getCloudinaryPicUrl(context, { elForm }) {
-        //     return cloudinaryService.uploadImg(elForm)
-        //         .then(res => {
-        //             return res.url;
-        //         })
-        // },
-
-
-
         getVisitedUser(context, { userId }) {
             return userServices.getUserById(userId)
                 .then(user => {
@@ -84,48 +80,23 @@ export default {
                     context.commit({ type: 'updateUsers', users })
                     return users;
                 })
-        }
-
-        // signUp(context, userDetails) {
-        //     return userServices.registration(userDetails)
-        //         .then(user => {
-        //             context.commit({ type: 'setUser', user })
-        //             return user;
-        //         })
-        // },
-        // logIn(context, userDetails) {
-        //     return userServices.logIn(userDetails)
-        //         .then(user => {
-        //             context.commit({ type: 'setUser', user })
-        //             return user;
-        //         })
-        // },
-
-
-        //     addSamplesToFavorites(context, { sampleId, userId }) {
-
-        //         userServices.addSamplesToFavorites(sampleId, userId)
-        //             .then(user => {
-        //                 context.commit({ type: 'updateUserFavorites', user })
-        //             })
-        //     },
-        //     removeSamplesFromFavorites(context, { sampleId, userId }) {
-
-        //         userServices.removeSamplesFromFavorites(sampleId, userId)
-        //             .then(user => {
-        //                 context.commit({ type: 'updateUserFavorites', user })
-        //             })
-        //     },
-        //     updateUserDetails(context, { newUserDetails, loggedInUserId }) {
-
-        //         return userServices.updateUserDetails(newUserDetails, loggedInUserId)
-        //             .then(newUser => {
-        //                 context.commit({ type: 'updateUserDetails', newUser });
-        //                 return newUser
-        //             })
-        //     }
+        },
+        addToUserFavorites(context, { imageId }) {
+            return userServices.addToUserFavorites(imageId, context.state.loggedInUser._id)
+                .then(user => {
+                    context.commit({ type: 'updateLoggedInUser', user })
+                    return user;
+                })
+        },
+        removeFromUserFavorites(context, { imageId }) {
+            return userServices.removeFromUserFavorites(imageId, context.state.loggedInUser._id)
+                .then(user => {
+                    context.commit({ type: 'updateLoggedInUser', user })
+                    return user;
+                })
+        },
 
     }
-
-
 }
+   
+

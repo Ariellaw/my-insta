@@ -20,7 +20,7 @@ app.use(cors({
   credentials: true // enable set cookie
 }));
 
-mongoService.connect();
+// mongoService.connect();
 
 app.use(bodyParser.json())
 app.use(cookieParser());

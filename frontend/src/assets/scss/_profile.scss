@@ -62,8 +62,9 @@
         display: flex;
         justify-content: center;
         span {
-          margin: 1rem 9rem;
+          margin: 0rem 9rem;
           font-size: 1.5rem;
+          padding:1rem;
         }
       }
       .user-posts {
@@ -80,6 +81,10 @@
       }
       .chosen-filter {
         color: black;
+        font-weight: bold;
+        border-top: 1px solid #262626;
+       
+        // color:green;
         //add a thicker line to the line above
       }
     }

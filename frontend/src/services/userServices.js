@@ -3,6 +3,7 @@ import utilService from './utilServices'
 const BASE_URL = 'http://localhost:3003/user'
 
 function getUserById(userId) {
+    // console.log('services gt visited user', userId)
     return axios.get(`${BASE_URL}/${userId}`)
         .then(res =>{
             return res.data
@@ -30,9 +31,31 @@ function removeFollowers(followeeId, followerId){
         return res.data
     })
 }
+function addToUserFavorites(imageId, loggedInUserId){
+    return  axios.put(`${BASE_URL}/${imageId}/favorites`, {imageId, loggedInUserId})
+        .then(res => {
+            return res.data
+        })
+}
+function removeFromUserFavorites(imageId, loggedInUserId){
+    return  axios.delete(`${BASE_URL}/${imageId}/${loggedInUserId}/favorites`)
+        .then(res => {
+            return res.data
+        })
+}
+function getImagesByImageId(userId){
+    return axios.get(`${BASE_URL}/${userId}/images`)
+    .then(res =>{
+        console.log("usr favorites images",res.data)
+        return res.data       
+    })
+}
 export default {
     getUserById,
     updateFollowers,
     addFollowers,
-    removeFollowers
+    removeFollowers,
+    addToUserFavorites,
+    removeFromUserFavorites,
+    getImagesByImageId
 }

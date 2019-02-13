@@ -1,9 +1,12 @@
 const mongoService = require('./mongo-services');
 const userDb = 'user';
+const imagesDb = 'post';
 const ObjectId = require('mongodb').ObjectId;
+const ImageService = require('./imageService')
 
 
 function getById(userId) {
+    // console.log("getById",userId )
     const _id = new ObjectId(userId);
     return mongoService.connect()
         .then(db =>
@@ -14,7 +17,7 @@ function getById(userId) {
 //find out w
 
 function addFollowers(followeeId, followerId) {
-    console.log(Date.now(),"addFollowers - start");
+    // console.log(Date.now(),"addFollowers - start");
 
     var prms = [];
     prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
@@ -50,8 +53,9 @@ function addFollowers(followeeId, followerId) {
 function removeFollowers(followeeId, followerId) {
     var prms = [];
     prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
-        var idx = followerIds.findIndex(id=>  {
-            return id === followerId});
+        var idx = followerIds.findIndex(id => {
+            return id === followerId
+        });
 
         if (idx !== -1) {
             followerIds.splice(idx, 1);
@@ -66,10 +70,13 @@ function removeFollowers(followeeId, followerId) {
 
             })
     }))
+
+
     prms.push(_getListProperty(followerId, 'followees').then(followeeIds => {
 
         var idx = followeeIds.findIndex(id => {
-            return id === followeeId} );
+            return id === followeeId
+        });
 
         if (idx !== -1) {
             followeeIds.splice(idx, 1);
@@ -86,18 +93,79 @@ function removeFollowers(followeeId, followerId) {
     }))
     return Promise.all(prms);
 }
+function removeFromUserFavorites(imageId, loggedInUserId) {
+    // console.log('remove', imageId, loggedInUserId)
 
+    const _id = new ObjectId(loggedInUserId);
+
+    return getById(loggedInUserId).then(user => {
+        var favoriteIds = user.favorites;
+        var idx = favoriteIds.findIndex(id => id === imageId);
+        if (idx !== -1) {
+            favoriteIds.splice(idx, 1);
+        }
+        return mongoService.connect()
+            .then(db =>
+                db.collection(userDb).findOneAndUpdate({ "_id": _id }, { $set: { 'favorites': favoriteIds } }, { returnOriginal: false })
+
+            )
+    })
+}
+
+
+function addToUserFavorites(imageId, loggedInUserId) {
+
+    const _id = new ObjectId(loggedInUserId);
+
+    return getById(loggedInUserId).then(user => {
+        var favoriteIds = user.favorites;
+        var idx = favoriteIds.findIndex(id => id === imageId);
+
+        if (idx === -1) {
+            favoriteIds.push(imageId);
+
+        }
+        return mongoService.connect()
+            .then(db =>
+                db.collection(userDb).findOneAndUpdate({ "_id": _id }, { $set: { 'favorites': favoriteIds } }, { returnOriginal: false })
+
+            )
+    })
+}
 function _getListProperty(userId, listName) {
     return getById(userId).then(user => {
         return user[listName];
     })
         .then(res => { return res; })
 }
+function getImagesByImageId(userId) {
+    var prms = [];
 
+
+    return getById(userId).then(user => {
+        var favorites = user.favorites;
+        for (var i = 0; i < favorites.length; i++) {
+            var imageId = favorites[i];
+            var _id = new ObjectId(imageId);
+            console.log(_id)
+            prms.push( mongoService.connect()
+                .then(db =>
+                    db.collection(imagesDb).findOne({ '_id': _id })
+                ))
+        }
+        return Promise.all(prms)
+    })
+    .then(results => {
+        return results;
+    })
+}
 
 module.exports = {
     getById,
     removeFollowers,
-    addFollowers
+    addFollowers,
+    removeFromUserFavorites,
+    addToUserFavorites,
+    getImagesByImageId
 
 }

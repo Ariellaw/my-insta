@@ -11,20 +11,25 @@
 
           <div class="modal-body">
             <div class="user-info bold-reg">
-              <img :src="imageOwner.profilePic" alt class="profile-pic btn">
+              <img
+                @click="goToImageOwnerProfile"
+                :src="imageOwner.profilePic"
+                alt
+                class="profile-pic btn"
+              >
               <h3 class="btn">
-                {{imageOwner.userName}}
-                <span
+                <span @click="goToImageOwnerProfile">{{imageOwner.userName}}</span>
+                <h3
                   v-if="isFollowing"
                   :class="followingStatusClass"
                   @click="removeFollowers(viewedImage.ownerId)"
-                >Following</span>
-                <span
+                >Following</h3>
+                <h3
                   v-else
                   :class="followingStatusClass"
                   class="follow"
                   @click="addFollowers(viewedImage.ownerId)"
-                >Follow</span>
+                >Follow</h3>
               </h3>
             </div>
             <div class="comments">
@@ -35,11 +40,16 @@
               ></user-comment>
             </div>
             <div class="likes-and-followers">
-              <div class="icons">
+              <div v-if="loggedInUser" class="icons">
                 <i class="far fa-heart btn btn"></i>
                 <i class="far fa-comment btn"></i>
                 <i class="fas fa-share-alt btn"></i>
-                <i class="far fa-bookmark btn"></i>
+                <i
+                  v-if="inUserFavorites"
+                  @click="removeFromUserFavorites"
+                  class="fas fa-bookmark btn"
+                ></i>
+                <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
               </div>
               <p class="num-of-likes bold-reg">{{viewedImage.likes.length+" "}}Likes</p>
               <p class="time-posted">{{ viewedImage.timePosted | moment }}</p>
@@ -69,7 +79,8 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      userComment: null
+      userComment: null,
+      viewedImageComments: this.viewedImage.comments
     };
   },
   created() {
@@ -97,12 +108,36 @@ export default {
     },
 
     addUserComment(userComment, imageId, commentWriterId) {
+      this.$store
+        .dispatch({
+          type: "addUserComment",
+          userComment,
+          imageId,
+          commentWriterId
+        })
+        .then(comments => {
+          this.viewedImageComments = comments;
+          this.userComment = null;
+        });
+    },
+    addToUserFavorites() {
+      console.log("cmp add", this.viewedImage._id);
       this.$store.dispatch({
-        type: "addUserComment",
-        userComment,
-        imageId,
-        commentWriterId
-      }).then(()=>this.userComment = null)
+        type: "addToUserFavorites",
+        imageId: this.viewedImage._id
+      });
+    },
+    removeFromUserFavorites() {
+
+      this.$store.dispatch({
+        type: "removeFromUserFavorites",
+        imageId: this.viewedImage._id
+      });
+    },
+    goToImageOwnerProfile() {
+      var imageOwnerId = this.imageOwner._id;
+      this.$router.push(`/user/${imageOwnerId}`);
+      this.$router.go();
     }
   },
   computed: {
@@ -113,18 +148,19 @@ export default {
       return this.$store.getters.viewedImageOwner;
     },
     isFollowing() {
-      if (this.loggedInUser.followees.includes(this.imageOwner._id)) {
-        return true;
-      } else return false;
+      return this.loggedInUser.followees.includes(this.imageOwner._id);
     },
     followingStatusClass() {
       return {
         displayNone: this.loggedInUserId === this.imageOwner._id
       };
     },
-    viewedImageComments() {
-      return this.$store.getters.viewedImageComments;
+    inUserFavorites() {
+      return this.loggedInUser.favorites.includes(this.viewedImage._id);
     }
+    // viewedImageComments() {
+    //   return this.$store.getters.viewedImageComments;
+    // }
   },
   components: {
     userComment

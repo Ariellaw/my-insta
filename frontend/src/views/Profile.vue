@@ -5,9 +5,9 @@
       <div class="loggedin-user-details">
         <div class="username">
           {{visitedUser.userName}}
-          <div class="right">
+          <div v-if="loggedInUser" class="right">
             <button
-              v-if="loggedInUser && loggedInUser._id === visitedUser._id"
+              v-if="loggedInUser._id === visitedUser._id"
               class="edit-profile-or-following"
             >Edit Profile</button>
             <button
@@ -64,51 +64,37 @@
           <i class="fas fa-camera-retro"></i> Tagged
         </span>
       </div>
-
-      <viewImage
-        v-if="showModal"
-        :viewedImage="viewedImage"
-        @close="showModal = false"
-      ></viewImage>
-
-      <h1 v-if="isLoadingImages">Loading...</h1>
-      <div v-else class="user-posts">
-        <img
-          v-for="image in usersCreatedImages"
-          :key="image._id"
-          :src="image.image"
-          alt="oh noo!"
-          class="visitedUserImg btn"
-          @click="displayViewedImage(image)"
-        >
-      </div>
+      <!-- <galleryOfImages></galleryOfImages>
+      <galleryOfImages></galleryOfImages> -->
+      <galleryOfImages :displayedImages="displayedImages"></galleryOfImages>
     </section>
   </div>
 </template>
 
 <script>
-import viewImage from "../components/view-image.vue";
+import galleryOfImages from "../components/gallary-of-images.vue";
+
 export default {
   name: "user-profile",
   data() {
     return {
       filter: "album",
-      showModal: false,
-      viewedImage: null,
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96"
+      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      displayedImages: this.usersCreatedImages
     };
   },
   methods: {
     changeFilter(filter) {
       this.filter = filter;
+      if (this.filter === "album") {
+        this.displayedImages = this.usersCreatedImages;
+      } else if (this.filter === "favorites") {
+        this.displayedImages = this.userFavorites;
+      }
+      console.log('filter', filter)
     },
     getVisitedUserImages(userId) {
       this.$store.dispatch({ type: "getVisitedUserImages", userId });
-    },
-    displayViewedImage(image) {
-      this.showModal = true;
-      this.viewedImage = image;
-       this.$store.dispatch({ type: "setViewedImage", image });
     },
 
     addFollowers(followeeId) {
@@ -119,32 +105,37 @@ export default {
     }
   },
   computed: {
-    isLoadingImages() {
-      return this.$store.getters.isLoadingImages;
-    },
     usersCreatedImages() {
       return this.$store.getters.visitedUserImages;
     },
     followingVisitedUser() {
-      if (this.loggedInUser && this.loggedInUser.followees.includes(this.visitedUser._id)) {
-        return true;
-      } else return false;
+      return this.loggedInUser.followees.includes(this.visitedUser._id);
     },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
     visitedUser() {
       return this.$store.getters.visitedUser;
+    },
+    userFavorites() {
+      return this.$store.getters.userFavoriteImages;
     }
   },
   created() {
     const userId = this.$route.params.userId;
     this.$store.dispatch({ type: "getVisitedUser", userId });
+    this.$store.dispatch({
+      type: "getUserFavoriteImages",
+      userId: this.loggedInUserId
+    });
     this.getVisitedUserImages(userId);
-    this.$store.dispatch({type:"getLoggedInUser", userId:this.loggedInUserId});
+    this.$store.dispatch({
+      type: "getLoggedInUser",
+      userId: this.loggedInUserId
+    });
   },
   components: {
-    viewImage
+    galleryOfImages
   }
 };
 </script>

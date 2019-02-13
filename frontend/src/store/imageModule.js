@@ -12,14 +12,16 @@ export default {
         visitedUserImages: null,
         viewedImage: null,
         viewedImageOwner: null,
-        viewedImageComments: null,
+        // viewedImageComments: null,
     },
     getters: {
         visitedUserImages: state => { return state.visitedUserImages },
         isLoadingImages: state => { return state.isLoadingImages },
         viewedImage: state => { return state.viewedImage },
         viewedImageOwner: state => { return state.viewedImageOwner },
-        viewedImageComments: state => { return state.viewedImage.comments }
+        // viewedImageComments: state => { return state.viewedImage.comments },
+        setIsLoadingFavorites: state => { return state.setIsLoadingFavorites },
+
 
 
 
@@ -27,6 +29,9 @@ export default {
     mutations: {
         setIsLoading(state, { isLoading }) {
             state.isLoadingImages = isLoading;
+        },
+        setIsLoadingFavorites(state, { isLoading }) {
+            state.setIsLoadingFavorites = isLoading;
         },
         setVisitedUserImages(state, { images }) {
             state.visitedUserImages = images;
@@ -41,7 +46,6 @@ export default {
             var image = res.value;
             state.viewedImage = image;
             state.viewedImageComments = image.comments;
-            console.log('actions', image.comments)
         }
     },
     actions: {
@@ -85,6 +89,16 @@ export default {
             return imageServices.addUserComment(userComment, imageId, commentWriterId)
                 .then(res => {
                     context.commit({ type: 'setUserCommentsAndImage', res })
+                    return  res.value.comments;
+                })
+        },
+        getUserFavoriteImages(context, { userId }) {
+            context.commit({ type: 'setIsLoadingFavorites', isLoading: true })
+            return userServices.getImagesByImageId(userId)
+                .then(images => {
+                    context.commit({ type: 'setUserFavoriteImages', images })
+                    context.commit({ type: 'setIsLoading', isLoading: false })
+                    return images;
                 })
         }
 

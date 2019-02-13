@@ -29,7 +29,31 @@ function addUserRoutes(app) {
                     return res.json(users);
                 })
     })
-    
+    app.delete(`${BASE}/:imageId/:loggedInUserId/favorites`, (req, res) =>{
+        const imageId = req.params.imageId;
+        const loggedInUserId = req.params.loggedInUserId;
+
+        userService.removeFromUserFavorites(imageId, loggedInUserId)
+            .then(user =>{
+                return res.json(user);
+            })
+    })
+    app.put(`${BASE}/:imageId/favorites`, (req, res) =>{
+        const imageId = req.body.imageId;
+        const loggedInUserId = req.body.loggedInUserId;
+        userService.addToUserFavorites(imageId, loggedInUserId)
+            .then(user =>{
+                return res.json(user);
+            })
+    })
+    app.get(`${BASE}/:userId/images`, (req,res)=>{
+        const userId = req.params.userId;
+        userService.getImagesByImageId(userId)
+            .then(images =>{
+                return res.json(images);
+            })
+
+    })
 }
 
 module.exports = addUserRoutes;
