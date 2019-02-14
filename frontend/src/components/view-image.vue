@@ -1,12 +1,12 @@
 <template>
   <transition name="modal" v-if="viewedImage && imageOwner">
     <div class="modal-mask">
-      <div class="modal-wrapper" :class="{'vertical':verticalDisplay}" >
+      <div class="modal-wrapper" :class="{'displayVertical':displayVertically}">
         <button class="modal-default-button" @click="$emit('close')">
           <i class="fas fa-times"></i>
         </button>
 
-        <div class="modal-container" :class="{'displayVertical':displayVertically===true}">
+        <div class="modal-container">
           <img :src="viewedImage.image" class="currImage" alt>
 
           <!-- <div class="modal-body"> -->
@@ -86,8 +86,8 @@ export default {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       userComment: null,
       viewedImageComments: this.viewedImage.comments,
-      displayVertically: true,
-      imageLikes:this.viewedImage.likes,
+      displayVertically: false,
+      likes: this.viewedImage.likes
     };
   },
   created() {
@@ -108,19 +108,22 @@ export default {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
     },
     addUserLike() {
-      this.$store.dispatch({
-        type: "addUserLike",
-        imageId: this.viewedImage._id,
-        userId: this.loggedInUser._id
-      }).then(image => this.imageLikes = image.likes);
+      this.$store
+        .dispatch({
+          type: "addUserLike",
+          imageId: this.viewedImage._id,
+          userId: this.loggedInUser._id
+        })
+        .then(likes => (this.likes = likes));
     },
     removeUserLike() {
-      console.log('cmp remove', this.viewedImage._id, this.loggedInUser._id)
-      this.$store.dispatch({
-        type: "removeUserLike",
-        imageId: this.viewedImage._id,
-        userId: this.loggedInUser._id
-      });
+      this.$store
+        .dispatch({
+          type: "removeUserLike",
+          imageId: this.viewedImage._id,
+          userId: this.loggedInUser._id
+        })
+        .then(likes => (this.likes = likes));
     },
     getViewedImageOwner(userId) {
       this.$store.dispatch({
@@ -179,11 +182,10 @@ export default {
       return this.loggedInUser.favorites.includes(this.viewedImage._id);
     },
     isLiked() {
-      return this.imageLikes.includes(this.loggedInUser._id);
+      if (this.likes) {
+        return this.likes.includes(this.loggedInUser._id);
+      }
     }
-    // viewedImageComments() {
-    //   return this.$store.getters.viewedImageComments;
-    // }
   },
   components: {
     userComment
