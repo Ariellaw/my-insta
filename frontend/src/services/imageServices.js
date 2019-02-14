@@ -24,11 +24,27 @@ function addUserComment(userComment, imageId, commentWriterId) {
             return res.data
         })
 }
+function addUserLike(imageId, userId){
+    return axios.put(`${BASE_URL}/${imageId}/likes`, {imageId, userId})
+    .then(res => {
+        return res.data
+    })
+ }
 
+function removeUserLike(imageId, userId){
+    console.log('services remove', imageId, userId)
+
+    return  axios.delete(`${BASE_URL}/${imageId}/${userId}/likes`)
+        .then(res => {
+            return res.data
+        })
+}
 export default {
     getUserImages,
     getImageById,
-    addUserComment
+    addUserComment,
+    addUserLike,
+    removeUserLike
 
 }
 

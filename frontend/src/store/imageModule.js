@@ -100,6 +100,24 @@ export default {
                     context.commit({ type: 'setIsLoading', isLoading: false })
                     return images;
                 })
+        },
+        addUserLike(context, {imageId, userId}){
+            return imageServices.addUserLike(imageId, userId)
+                .then(res =>{
+                    console.log('actions add', res)
+                    context.commit({type:'setViewedImage', res});
+                    return res.value
+                })
+        },
+        removeUserLike(context, {imageId, userId}){
+
+            return imageServices.removeUserLike(imageId, userId)
+            .then(res =>{
+                console.log('actions remove', res)
+
+                context.commit({type:'setViewedImage', res});
+                return res.value
+            })
         }
 
     }

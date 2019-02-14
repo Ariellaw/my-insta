@@ -91,7 +91,6 @@ export default {
       } else if (this.filter === "favorites") {
         this.displayedImages = this.userFavorites;
       }
-      console.log('filter', filter)
     },
     getVisitedUserImages(userId) {
       this.$store.dispatch({ type: "getVisitedUserImages", userId });

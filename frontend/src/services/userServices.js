@@ -46,7 +46,6 @@ function removeFromUserFavorites(imageId, loggedInUserId){
 function getImagesByImageId(userId){
     return axios.get(`${BASE_URL}/${userId}/images`)
     .then(res =>{
-        console.log("usr favorites images",res.data)
         return res.data       
     })
 }

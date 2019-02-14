@@ -27,6 +27,25 @@ function addImageRoutes(app) {
                 return res.json(commentThread)
             })
     })
+    app.put(`${BASE}/:imageId/likes`, (req,res)=>{
+        const imageId = req.body.imageId;
+        const userId = req.body.userId;
+        console.log(imageId, userId)
+        imageService.addUserLike(imageId, userId)
+        .then(image =>{
+            return res.json(image)
+        })
+    })
+    app.delete(`${BASE}/:imageId/:userId/likes`, (req,res) =>{
+        const imageId = req.params.imageId;
+        const userId = req.params.userId;
+        console.log('routes remove', imageId, userId)
+
+        imageService.removeUserLike(imageId, userId)
+        .then(image =>{
+            return res.json(image)
+        })
+    })
 }
 
 module.exports = addImageRoutes;
