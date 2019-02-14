@@ -1,7 +1,7 @@
 <template>
   <transition name="modal" v-if="viewedImage && imageOwner">
     <div class="modal-mask">
-      <div class="modal-wrapper">
+      <div class="modal-wrapper" :class="{'vertical':verticalDisplay}" >
         <button class="modal-default-button" @click="$emit('close')">
           <i class="fas fa-times"></i>
         </button>
@@ -9,7 +9,7 @@
         <div class="modal-container">
           <img :src="viewedImage.image" class="currImage" alt>
 
-          <div class="modal-body">
+          <!-- <div class="modal-body"> -->
             <div class="user-info bold-reg">
               <img
                 @click="goToImageOwnerProfile"
@@ -62,7 +62,7 @@
                 v-model="userComment"
               ></textarea>
             </div>
-          </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -80,7 +80,8 @@ export default {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       userComment: null,
-      viewedImageComments: this.viewedImage.comments
+      viewedImageComments: this.viewedImage.comments,
+      verticalDisplay:false,
     };
   },
   created() {
