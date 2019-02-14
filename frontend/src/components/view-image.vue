@@ -1,7 +1,7 @@
 <template>
   <transition name="modal" v-if="viewedImage && imageOwner">
     <div class="modal-mask">
-      <div class="modal-wrapper">
+      <div class="modal-wrapper" :class="{'vertical':verticalDisplay}" >
         <button class="modal-default-button" @click="$emit('close')">
           <i class="fas fa-times"></i>
         </button>
