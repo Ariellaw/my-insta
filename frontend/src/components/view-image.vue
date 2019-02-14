@@ -6,63 +6,65 @@
           <i class="fas fa-times"></i>
         </button>
 
-        <div class="modal-container">
+        <div class="modal-container" :class="{'displayVertical':displayVertically===true}">
           <img :src="viewedImage.image" class="currImage" alt>
 
-          <div class="modal-body">
-            <div class="user-info bold-reg">
-              <img
-                @click="goToImageOwnerProfile"
-                :src="imageOwner.profilePic"
-                alt
-                class="profile-pic btn"
-              >
-              <h3 class="btn">
-                <span @click="goToImageOwnerProfile">{{imageOwner.userName}}</span>
-                <h3
-                  v-if="isFollowing"
-                  :class="followingStatusClass"
-                  @click="removeFollowers(viewedImage.ownerId)"
-                >Following</h3>
-                <h3
-                  v-else
-                  :class="followingStatusClass"
-                  class="follow"
-                  @click="addFollowers(viewedImage.ownerId)"
-                >Follow</h3>
-              </h3>
-            </div>
-            <div class="comments">
-              <user-comment
-                v-for="comment in viewedImageComments"
-                :comment="comment"
-                :key="comment.id"
-              ></user-comment>
-            </div>
-            <div class="likes-and-followers">
-              <div v-if="loggedInUser" class="icons">
-                <i class="far fa-heart btn btn"></i>
-                <i class="far fa-comment btn"></i>
-                <i class="fas fa-share-alt btn"></i>
-                <i
-                  v-if="inUserFavorites"
-                  @click="removeFromUserFavorites"
-                  class="fas fa-bookmark btn"
-                ></i>
-                <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
-              </div>
-              <p class="num-of-likes bold-reg">{{viewedImage.likes.length+" "}}Likes</p>
-              <p class="time-posted">{{ viewedImage.timePosted | moment }}</p>
-            </div>
-            <div class="add-a-comment">
-              <textarea
-                placeholder="Add a comment....."
-                name
-                v-on:keyup.enter="addUserComment(userComment, viewedImage._id, loggedInUserId)"
-                v-model="userComment"
-              ></textarea>
-            </div>
+          <!-- <div class="modal-body"> -->
+          <div class="user-info bold-reg">
+            <img
+              @click="goToImageOwnerProfile"
+              :src="imageOwner.profilePic"
+              alt
+              class="profile-pic btn"
+            >
+            <span class="btn">
+              <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
+              <span
+                v-if="isFollowing"
+                :class="followingStatusClass"
+                @click="removeFollowers(viewedImage.ownerId)"
+              >Following</span>
+              <span
+                v-else
+                :class="followingStatusClass"
+                class="follow"
+                @click="addFollowers(viewedImage.ownerId)"
+              >Follow</span>
+            </span>
           </div>
+          <div class="comments">
+            <user-comment
+              v-for="comment in viewedImageComments"
+              :comment="comment"
+              :key="comment.id"
+            ></user-comment>
+          </div>
+          <div class="likes-and-followers">
+            <div v-if="loggedInUser" class="icons">
+              <i class="far fa-heart btn btn"></i>
+              <i class="far fa-comment btn"></i>
+              <i class="fas fa-share-alt btn"></i>
+              <i
+                v-if="inUserFavorites"
+                @click="removeFromUserFavorites"
+                class="fas fa-bookmark btn"
+              ></i>
+              <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
+            </div>
+            <span class="column">
+              <span class="num-of-likes bold-reg">{{viewedImage.likes.length}}&nbsp;Likes&nbsp;</span>
+              <span class="time-posted">{{ viewedImage.timePosted | moment }}</span>
+            </span>
+          </div>
+          <div class="add-a-comment">
+            <textarea
+              placeholder="Add a comment....."
+              name
+              v-on:keyup.enter="addUserComment(userComment, viewedImage._id, loggedInUserId)"
+              v-model="userComment"
+            ></textarea>
+          </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -80,7 +82,8 @@ export default {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       userComment: null,
-      viewedImageComments: this.viewedImage.comments
+      viewedImageComments: this.viewedImage.comments,
+      displayVertically: false
     };
   },
   created() {
@@ -128,7 +131,6 @@ export default {
       });
     },
     removeFromUserFavorites() {
-
       this.$store.dispatch({
         type: "removeFromUserFavorites",
         imageId: this.viewedImage._id

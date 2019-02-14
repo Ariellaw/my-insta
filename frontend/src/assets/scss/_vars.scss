@@ -21,3 +21,15 @@ $lighter-font-color: lightgray;
     border: none;
     resize: none;
 }
+
+@mixin modelArea{
+    color: black;
+    font-size: 1.5rem;
+    max-width: 95vw;
+    margin: 0px auto;
+    display: flex;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    transition: all 0.3s ease;
+}
