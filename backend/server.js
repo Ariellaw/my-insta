@@ -14,13 +14,16 @@ const session = require('express-session');
 
 // const addUserRoutes = require('./routes/user-route')
 
-const app = express()
+const app = express();
 app.use(cors({
   origin: ['http://localhost:8080'],
   credentials: true // enable set cookie
 }));
 
-// mongoService.connect();
+mongoService.initDbConnection();
+
+
+
 
 app.use(bodyParser.json())
 app.use(cookieParser());

@@ -1,12 +1,12 @@
 <template>
   <transition name="modal" v-if="viewedImage && imageOwner">
     <div class="modal-mask">
-      <div class="modal-wrapper" :class="{'displayVertical':displayVertically}">
+      <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
           <i class="fas fa-times"></i>
         </button>
 
-        <div class="modal-container">
+        <div class="modal-container"  :class="{'displayVertical':displayVertically}">
           <img :src="viewedImage.image" class="currImage" alt>
 
           <!-- <div class="modal-body"> -->
@@ -55,7 +55,7 @@
               <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
             </div>
             <span class="column">
-              <span class="num-of-likes bold-reg">{{viewedImage.likes.length}}&nbsp;Likes&nbsp;</span>
+              <span class="num-of-likes bold-reg">{{likes.length}}&nbsp;Likes&nbsp;</span>
               <span class="time-posted">{{ viewedImage.timePosted | moment }}</span>
             </span>
           </div>

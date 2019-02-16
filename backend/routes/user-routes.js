@@ -8,6 +8,7 @@ function addUserRoutes(app) {
         const userId = req.params.userId;
         userService.getById(userId)
             .then(user => {
+                console.debug('user',user)
                 return res.json(user);
             })
     })

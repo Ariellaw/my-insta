@@ -48,13 +48,13 @@
         >
           <i class="far fa-images"></i> Posts
         </span>
-        <span
+        <!-- <span
           class="btn"
           @click="changeFilter('favorites')"
           :class="{ 'chosen-filter': filter==='favorites'}"
         >
           <i class="far fa-star"></i> Favorites
-        </span>
+        </span> -->
         
         <span
           class="btn"
@@ -123,10 +123,10 @@ export default {
   created() {
     const userId = this.$route.params.userId;
     this.$store.dispatch({ type: "getVisitedUser", userId });
-    this.$store.dispatch({
-      type: "getUserFavoriteImages",
-      userId: this.loggedInUserId
-    });
+    // this.$store.dispatch({
+    //   type: "getUserFavoriteImages",
+    //   userId: this.loggedInUserId
+    // });
     this.getVisitedUserImages(userId);
     this.$store.dispatch({
       type: "getLoggedInUser",

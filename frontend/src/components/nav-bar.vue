@@ -2,7 +2,7 @@
   <nav class="main-nav-bar">
     <div class="nav-buttons-container">
       <div class="instagram-logo btn">
-        <i class="fab fa-instagram btn"></i> | Instagram
+        <i class="fab fa-instagram btn"></i> | AriellaGram
       </div>
       <input type="text" autocapitalize="none" size="35" placeholder="Search....." value>
       <div class="menu-icons">

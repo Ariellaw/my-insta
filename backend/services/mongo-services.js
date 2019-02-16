@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-
+var dataBaseConnection;
 // Connection URL
 const url = 'mongodb://localhost:27017';
 
@@ -9,60 +9,45 @@ const dbName = 'AriellaGram';
 // Create a new MongoClient
 const client = new MongoClient(url);
 
-function connectToMongoDB() {
+/**
+ * This should connect to the database when the server starts and stay connected until the site is shut down :-)
+ */
+function initDbConnection() {
 
-
-    var res = client.connect()
-        .then(prm => {
+    return client.connect()
+        .then(connectedClient => {
             console.log("Connected successfully to server and to AriellaGram");
+            // console.log("client1", client1)
+            // console.log("err", err)
 
-            const db = client.db(dbName);
-            return db;
+            dataBaseConnection = connectedClient;
+            return dataBaseConnection;
 
         }).catch(err =>
             console.log("Failed to connect to MongoDB", err)
 
         );
-    
-    return res;
+
+}
 
 
-    // Use connect method to connect to the Server
+/**
+ * this creates a connection to the database when requested - it is too slow
+ */
+function connectToMongoDB() {
+
+    return Promise.resolve(dataBaseConnection.db(dbName))
 
 }
 
 
 
 module.exports = {
-    connect: connectToMongoDB
+    connect: connectToMongoDB,
+    initDbConnection
 }
 
 
 
-// const insertDocuments = function (db, callback) {
-//     // Get the documents collection
-//     const collection = db.collection('documents');
-//     // Insert some documents
-//     collection.insertMany([
-//         { a: 1 }, { a: 2 }, { a: 3 }
-//     ], function (err, result) {
-//         assert.equal(err, null);
-//         assert.equal(3, result.result.n);
-//         assert.equal(3, result.ops.length);
-//         console.log("Inserted 3 documents into the collection");
-//         callback(result);
-//     });
-// }
-// const findDocuments = function (db, callback) {
-//     // Get the documents collection
-//     const collection = db.collection('documents');
-//     // Find some documents
-//     collection.find({}).toArray(function (err, docs) {
-//         assert.equal(err, null);
-//         console.log("Found the following records");
-//         console.log(docs)
-//         callback(docs);
-//     });
-// }
 
 

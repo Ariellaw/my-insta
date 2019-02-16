@@ -6,12 +6,13 @@ const ImageService = require('./imageService')
 
 
 function getById(userId) {
-    // console.log("getById",userId )
+    console.log("getById",userId )
     const _id = new ObjectId(userId);
     return mongoService.connect()
-        .then(db =>
-            db.collection(userDb).findOne({ "_id": _id })
-        )
+        .then(db =>{
+            // console.log("db", db)
+            return db.collection(userDb).findOne({ "_id": _id })
+        })
 }
 
 //find out w
@@ -144,15 +145,14 @@ function getImagesByImageId(userId) {
 
     return getById(userId).then(user => {
         var favorites = user.favorites;
-        for (var i = 0; i < favorites.length; i++) {
-            var imageId = favorites[i];
+        // for (var i = 0; i < favorites.length; i++) {
+            var imageId = favorites[0];
             var _id = new ObjectId(imageId);
-            console.log(_id)
-            prms.push( mongoService.connect()
+         mongoService.connect()
                 .then(db =>
                     db.collection(imagesDb).findOne({ '_id': _id })
-                ))
-        }
+                )
+        // }
         return Promise.all(prms)
     })
     .then(results => {

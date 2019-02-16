@@ -104,7 +104,7 @@ export default {
         addUserLike(context, {imageId, userId}){
             return imageServices.addUserLike(imageId, userId)
                 .then(res =>{
-                    console.log('actions add', res.value)
+                    console.log('actions add', res.value.likes)
                     // context.commit({type:'setViewedImage', res});
                     return res.value.likes;
                 })
@@ -113,7 +113,7 @@ export default {
 
             return imageServices.removeUserLike(imageId, userId)
             .then(res =>{
-                console.log('actions remove', res.value)
+                console.log('actions remove', res.value.likes)
 
                 // context.commit({type:'setViewedImage', res});
                 return res.value.likes;
