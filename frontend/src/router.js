@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import userProfile from './views/Profile.vue'
+import editUserDetails from './views/EditUserDetails'
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/user/:userId',
       name: 'user-profile',
       component: userProfile
+    },
+    {
+      path: '/edit/:userId',
+      name: 'edit-user-details',
+      component: editUserDetails
     },
     {
       path: '/about',

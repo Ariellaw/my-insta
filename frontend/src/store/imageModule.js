@@ -7,7 +7,6 @@ import userServices from '../services/userServices.js'
 export default {
 
     state: {
-        pictures: null,
         isLoadingImages: false,
         visitedUserImages: null,
         viewedImage: null,
@@ -46,7 +45,8 @@ export default {
             var image = res.value;
             state.viewedImage = image;
             state.viewedImageComments = image.comments;
-        }
+        },
+
     },
     actions: {
         getVisitedUserImages(context, { userId }) {
@@ -89,7 +89,7 @@ export default {
             return imageServices.addUserComment(userComment, imageId, commentWriterId)
                 .then(res => {
                     context.commit({ type: 'setUserCommentsAndImage', res })
-                    return  res.value.comments;
+                    return res.value.comments;
                 })
         },
         getUserFavoriteImages(context, { userId }) {
@@ -101,23 +101,25 @@ export default {
                     return images;
                 })
         },
-        addUserLike(context, {imageId, userId}){
+        addUserLike(context, { imageId, userId }) {
             return imageServices.addUserLike(imageId, userId)
-                .then(res =>{
-                    console.log('actions add', res.value.likes)
+                .then(res => {
                     // context.commit({type:'setViewedImage', res});
                     return res.value.likes;
                 })
         },
-        removeUserLike(context, {imageId, userId}){
+        removeUserLike(context, { imageId, userId }) {
 
             return imageServices.removeUserLike(imageId, userId)
-            .then(res =>{
-                console.log('actions remove', res.value.likes)
+                .then(res => {
 
-                // context.commit({type:'setViewedImage', res});
-                return res.value.likes;
-            })
+                    // context.commit({type:'setViewedImage', res});
+                    return res.value.likes;
+                })
+        },
+        createImgObj(context, { imgDetails, image }) {
+            return imageServices.createImgObj(imgDetails, image);
+            //TODO: findout if displayedprofile is loggedinuserprofiel and update inthat case
         }
 
     }

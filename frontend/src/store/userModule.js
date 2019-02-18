@@ -43,7 +43,10 @@ export default {
         },
         setUserFavoriteImages(state, { images }) {
             state.userFavoriteImages = images;
-        }
+        },
+        // updateLoggedInUsersImages(state, {image}){
+        //     state.loggedInUser.
+        // }
     },
     actions: {
         getVisitedUser(context, { userId }) {

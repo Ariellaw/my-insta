@@ -46,7 +46,6 @@ function addUserLike(imageId, userId){
         })
 }
 function removeUserLike(imageId, userId){
-    console.log('services remove', imageId, userId)
 
     const _id = new ObjectId(imageId);
     return getImageById(imageId).then(image =>{
@@ -54,7 +53,6 @@ function removeUserLike(imageId, userId){
         var idx = likes.findIndex(id => id === userId) 
            if(idx !== -1){
                likes.splice(idx,1);
-               console.log(likes)
            }
    return mongoService.connect()
     .then(db =>
@@ -63,10 +61,21 @@ function removeUserLike(imageId, userId){
 
         })
 }
+
+function addNewImage(imgObj){
+    var id = imgObj.ownerId;
+    imgObj.ownerId = ObjectId(id);
+    return mongoService.connect()
+        .then(db =>
+           db.collection(imagesDb).insert(imgObj)
+           )
+
+}
 module.exports = {
     getImagesByUserId,
     getImageById,
     addComments,
     addUserLike,
-    removeUserLike
+    removeUserLike,
+    addNewImage
 }

@@ -30,7 +30,6 @@ function addImageRoutes(app) {
     app.put(`${BASE}/:imageId/likes`, (req,res)=>{
         const imageId = req.body.imageId;
         const userId = req.body.userId;
-        console.log(imageId, userId)
         imageService.addUserLike(imageId, userId)
         .then(image =>{
             return res.json(image)
@@ -39,9 +38,17 @@ function addImageRoutes(app) {
     app.delete(`${BASE}/:imageId/:userId/likes`, (req,res) =>{
         const imageId = req.params.imageId;
         const userId = req.params.userId;
-        console.log('routes remove', imageId, userId)
 
         imageService.removeUserLike(imageId, userId)
+        .then(image =>{
+            return res.json(image)
+        })
+    })
+
+    app.post(`${BASE}/newImage`, (req, res)=>{
+        const imgObj = req.body.imgObj;
+
+        imageService.addNewImage(imgObj)
         .then(image =>{
             return res.json(image)
         })

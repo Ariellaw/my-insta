@@ -6,11 +6,9 @@ const ImageService = require('./imageService')
 
 
 function getById(userId) {
-    console.log("getById",userId )
     const _id = new ObjectId(userId);
     return mongoService.connect()
         .then(db =>{
-            // console.log("db", db)
             return db.collection(userDb).findOne({ "_id": _id })
         })
 }
@@ -18,7 +16,6 @@ function getById(userId) {
 //find out w
 
 function addFollowers(followeeId, followerId) {
-    // console.log(Date.now(),"addFollowers - start");
 
     var prms = [];
     prms.push(_getListProperty(followeeId, 'followers').then(followerIds => {
@@ -95,7 +92,6 @@ function removeFollowers(followeeId, followerId) {
     return Promise.all(prms);
 }
 function removeFromUserFavorites(imageId, loggedInUserId) {
-    // console.log('remove', imageId, loggedInUserId)
 
     const _id = new ObjectId(loggedInUserId);
 

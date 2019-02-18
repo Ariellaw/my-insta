@@ -6,7 +6,7 @@
           <i class="fas fa-times"></i>
         </button>
 
-        <div class="modal-container"  :class="{'displayVertical':displayVertically}">
+        <div class="modal-container" :class="{'displayVertical':displayVertically}">
           <img :src="viewedImage.image" class="currImage" alt>
 
           <!-- <div class="modal-body"> -->
@@ -30,6 +30,7 @@
                 class="follow"
                 @click="addFollowers(viewedImage.ownerId)"
               >Follow</span>
+              <p class="image-location">{{viewedImage.location}}</p>
             </span>
           </div>
           <div class="comments">
@@ -55,12 +56,16 @@
               <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
             </div>
             <span class="column">
-              <span class="num-of-likes bold-reg">{{likes.length}}&nbsp;Likes&nbsp;</span>
+              <span
+                :class="{'visibilityNone':likes.length===0}"
+                class="num-of-likes bold-reg"
+              >{{likes.length}}&nbsp;Likes&nbsp;</span>
               <span class="time-posted">{{ viewedImage.timePosted | moment }}</span>
             </span>
           </div>
           <div class="add-a-comment">
             <textarea
+              class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
               v-on:keyup.enter="addUserComment(userComment, viewedImage._id, loggedInUserId)"
@@ -86,7 +91,7 @@ export default {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       userComment: null,
       viewedImageComments: this.viewedImage.comments,
-      displayVertically: false,
+      displayVertically: true,
       likes: this.viewedImage.likes
     };
   },

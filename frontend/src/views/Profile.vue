@@ -7,8 +7,9 @@
           {{visitedUser.userName}}
           <div v-if="loggedInUser" class="right">
             <button
+              @click="editProfile"
               v-if="loggedInUser._id === visitedUser._id"
-              class="edit-profile-or-following"
+              class="edit-profile-or-following btn"
             >Edit Profile</button>
             <button
               @click="removeFollowers(visitedUser._id)"
@@ -26,7 +27,7 @@
         </div>
         <div class="numbers">
           <p>
-            <span class="bold-reg" v-if="usersCreatedImages">{{usersCreatedImages.length+" "}}</span>posts
+            <span class="bold-reg" v-if="usersImages">{{usersImages.length+" "}}</span>posts
           </p>
           <p>
             <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -66,7 +67,9 @@
       </div>
       <!-- <galleryOfImages></galleryOfImages>
       <galleryOfImages></galleryOfImages> -->
-      <galleryOfImages :displayedImages="displayedImages"></galleryOfImages>
+      <galleryOfImages  v-if="filter==='album'" :displayedImages="usersImages"></galleryOfImages>
+        <galleryOfImages :displayedImages="userFavorites"></galleryOfImages>
+
     </section>
   </div>
 </template>
@@ -80,14 +83,13 @@ export default {
     return {
       filter: "album",
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      displayedImages: this.usersCreatedImages
     };
   },
   methods: {
     changeFilter(filter) {
       this.filter = filter;
       if (this.filter === "album") {
-        this.displayedImages = this.usersCreatedImages;
+        this.displayedImages = this.usersImages;
       } else if (this.filter === "favorites") {
         this.displayedImages = this.userFavorites;
       }
@@ -101,10 +103,14 @@ export default {
     },
     removeFollowers(followeeId) {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
+    },
+    editProfile(){
+     this.$router.push(`/edit/${this.loggedInUserId}`);
+
     }
   },
   computed: {
-    usersCreatedImages() {
+    usersImages() {
       return this.$store.getters.visitedUserImages;
     },
     followingVisitedUser() {

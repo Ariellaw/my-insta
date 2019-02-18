@@ -44,6 +44,10 @@
           flex-direction: row;
           margin: 1rem;
         }
+        .image-location{
+          font-family: monst-light;
+          font-weight: 100;
+        }
       }
       .comments {
         height: 20%;
@@ -87,8 +91,9 @@
       .add-a-comment {
         height: 7%;
         order:5;
-        textarea {
+        .viewed-image-text-area {
          @include textarea;
+         height: 100%;
         }
       }
     
@@ -126,6 +131,10 @@
         border-radius: 50%;
         flex-direction: row;
         margin: 1rem;
+      }
+      .image-location{
+        font-family: monst-light;
+        font-weight: 100;
       }
     }
     .comments {

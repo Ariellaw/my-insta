@@ -12,7 +12,7 @@
           action
           method="POST"
           enctype="multipart/form-data"
-          @submit="getCloudinaryUrl"
+          @submit="getCloudinaryUrl()"
         >
           <div class="image-upload">
             <label for="file-input">
@@ -70,11 +70,11 @@ export default {
     goToLoggedInUserProfile() {
       var loggedInUserId = this.loggedInUser._id;
       this.$router.push(`/user/${loggedInUserId}`);
-      this.$router.go(); 
-    },
+      this.$router.go();
+    }
   },
-  computed:{
-     loggedInUser() {
+  computed: {
+    loggedInUser() {
       return this.$store.getters.loggedInUser;
     }
   },
@@ -85,6 +85,5 @@ export default {
 </script>
 
  <style lang="scss" scoped>
-
 </style>
 

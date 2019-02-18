@@ -1,6 +1,7 @@
 import axios from 'axios';
 import utilService from './utilServices'
 const BASE_URL = 'http://localhost:3003/image'
+import userServices from "./userServices"
 
 
 function getImageById(imageId) {
@@ -16,27 +17,46 @@ function getUserImages(userId) {
         })
 }
 function addUserComment(userComment, imageId, commentWriterId) {
-    var id = utilService.makeId()
-    var userComment = { commentOwnerId: commentWriterId, comment: userComment };
-    userComment.id=id;
+    var id = utilService.makeId();
+    var timeStamp = Date.now;
+    var userComment = { commentOwnerId: commentWriterId, comment: userComment, timeStamp};
+    userComment.id = id;
     return axios.put(`${BASE_URL}/${imageId}/comment`, { imageId, userComment })
         .then(res => {
             return res.data
         })
 }
-function addUserLike(imageId, userId){
-    return axios.put(`${BASE_URL}/${imageId}/likes`, {imageId, userId})
-    .then(res => {
-        return res.data
-    })
- }
-
-function removeUserLike(imageId, userId){
-    console.log('services remove', imageId, userId)
-
-    return  axios.delete(`${BASE_URL}/${imageId}/${userId}/likes`)
+function addUserLike(imageId, userId) {
+    return axios.put(`${BASE_URL}/${imageId}/likes`, { imageId, userId })
         .then(res => {
             return res.data
+        })
+}
+
+function removeUserLike(imageId, userId) {
+
+    return axios.delete(`${BASE_URL}/${imageId}/${userId}/likes`)
+        .then(res => {
+            return res.data
+        })
+}
+function createImgObj(imgDetails, image) {
+   var commentId = utilService.makeId();
+    var comments = [];
+    var timeStamp = Date.now();
+    comments.push({ commentOwnerId: "5c5fecdbd16a8d56eaca3c98", comment: imgDetails.text, id: commentId, timeStamp })
+    var imgObj =
+    {
+        "image": image,
+        "ownerId": "5c5fecdbd16a8d56eaca3c98",
+        "comments": comments,
+        "likes": [],
+        "timePosted": timeStamp,
+        "location": imgDetails.location,
+    }
+    return axios.post(`${BASE_URL}/newImage`, {imgObj})
+        .then(res =>{
+            return res.data;
         })
 }
 export default {
@@ -44,7 +64,8 @@ export default {
     getImageById,
     addUserComment,
     addUserLike,
-    removeUserLike
+    removeUserLike,
+    createImgObj
 
 }
 
