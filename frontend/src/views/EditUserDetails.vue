@@ -1,21 +1,22 @@
 <template>
   <div class="edit-profile-container">
-    <div>
-      <div class="update-profile-pic">
-              <img :src="loggedInUser.profilePic" alt class="edit-image">
-
-        <label for="file-input" class="btn">Update your Profile Picture</label>
-        <input
-          type="file"
-          name="pic"
-          id="file-input"
-          accept="image/*"
-          @change="getCloudinaryUrl()"
-          required
-        >
-      </div>
+    <!-- <div> -->
+    <div class="update-profile-pic-container">
+      <img :src="loggedInUser.profilePic" alt class="edit-image">
+      <h3>{{loggedInUser.userName}}</h3>
+      <label for="file-input" class="btn">Update your Profile Picture</label>
+      <input
+        type="file"
+        name="pic"
+        id="file-input"
+        accept="image/*"
+        @change="getCloudinaryUrl()"
+        required
+      >
+      <!-- </div> -->
     </div>
-    <label class="edit-profile-label" for><h3>First Name</h3>
+    <label class="edit-profile-label" for>
+      <h3>First Name</h3>
       <input
         type="text"
         class="edit-user-input fName"
@@ -23,7 +24,8 @@
         placeholder="First name...."
       >
     </label>
-    <label for class="edit-profile-label"><h3>Last Name</h3>
+    <label for class="edit-profile-label">
+      <h3>Last Name</h3>
       <input
         type="text"
         class="edit-user-input lName"
@@ -31,7 +33,8 @@
         placeholder="Last name...."
       >
     </label>
-    <label for class="edit-profile-label"><h3>Username</h3>
+    <label for class="edit-profile-label">
+      <h3>Username</h3>
       <input
         type="text"
         class="edit-user-input userName"
@@ -39,7 +42,8 @@
         placeholder="Username...."
       >
     </label>
-    <label for class="edit-profile-label"><h3>Email</h3>
+    <label for class="edit-profile-label">
+      <h3>Email</h3>
       <input
         type="text"
         class="edit-user-input email"
@@ -86,6 +90,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  height: 100vh;
   .edit-image {
     width: 150px;
     height: 150px;
@@ -94,24 +99,41 @@ export default {
     border: 1px solid black;
     margin-bottom: 15px;
   }
+  .update-profile-pic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .edit-profile-label {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    margin-right: 10px;
-    h3{
-      margin-right:2rem;
+    flex-wrap: wrap;
+    width: 100%;
+    h3 {
+      margin-right: 2rem;
+      width: 24%;
+      display: flex;
+      justify-content: flex-end;
     }
+
     .edit-user-input {
       height: 41px;
       border-radius: 10px;
       padding: 10px;
-      width: 75%;
+      width: 72%;
+      justify-content: flex-end;
     }
   }
   .update-profile-pic {
-    color: #3897f0;
-    font-family: monst-bold;
+    h3 {
+      font-weight: 200;
+    }
+    label {
+      color: #3897f0;
+      font-family: monst-bold;
+    }
     > input {
       display: none;
     }
