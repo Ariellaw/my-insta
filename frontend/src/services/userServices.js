@@ -49,6 +49,14 @@ function getImagesByImageId(userId){
         return res.data       
     })
 }
+function updateUserDetails(userDetails){
+    var userId = userDetails._id;
+    console.log('services', userDetails)
+    return axios.put(`${BASE_URL}/${userId}/userDetails`, {userDetails})
+        .then(res => {
+            return res.data
+        })
+}
 export default {
     getUserById,
     updateFollowers,
@@ -56,5 +64,6 @@ export default {
     removeFollowers,
     addToUserFavorites,
     removeFromUserFavorites,
-    getImagesByImageId
+    getImagesByImageId,
+    updateUserDetails
 }

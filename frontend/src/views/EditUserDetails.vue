@@ -1,27 +1,36 @@
-<template>
-  <div class="edit-profile-container">
-    <!-- <div> -->
+<template >
+  <form v-if="loggedInUser"
+    class="edit-profile-container"
+    ref="form"
+    action
+    method="POST"
+    enctype="multipart/form-data"
+    @submit.prevent="updateUserDetails"
+  >
+    
     <div class="update-profile-pic-container">
-      <img :src="loggedInUser.profilePic" alt class="edit-image">
+      <img x :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image">
       <h3>{{loggedInUser.userName}}</h3>
-      <label for="file-input" class="btn">Update your Profile Picture</label>
-      <input
-        type="file"
-        name="pic"
-        id="file-input"
-        accept="image/*"
-        @change="getCloudinaryUrl()"
-        required
-      >
-      <!-- </div> -->
+      <label for="file-input" class="btn">
+        Update your Profile Picture
+        <input
+          type="file"
+          name="user-profile-pic"
+          id="file-input"
+          accept="image/*"
+          @change="getCloudinaryUrl()"
+          @input="user.profilePic = $event.target.value"
+        >
+      </label>
     </div>
     <label class="edit-profile-label" for>
       <h3>First Name</h3>
       <input
         type="text"
         class="edit-user-input fName"
-        v-model="loggedInUser.firstName"
         placeholder="First name...."
+        :value="loggedInUser.firstName"
+        @input="user.firstName = $event.target.value"
       >
     </label>
     <label for class="edit-profile-label">
@@ -29,7 +38,8 @@
       <input
         type="text"
         class="edit-user-input lName"
-        v-model="loggedInUser.lastName"
+        :value="loggedInUser.lastName"
+        @input="user.lastName = $event.target.value"
         placeholder="Last name...."
       >
     </label>
@@ -38,7 +48,8 @@
       <input
         type="text"
         class="edit-user-input userName"
-        v-model="loggedInUser.userName"
+        :value="loggedInUser.userName"
+        @input="user.userName = $event.target.value"
         placeholder="Username...."
       >
     </label>
@@ -47,11 +58,13 @@
       <input
         type="text"
         class="edit-user-input email"
-        v-model="loggedInUser.email"
+        :value="loggedInUser.email"
+        @input="user.email = $event.target.value"
         placeholder="Email...."
       >
     </label>
-  </div>
+    <input type="submit" value="Submit" class="sumbit-btn btn">
+  </form>
 </template>
 
 <script>
@@ -59,21 +72,32 @@ export default {
   name: "edit-user-details",
   data() {
     return {
-      loggedInUser: {
+      user: {
         firstName: null,
         lastName: null,
         userName: null,
-        email: null
+        email: null,
       }
     };
   },
   created() {
     const userId = this.$route.params.userId;
-    this.$store
-      .dispatch({ type: "getLoggedInUser", userId })
-      .then(user => (this.loggedInUser = user));
+    this.$store.dispatch({ type: "getLoggedInUser", userId });
   },
-  computed: {}
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
+  },
+  methods: {
+    updateUserDetails() {
+      this.user._id = this.loggedInUser._id;
+      this.$store.dispatch({
+        type: "updateUserDetails",
+        userDetails: this.user
+      });
+    }
+  }
 };
 </script>
 
@@ -91,22 +115,7 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   height: 100vh;
-  .edit-image {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 1px solid black;
-    margin-bottom: 15px;
-  }
-  .update-profile-pic-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
   .edit-profile-label {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -126,17 +135,35 @@ export default {
       justify-content: flex-end;
     }
   }
-  .update-profile-pic {
+  .update-profile-pic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .edit-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid black;
+      margin-bottom: 15px;
+    }
     h3 {
       font-weight: 200;
     }
+
     label {
       color: #3897f0;
       font-family: monst-bold;
+      > input {
+        display: none;
+      }
     }
-    > input {
-      display: none;
-    }
+  }
+  .sumbit-btn {
+    align-self: flex-end;
+    width: 10rem;
+    height: 5rem;
   }
 }
 </style>

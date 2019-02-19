@@ -54,6 +54,16 @@ function addUserRoutes(app) {
             })
 
     })
+
+    app.put(`${BASE}/:userId/userDetails`, (req,res)=>{
+        console.log('yay')
+        const userDetails = req.body.userDetails;
+        console.log('user test', userDetails)
+        userService.updateUserDetails(userDetails)
+            .then(user =>{
+                return res.json(user);
+            })
+    })
 }
 
 module.exports = addUserRoutes;

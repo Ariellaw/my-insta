@@ -8,7 +8,7 @@ const ImageService = require('./imageService')
 function getById(userId) {
     const _id = new ObjectId(userId);
     return mongoService.connect()
-        .then(db =>{
+        .then(db => {
             return db.collection(userDb).findOne({ "_id": _id })
         })
 }
@@ -142,26 +142,45 @@ function getImagesByImageId(userId) {
     return getById(userId).then(user => {
         var favorites = user.favorites;
         // for (var i = 0; i < favorites.length; i++) {
-            var imageId = favorites[0];
-            var _id = new ObjectId(imageId);
-         mongoService.connect()
-                .then(db =>
-                    db.collection(imagesDb).findOne({ '_id': _id })
-                )
+        var imageId = favorites[0];
+        var _id = new ObjectId(imageId);
+        mongoService.connect()
+            .then(db =>
+                db.collection(imagesDb).findOne({ '_id': _id })
+            )
         // }
         return Promise.all(prms)
     })
-    .then(results => {
-        return results;
-    })
+        .then(results => {
+            return results;
+        })
 }
 
+function updateUserDetails(userDetails) {
+    var userId = userDetails._id;
+    const _id = new ObjectId(userId);
+
+    return getById(userId).then(user => {
+        var firstName = userDetails.firstName || user.firstName;
+        var lastName = userDetails.lastName || user.lastName;
+        var email = userDetails.email || user.email;
+        var userName = userDetails.userName || user.userName;
+
+        return mongoService.connect()
+            .then(db =>
+                db.collection(userDb).findOneAndUpdate({ "_id": _id },
+                    { $set: { 'firstName': firstName ,  'lastName': lastName ,  'email': email , 'userName': userName }  }, { returnOriginal: false })
+
+            )
+    })
+}
 module.exports = {
     getById,
     removeFollowers,
     addFollowers,
     removeFromUserFavorites,
     addToUserFavorites,
-    getImagesByImageId
+    getImagesByImageId,
+    updateUserDetails
 
 }

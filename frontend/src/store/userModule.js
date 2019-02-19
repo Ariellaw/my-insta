@@ -32,7 +32,7 @@ export default {
             state.loggedInUser = user;
         },
         updateLoggedInUser(state, { user }) {
-            state.loggedInUser = user.value;
+            state.loggedInUser = user;
         },
 
 
@@ -87,17 +87,25 @@ export default {
         addToUserFavorites(context, { imageId }) {
             return userServices.addToUserFavorites(imageId, context.state.loggedInUser._id)
                 .then(user => {
-                    context.commit({ type: 'updateLoggedInUser', user })
+                    context.commit({ type: 'updateLoggedInUser', user:user.value })
                     return user;
                 })
         },
         removeFromUserFavorites(context, { imageId }) {
             return userServices.removeFromUserFavorites(imageId, context.state.loggedInUser._id)
                 .then(user => {
-                    context.commit({ type: 'updateLoggedInUser', user })
+                    context.commit({ type: 'updateLoggedInUser', user:user.value  })
                     return user;
                 })
         },
+        updateUserDetails(context,{userDetails}){
+            console.log('actions', userDetails)
+            userServices.updateUserDetails(userDetails)
+                .then(user =>{
+                    context.commit({ type: 'updateLoggedInUser', user:user.value })
+                    return user.value;
+                } )
+        }
 
     }
 }
