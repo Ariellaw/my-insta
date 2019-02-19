@@ -30,12 +30,8 @@
         }
         .username {
           font-size: 2.5rem;
-          .edit-profile-or-following {
-            border-radius: 11%;
-            background-color: whitesmoke;
-            border: 1px solid darkgray;
-            width: 89px;
-            height: 30px;
+          .edit-profile-or-following-btn {
+            @include general-button;
             margin-right: 1rem;
         
           }

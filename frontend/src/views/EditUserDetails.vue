@@ -1,5 +1,6 @@
 <template >
-  <form v-if="loggedInUser"
+  <form
+    v-if="loggedInUser"
     class="edit-profile-container"
     ref="form"
     action
@@ -7,19 +8,19 @@
     enctype="multipart/form-data"
     @submit.prevent="updateUserDetails"
   >
-    
-    <div class="update-profile-pic-container">
-      <img x :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image">
+    <div v-if="currProfilePic" class="update-profile-pic-container">
+      <img :src="currProfilePic" alt="profile-picture" class="edit-image">
       <h3>{{loggedInUser.userName}}</h3>
       <label for="file-input" class="btn">
         Update your Profile Picture
+
+
         <input
           type="file"
           name="user-profile-pic"
           id="file-input"
           accept="image/*"
-          @change="getCloudinaryUrl()"
-          @input="user.profilePic = $event.target.value"
+          @change="getCloudinaryUrl"
         >
       </label>
     </div>
@@ -72,14 +73,18 @@ export default {
   name: "edit-user-details",
   data() {
     return {
+      profilePicChanged:false,
       user: {
         firstName: null,
         lastName: null,
         userName: null,
         email: null,
+        profilePic: null
       }
     };
   },
+            //  @input="user.profilePic = $event.target.value"
+
   created() {
     const userId = this.$route.params.userId;
     this.$store.dispatch({ type: "getLoggedInUser", userId });
@@ -87,7 +92,14 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
-    }
+    },
+   currProfilePic(){
+     if(!this.profilePicChanged){
+     return this.loggedInUser.profilePic;
+     }
+      else return this.user.profilePic;
+   } 
+
   },
   methods: {
     updateUserDetails() {
@@ -96,6 +108,20 @@ export default {
         type: "updateUserDetails",
         userDetails: this.user
       });
+    },
+    getCloudinaryUrl() {
+      console.log('yay');
+      var elForm = this.$refs.form;
+      return this.$store
+        .dispatch({
+          type: "getCloudinaryPicUrl",
+          elForm
+        })
+        .then(url => {
+          this.user.profilePic = url;
+          this.profilePicChanged = true;
+          this.updateUserDetails();
+        });
     }
   }
 };
@@ -156,14 +182,21 @@ export default {
       color: #3897f0;
       font-family: monst-bold;
       > input {
-        display: none;
+        // display: none;
+        // visibility: hidden;
       }
     }
   }
   .sumbit-btn {
     align-self: flex-end;
-    width: 10rem;
-    height: 5rem;
+    border-radius: 11%;
+    background-color: whitesmoke;
+    border: 1px solid darkgray;
+    width: 89px;
+    height: 30px;
+    //TODO - change to mixin general-button
+
+
   }
 }
 </style>

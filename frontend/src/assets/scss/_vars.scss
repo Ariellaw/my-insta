@@ -34,3 +34,11 @@ $lighter-font-color: lightgray;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
 }
+
+@mixin general-button{
+    border-radius: 11%;
+    background-color: whitesmoke;
+    border: 1px solid darkgray;
+    width: 89px;
+    height: 30px;
+}

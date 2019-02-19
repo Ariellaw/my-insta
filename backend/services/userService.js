@@ -165,11 +165,13 @@ function updateUserDetails(userDetails) {
         var lastName = userDetails.lastName || user.lastName;
         var email = userDetails.email || user.email;
         var userName = userDetails.userName || user.userName;
+        var profilePic = userDetails.profilePic || user.profilePic;
+
 
         return mongoService.connect()
             .then(db =>
                 db.collection(userDb).findOneAndUpdate({ "_id": _id },
-                    { $set: { 'firstName': firstName ,  'lastName': lastName ,  'email': email , 'userName': userName }  }, { returnOriginal: false })
+                    { $set: { 'firstName': firstName ,  'lastName': lastName ,  'email': email , 'userName': userName , 'profilePic':profilePic}  }, { returnOriginal: false })
 
             )
     })

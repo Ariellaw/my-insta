@@ -9,17 +9,17 @@
             <button
               @click="editProfile"
               v-if="loggedInUser._id === visitedUser._id"
-              class="edit-profile-or-following btn"
+              class="edit-profile-or-following-btn btn"
             >Edit Profile</button>
             <button
               @click="removeFollowers(visitedUser._id)"
               v-else-if="followingVisitedUser"
-              class="edit-profile-or-following"
+              class="edit-profile-or-following-btn"
             >Following</button>
             <button
               @click="addFollowers(visitedUser._id)"
               v-else
-              class="edit-profile-or-following"
+              class="edit-profile-or-following-btn"
             >Follow</button>
             
             <i class="fas fa-cog btn"></i>
