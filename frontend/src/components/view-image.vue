@@ -9,7 +9,6 @@
         <div class="modal-container" :class="{'displayVertical':displayVertically}">
           <img :src="viewedImage.image" class="currImage" alt>
 
-          <!-- <div class="modal-body"> -->
           <div class="user-info bold-reg">
             <img
               @click="goToImageOwnerProfile"
@@ -72,12 +71,10 @@
               v-model="userComment"
             ></textarea>
           </div>
-          <!-- </div> -->
         </div>
       </div>
     </div>
   </transition>
-  <!-- </script> -->
 </template>
 
 <script>
@@ -102,7 +99,6 @@ export default {
   filters: {
     moment: function(date) {
       return moment(date).fromNow();
-      //TODO - write date if over certain date - to be decided
     }
   },
   methods: {

@@ -6,7 +6,6 @@ export default {
 
         visitedUser: null,
         loggedInUser: null,
-        userFavoriteImages: null,
         // isLoadingImages: false,
 
 
@@ -14,7 +13,6 @@ export default {
     getters: {
         visitedUser: state => { return state.visitedUser },
         loggedInUser: state => { return state.loggedInUser },
-        userFavoriteImages: state => { return state.userFavoriteImages },
         // isLoadingImages: state => { return state.isLoadingImages },
 
 
@@ -34,16 +32,14 @@ export default {
         updateLoggedInUser(state, { user }) {
             state.loggedInUser = user;
         },
-
+        
 
         setVisitedUser(state, { user }) {
             state.visitedUser = user;
             // state.visitedUserSamples = data.samples;
             // state.visitedUserFavorites = data.favorites;
         },
-        setUserFavoriteImages(state, { images }) {
-            state.userFavoriteImages = images;
-        },
+
         // updateLoggedInUsersImages(state, {image}){
         //     state.loggedInUser.
         // }
@@ -85,6 +81,7 @@ export default {
                 })
         },
         addToUserFavorites(context, { imageId }) {
+
             return userServices.addToUserFavorites(imageId, context.state.loggedInUser._id)
                 .then(user => {
                     context.commit({ type: 'updateLoggedInUser', user:user.value })
@@ -99,7 +96,6 @@ export default {
                 })
         },
         updateUserDetails(context,{userDetails}){
-            console.log('actions', userDetails)
             userServices.updateUserDetails(userDetails)
                 .then(user =>{
                     context.commit({ type: 'updateLoggedInUser', user:user.value })

@@ -108,7 +108,6 @@ export default {
       });
     },
     uploadImage() {
-      console.log("change user details");
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
@@ -116,12 +115,10 @@ export default {
           elForm
         })
         .then(url => {
-          console.log("change user details1");
 
           this.user.profilePic = url;
           this.profilePicChanged = true;
           this.updateUserDetails();
-          console.log("change user details2");
         });
     }
   }

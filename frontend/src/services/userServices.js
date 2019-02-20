@@ -3,7 +3,6 @@ import utilService from './utilServices'
 const BASE_URL = 'http://localhost:3003/user'
 
 function getUserById(userId) {
-    // console.log('services gt visited user', userId)
     return axios.get(`${BASE_URL}/${userId}`)
         .then(res =>{
             return res.data
@@ -32,6 +31,7 @@ function removeFollowers(followeeId, followerId){
     })
 }
 function addToUserFavorites(imageId, loggedInUserId){
+
     return  axios.put(`${BASE_URL}/${imageId}/favorites`, {imageId, loggedInUserId})
         .then(res => {
             return res.data
@@ -44,6 +44,7 @@ function removeFromUserFavorites(imageId, loggedInUserId){
         })
 }
 function getImagesByImageId(userId){
+
     return axios.get(`${BASE_URL}/${userId}/images`)
     .then(res =>{
         return res.data       
@@ -51,7 +52,6 @@ function getImagesByImageId(userId){
 }
 function updateUserDetails(userDetails){
     var userId = userDetails._id;
-    console.log('services', userDetails)
     return axios.put(`${BASE_URL}/${userId}/userDetails`, {userDetails})
         .then(res => {
             return res.data

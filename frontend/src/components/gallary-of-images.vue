@@ -8,6 +8,7 @@
       <img
         v-for="image in displayedImages"
         :src="image.image"
+        :key="image._id"
         alt="oh noo!"
         class="visitedUserImg btn"
         @click="displayViewedImage(image)"
@@ -15,7 +16,6 @@
     </div>
   </div>
 </template>
-        <!-- :key="image._id" -->
 
 <script>
 import viewImage from "./view-image.vue";
@@ -39,6 +39,9 @@ export default {
     setIsLoadingFavorites() {
       return this.$store.getters.isLoadingImages;
     }
+  },
+  created(){
+    console.log("gallaery", this.displayedImages)
   },
 
   components: {

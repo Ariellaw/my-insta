@@ -11,16 +11,15 @@ export default {
         visitedUserImages: null,
         viewedImage: null,
         viewedImageOwner: null,
-        // viewedImageComments: null,
+        userFavoriteImages:null
     },
     getters: {
         visitedUserImages: state => { return state.visitedUserImages },
         isLoadingImages: state => { return state.isLoadingImages },
         viewedImage: state => { return state.viewedImage },
         viewedImageOwner: state => { return state.viewedImageOwner },
-        // viewedImageComments: state => { return state.viewedImage.comments },
         setIsLoadingFavorites: state => { return state.setIsLoadingFavorites },
-
+        userFavoriteImages: state => {return state.userFavoriteImages}
 
 
 
@@ -46,6 +45,11 @@ export default {
             state.viewedImage = image;
             state.viewedImageComments = image.comments;
         },
+        setUserFavoriteImages(state, {images}){
+            state.userFavoriteImages = images;
+            console.log(state.userFavoriteImages, images)
+
+        }
 
     },
     actions: {
@@ -70,15 +74,7 @@ export default {
             return image;
 
         },
-        // getPostById(context,{id}){
-        //     return imageServices.getPostById(id)
-        //     .then(image => {
-        //       context.commit({type:'setViewedPost', image});  
-        //       userServices.getUserById(image.owenerId) 
-        //       return image;
-
-        //     })
-        // },
+        
         getCloudinaryPicUrl(context, { elForm }) {
             return cloudinaryService.uploadImg(elForm)
                 .then(res => {
@@ -97,7 +93,7 @@ export default {
             return userServices.getImagesByImageId(userId)
                 .then(images => {
                     context.commit({ type: 'setUserFavoriteImages', images })
-                    context.commit({ type: 'setIsLoading', isLoading: false })
+                    context.commit({ type: 'setIsLoadingFavorites', isLoading: false })
                     return images;
                 })
         },

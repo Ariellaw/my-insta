@@ -49,13 +49,13 @@
         >
           <i class="far fa-images"></i> Posts
         </span>
-        <!-- <span
+        <span
           class="btn"
           @click="changeFilter('favorites')"
           :class="{ 'chosen-filter': filter==='favorites'}"
         >
           <i class="far fa-star"></i> Favorites
-        </span> -->
+        </span>
         
         <span
           class="btn"
@@ -65,10 +65,9 @@
           <i class="fas fa-camera-retro"></i> Tagged
         </span>
       </div>
-      <!-- <galleryOfImages></galleryOfImages>
-      <galleryOfImages></galleryOfImages> -->
+
       <galleryOfImages  v-if="filter==='album'" :displayedImages="usersImages"></galleryOfImages>
-        <galleryOfImages :displayedImages="userFavorites"></galleryOfImages>
+        <galleryOfImages v-else-if="filter==='favorites'" :displayedImages="userFavorites"></galleryOfImages>
 
     </section>
   </div>
@@ -88,11 +87,6 @@ export default {
   methods: {
     changeFilter(filter) {
       this.filter = filter;
-      if (this.filter === "album") {
-        this.displayedImages = this.usersImages;
-      } else if (this.filter === "favorites") {
-        this.displayedImages = this.userFavorites;
-      }
     },
     getVisitedUserImages(userId) {
       this.$store.dispatch({ type: "getVisitedUserImages", userId });
@@ -129,10 +123,10 @@ export default {
   created() {
     const userId = this.$route.params.userId;
     this.$store.dispatch({ type: "getVisitedUser", userId });
-    // this.$store.dispatch({
-    //   type: "getUserFavoriteImages",
-    //   userId: this.loggedInUserId
-    // });
+    this.$store.dispatch({
+      type: "getUserFavoriteImages",
+      userId
+    });
     this.getVisitedUserImages(userId);
     this.$store.dispatch({
       type: "getLoggedInUser",

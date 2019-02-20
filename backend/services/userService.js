@@ -136,53 +136,48 @@ function _getListProperty(userId, listName) {
         .then(res => { return res; })
 }
 function getImagesByImageId(userId) {
-    var prms = [];
-
 
     return getById(userId).then(user => {
         var favorites = user.favorites;
-        // for (var i = 0; i < favorites.length; i++) {
-        var imageId = favorites[0];
-        var _id = new ObjectId(imageId);
-        mongoService.connect()
-            .then(db =>
-                db.collection(imagesDb).findOne({ '_id': _id })
-            )
-        // }
-        return Promise.all(prms)
+        for (var i = 0; i < favorites.length; i++) {
+            favorites[i] = new ObjectId(favorites[i]);
+        }
+            console.log('displayed favorties array', favorites)
+            return mongoService.connect()
+                .then(db =>
+                    db.collection(imagesDb).find({ "_id": { "$in": favorites } }).sort({timePosted:-1}).toArray()
+                )
+   
+
     })
-        .then(results => {
-            return results;
+}
+    function updateUserDetails(userDetails) {
+        var userId = userDetails._id;
+        const _id = new ObjectId(userId);
+
+        return getById(userId).then(user => {
+            var firstName = userDetails.firstName || user.firstName;
+            var lastName = userDetails.lastName || user.lastName;
+            var email = userDetails.email || user.email;
+            var userName = userDetails.userName || user.userName;
+            var profilePic = userDetails.profilePic || user.profilePic;
+
+
+            return mongoService.connect()
+                .then(db =>
+                    db.collection(userDb).findOneAndUpdate({ "_id": _id },
+                        { $set: { 'firstName': firstName, 'lastName': lastName, 'email': email, 'userName': userName, 'profilePic': profilePic } }, { returnOriginal: false })
+
+                )
         })
-}
+    }
+    module.exports = {
+        getById,
+        removeFollowers,
+        addFollowers,
+        removeFromUserFavorites,
+        addToUserFavorites,
+        getImagesByImageId,
+        updateUserDetails
 
-function updateUserDetails(userDetails) {
-    var userId = userDetails._id;
-    const _id = new ObjectId(userId);
-
-    return getById(userId).then(user => {
-        var firstName = userDetails.firstName || user.firstName;
-        var lastName = userDetails.lastName || user.lastName;
-        var email = userDetails.email || user.email;
-        var userName = userDetails.userName || user.userName;
-        var profilePic = userDetails.profilePic || user.profilePic;
-
-
-        return mongoService.connect()
-            .then(db =>
-                db.collection(userDb).findOneAndUpdate({ "_id": _id },
-                    { $set: { 'firstName': firstName ,  'lastName': lastName ,  'email': email , 'userName': userName , 'profilePic':profilePic}  }, { returnOriginal: false })
-
-            )
-    })
-}
-module.exports = {
-    getById,
-    removeFollowers,
-    addFollowers,
-    removeFromUserFavorites,
-    addToUserFavorites,
-    getImagesByImageId,
-    updateUserDetails
-
-}
+    }

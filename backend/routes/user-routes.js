@@ -41,6 +41,7 @@ function addUserRoutes(app) {
     app.put(`${BASE}/:imageId/favorites`, (req, res) =>{
         const imageId = req.body.imageId;
         const loggedInUserId = req.body.loggedInUserId;
+
         userService.addToUserFavorites(imageId, loggedInUserId)
             .then(user =>{
                 return res.json(user);
@@ -48,6 +49,7 @@ function addUserRoutes(app) {
     })
     app.get(`${BASE}/:userId/images`, (req,res)=>{
         const userId = req.params.userId;
+
         userService.getImagesByImageId(userId)
             .then(images =>{
                 return res.json(images);
@@ -56,9 +58,7 @@ function addUserRoutes(app) {
     })
 
     app.put(`${BASE}/:userId/userDetails`, (req,res)=>{
-        console.log('yay')
         const userDetails = req.body.userDetails;
-        console.log('user test', userDetails)
         userService.updateUserDetails(userDetails)
             .then(user =>{
                 return res.json(user);

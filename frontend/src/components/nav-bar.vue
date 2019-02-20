@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     getCloudinaryUrl() {
-      console.log('nav bar thinggy')
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
