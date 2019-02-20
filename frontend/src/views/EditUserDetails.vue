@@ -11,18 +11,18 @@
     <div v-if="currProfilePic" class="update-profile-pic-container">
       <img :src="currProfilePic" alt="profile-picture" class="edit-image">
       <h3>{{loggedInUser.userName}}</h3>
-      <label for="file-input" class="btn">
-        Update your Profile Picture
-
-
+      <div class="image-upload">
+        <label for="file-input-edit" class="btn">Update your Profile Picture</label>
+        
         <input
           type="file"
           name="user-profile-pic"
-          id="file-input"
+          id="file-input-edit"
           accept="image/*"
-          @change="getCloudinaryUrl"
+          @change="uploadImage()"
+          required
         >
-      </label>
+      </div>
     </div>
     <label class="edit-profile-label" for>
       <h3>First Name</h3>
@@ -73,7 +73,7 @@ export default {
   name: "edit-user-details",
   data() {
     return {
-      profilePicChanged:false,
+      profilePicChanged: false,
       user: {
         firstName: null,
         lastName: null,
@@ -83,7 +83,7 @@ export default {
       }
     };
   },
-            //  @input="user.profilePic = $event.target.value"
+  //  @input="user.profilePic = $event.target.value"
 
   created() {
     const userId = this.$route.params.userId;
@@ -93,13 +93,11 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-   currProfilePic(){
-     if(!this.profilePicChanged){
-     return this.loggedInUser.profilePic;
-     }
-      else return this.user.profilePic;
-   } 
-
+    currProfilePic() {
+      if (!this.profilePicChanged) {
+        return this.loggedInUser.profilePic;
+      } else return this.user.profilePic;
+    }
   },
   methods: {
     updateUserDetails() {
@@ -109,8 +107,8 @@ export default {
         userDetails: this.user
       });
     },
-    getCloudinaryUrl() {
-      console.log('yay');
+    uploadImage() {
+      console.log("change user details");
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
@@ -118,9 +116,12 @@ export default {
           elForm
         })
         .then(url => {
+          console.log("change user details1");
+
           this.user.profilePic = url;
           this.profilePicChanged = true;
           this.updateUserDetails();
+          console.log("change user details2");
         });
     }
   }
@@ -128,76 +129,5 @@ export default {
 </script>
 
 <style lang="scss">
-.edit-profile-container {
-  font-size: 2rem;
-  width: 1000px;
-  height: 95vh;
-  border: 1px solid darken(#fafafa, 15%);
-  background-color: #fafafa;
-  border-radius: 5px;
-  margin: 20px auto;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 100vh;
-  .edit-profile-label {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-    h3 {
-      margin-right: 2rem;
-      width: 24%;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .edit-user-input {
-      height: 41px;
-      border-radius: 10px;
-      padding: 10px;
-      width: 72%;
-      justify-content: flex-end;
-    }
-  }
-  .update-profile-pic-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .edit-image {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 1px solid black;
-      margin-bottom: 15px;
-    }
-    h3 {
-      font-weight: 200;
-    }
-
-    label {
-      color: #3897f0;
-      font-family: monst-bold;
-      > input {
-        // display: none;
-        // visibility: hidden;
-      }
-    }
-  }
-  .sumbit-btn {
-    align-self: flex-end;
-    border-radius: 11%;
-    background-color: whitesmoke;
-    border: 1px solid darkgray;
-    width: 89px;
-    height: 30px;
-    //TODO - change to mixin general-button
-
-
-  }
-}
 </style>
 

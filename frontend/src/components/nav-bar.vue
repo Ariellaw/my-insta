@@ -12,7 +12,6 @@
           action
           method="POST"
           enctype="multipart/form-data"
-          @submit="getCloudinaryUrl()"
         >
           <div class="image-upload">
             <label for="file-input">
@@ -57,6 +56,7 @@ export default {
   },
   methods: {
     getCloudinaryUrl() {
+      console.log('nav bar thinggy')
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({

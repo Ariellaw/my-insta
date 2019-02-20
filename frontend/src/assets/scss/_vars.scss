@@ -2,7 +2,7 @@ $lighter-layout-color:#fafafa;
 $darker-layout-clr: darken(#fafafa, 2%);
 $darker-font-color:darkgray;
 $lighter-font-color: lightgray;
-
+$dark-border-color:darken(#fafafa, 15%);
 
 @mixin popup-button{
     float: right;
@@ -37,8 +37,16 @@ $lighter-font-color: lightgray;
 
 @mixin general-button{
     border-radius: 11%;
-    background-color: whitesmoke;
-    border: 1px solid darkgray;
+    background-color: $lighter-layout-color;
+    border: 1px solid $darker-font-color;
     width: 89px;
     height: 30px;
+}
+
+@mixin profilePic{
+    border-radius: 50%;
+    border: 1px solid black;
+    height: 15rem;
+    width:15rem;
+    object-fit: cover;
 }

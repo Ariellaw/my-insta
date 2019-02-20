@@ -13,9 +13,7 @@
       justify-content: flex-start;
   
       .profile-pic {
-        border-radius: 50%;
-        border: 1px solid black;
-        height: 15rem;
+        @include profilePic;
         margin-right: 10rem;
       }
       .loggedin-user-details {
