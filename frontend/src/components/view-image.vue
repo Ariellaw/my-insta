@@ -44,8 +44,8 @@
               <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
               <i @click="addUserLike" v-else class="far fa-heart btn"></i>
               
-              <i class="far fa-comment btn"></i>
-              <i class="fas fa-share-alt btn"></i>
+              <i @click="displaySocialMedia=true" class="fas fa-share-alt btn"></i>
+              <social-media @close="displaySocialMedia=false"  v-if="displaySocialMedia"></social-media>
               
               <i
                 v-if="inUserFavorites"
@@ -80,6 +80,7 @@
 <script>
 import moment from "moment";
 import userComment from "./user-comment.vue";
+import socialMedia from "./social-media.vue"
 export default {
   name: "view-image",
   props: ["viewedImage"],
@@ -88,8 +89,9 @@ export default {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       userComment: null,
       viewedImageComments: this.viewedImage.comments,
-      displayVertically: true,
-      likes: this.viewedImage.likes
+      displayVertically: false,
+      likes: this.viewedImage.likes,
+      displaySocialMedia:false
     };
   },
   created() {
@@ -189,7 +191,8 @@ export default {
     }
   },
   components: {
-    userComment
+    userComment,
+    socialMedia
   }
 };
 </script>

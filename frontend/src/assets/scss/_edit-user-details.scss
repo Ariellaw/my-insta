@@ -1,4 +1,18 @@
+@mixin submit-btn{
+  align-self: center;
+  background-color: #3897f0;
+  border: 1px solid #3897f0;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bolder;
+  height: 4rem;
+  width: 10rem;
+}
+
+
+
 .edit-profile-container {
+  
     font-size: 2rem;
     width: 1000px;
     height: 95vh;
@@ -44,6 +58,8 @@
 
       .edit-image {
         @include profilePic;
+        height: 15rem;
+        width:15rem;
         margin-bottom: 15px;
         //make this a mixing
       }
@@ -53,15 +69,15 @@
   
       label {
         color: #3897f0;
-        font-family: monst-bold;
-
       }
     }
     .sumbit-btn {
-      align-self: flex-end;
-    @include general-button
-      //TODO - change to mixin general-button
-  
-  
+      @include submit-btn;
+      opacity: .3;  
     }
+    .sumbit-btn-after-changes {
+      @include submit-btn;
+      opacity: 1;  
+    }
+    
   }

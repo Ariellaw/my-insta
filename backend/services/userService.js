@@ -142,7 +142,6 @@ function getImagesByImageId(userId) {
         for (var i = 0; i < favorites.length; i++) {
             favorites[i] = new ObjectId(favorites[i]);
         }
-            console.log('displayed favorties array', favorites)
             return mongoService.connect()
                 .then(db =>
                     db.collection(imagesDb).find({ "_id": { "$in": favorites } }).sort({timePosted:-1}).toArray()

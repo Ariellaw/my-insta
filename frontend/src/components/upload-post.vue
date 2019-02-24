@@ -6,11 +6,11 @@
 
         <div class="modal-container">
 
-                  <img class="viewed-image" :src="image" alt="">
+                  <img class="new-image" :src="image" alt="">
                   <div class="new-post-comments">
                     <input type="text" name="location" placeholder="Location.........." v-model="imgDetails.location">                   
                     <textarea placeholder="Say something about this photo............." v-model="imgDetails.text"></textarea>
-                  <button @click="submitImage" class="sumbit-image">Submit</button>
+                  <button @click="submitImage" class="sumbit-image-btn">Submit</button>
                   </div>
           <!-- <div class="modal-body"> -->
 

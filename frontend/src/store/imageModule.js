@@ -47,7 +47,6 @@ export default {
         },
         setUserFavoriteImages(state, {images}){
             state.userFavoriteImages = images;
-            console.log(state.userFavoriteImages, images)
 
         }
 

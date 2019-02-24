@@ -15,11 +15,16 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch({ type: "getUserById", userId:this.comment.commentOwnerId }).then(res => {
-      this.commentOwner = res;
-    });
+    this.$store
+      .dispatch({ type: "getUserById", userId: this.comment.commentOwnerId })
+      .then(res => {
+        this.commentOwner = res;
+      });
   },
-  
+  mounted() {
+      console.log("doc", document.querySelector(".comment-owner"));
+    
+  }
 };
 </script>
 
@@ -28,7 +33,6 @@ export default {
   padding: 3px;
   list-style: none;
   margin-bottom: 2px;
-
 }
 </style>
 >

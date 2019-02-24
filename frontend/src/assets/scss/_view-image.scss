@@ -39,9 +39,9 @@
         border-bottom: 1px solid $lighter-font-color;
     
         .profile-pic {
-          height: 40px;
-          width: 40px;
-          border-radius: 50%;
+          @include profilePic;
+          width: 55px;
+          height: 55px;
           flex-direction: row;
           margin: 1rem;
         }
@@ -69,8 +69,8 @@
         .icons {
           width: auto;    
           i {
-            font-size: 2.5rem;
-            margin-right: 0.5rem;
+            font-size: 2.8rem;
+            margin-right: 1rem;
           }
           .fa-bookmark {
             justify-self: flex-end;
@@ -127,12 +127,13 @@
       border-bottom: 1px solid $lighter-font-color;
   
       .profile-pic {
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
+        @include profilePic;
+        width: 55px;
+        height: 55px;
         flex-direction: row;
         margin: 1rem;
       }
+
       .image-location{
         font-family: monst-light;
         font-weight: 100;
@@ -150,13 +151,14 @@
       border-bottom: 1px solid $lighter-font-color;
       display: flex;
       flex-direction: column;
+      margin-left:.5rem;
       .icons {
         width: 100%;
         margin-bottom: 0.5rem;
   
         i {
           font-size: 2.5rem;
-          margin: 0.5rem;
+          margin-right: 0.5rem;
         }
         .fa-bookmark {
           float: right;
@@ -180,5 +182,4 @@
        @include textarea;
       }
     }
-  // }
   }

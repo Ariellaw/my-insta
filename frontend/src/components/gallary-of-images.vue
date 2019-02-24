@@ -41,7 +41,6 @@ export default {
     }
   },
   created(){
-    console.log("gallaery", this.displayedImages)
   },
 
   components: {

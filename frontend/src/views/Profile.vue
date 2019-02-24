@@ -1,5 +1,5 @@
 <template>
-  <div class="profile" v-if="visitedUser">
+  <div class="profile page-container" v-if="visitedUser">
     <section class="profile-pic-container">
       <img :src="visitedUser.profilePic" class="profile-pic">
       <div class="loggedin-user-details">

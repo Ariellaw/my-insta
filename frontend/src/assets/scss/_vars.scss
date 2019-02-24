@@ -20,7 +20,8 @@ $dark-border-color:darken(#fafafa, 15%);
     border: none;
     resize: none;
     font-size: 18px;
-
+    margin:5px;
+    padding:5px;
 }
 
 @mixin modelArea{
@@ -46,7 +47,5 @@ $dark-border-color:darken(#fafafa, 15%);
 @mixin profilePic{
     border-radius: 50%;
     border: 1px solid black;
-    height: 15rem;
-    width:15rem;
     object-fit: cover;
 }

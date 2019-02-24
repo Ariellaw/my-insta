@@ -1,10 +1,17 @@
 <template>
   <nav class="main-nav-bar">
-    <div class="nav-buttons-container">
+    <div class="nav-buttons-container page-container">
       <div class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i> | AriellaGram
       </div>
-      <input type="text" autocapitalize="none" size="35" placeholder="Search....." value>
+      <input
+        type="text"
+        autocapitalize="none"
+        size="35"
+        placeholder="Search....."
+        v-model="searchKeyword"
+        @keyup="findSearchResults(searchKeyword)"
+      >
       <div class="menu-icons">
         <form
           class="update-user-cover-pic"
@@ -49,6 +56,8 @@ export default {
   data() {
     return {
       showModal: false,
+      searchKeyword: null,
+
       image: {
         file: null
       }
@@ -70,6 +79,10 @@ export default {
       var loggedInUserId = this.loggedInUser._id;
       this.$router.push(`/user/${loggedInUserId}`);
       this.$router.go();
+    },
+    findSearchResults(keyword){
+      this.$router.push(`/`)
+      console.log('Search results', keyword)
     }
   },
   computed: {

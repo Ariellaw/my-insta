@@ -1,10 +1,10 @@
 <template >
   <form
+    @keyup="userMadeChanges=true"
     v-if="loggedInUser"
     class="edit-profile-container"
     ref="form"
     action
-    method="POST"
     enctype="multipart/form-data"
     @submit.prevent="updateUserDetails"
   >
@@ -20,7 +20,6 @@
           id="file-input-edit"
           accept="image/*"
           @change="uploadImage()"
-          required
         >
       </div>
     </div>
@@ -64,16 +63,24 @@
         placeholder="Email...."
       >
     </label>
-    <input type="submit" value="Submit" class="sumbit-btn btn">
+    <input
+      type="submit"
+      value="Submit"
+      :class="{'sumbit-btn': !userMadeChanges, 'sumbit-btn-after-changes':userMadeChanges }"
+      class="btn"
+    >
   </form>
 </template>
 
 <script>
+// method="POST"
+
 export default {
   name: "edit-user-details",
   data() {
     return {
       profilePicChanged: false,
+      userMadeChanges: false,
       user: {
         firstName: null,
         lastName: null,
@@ -102,10 +109,14 @@ export default {
   methods: {
     updateUserDetails() {
       this.user._id = this.loggedInUser._id;
-      this.$store.dispatch({
-        type: "updateUserDetails",
-        userDetails: this.user
-      });
+      this.$store
+        .dispatch({
+          type: "updateUserDetails",
+          userDetails: this.user
+        })
+        .then(() => {
+          this.userMadeChanges = false;
+        });
     },
     uploadImage() {
       var elForm = this.$refs.form;
@@ -115,12 +126,14 @@ export default {
           elForm
         })
         .then(url => {
-
           this.user.profilePic = url;
           this.profilePicChanged = true;
           this.updateUserDetails();
         });
     }
+  },
+  watched: {
+    input() {}
   }
 };
 </script>
