@@ -11,7 +11,8 @@ export default {
         visitedUserImages: null,
         viewedImage: null,
         viewedImageOwner: null,
-        userFavoriteImages:null
+        userFavoriteImages: null,
+        imagesForFeed: [],
     },
     getters: {
         visitedUserImages: state => { return state.visitedUserImages },
@@ -19,7 +20,8 @@ export default {
         viewedImage: state => { return state.viewedImage },
         viewedImageOwner: state => { return state.viewedImageOwner },
         setIsLoadingFavorites: state => { return state.setIsLoadingFavorites },
-        userFavoriteImages: state => {return state.userFavoriteImages}
+        userFavoriteImages: state => { return state.userFavoriteImages },
+        imagesForFeed: state => { return state.imagesForFeed }
 
 
 
@@ -45,9 +47,16 @@ export default {
             state.viewedImage = image;
             state.viewedImageComments = image.comments;
         },
-        setUserFavoriteImages(state, {images}){
+        setUserFavoriteImages(state, { images }) {
             state.userFavoriteImages = images;
 
+        },
+        setInitalImages(state, { res }) {
+            state.imagesForFeed = res;
+        },
+        setAddionalImages(state, {res}){
+            state.imagesForFeed = state.imagesForFeed.concat(res);
+            console.log("all the images", state.imagesForFeed)
         }
 
     },
@@ -73,7 +82,7 @@ export default {
             return image;
 
         },
-        
+
         getCloudinaryPicUrl(context, { elForm }) {
             return cloudinaryService.uploadImg(elForm)
                 .then(res => {
@@ -115,6 +124,28 @@ export default {
         createImgObj(context, { imgDetails, image }) {
             return imageServices.createImgObj(imgDetails, image);
             //TODO: findout if displayedprofile is loggedinuserprofiel and update inthat case
+        },
+        getInitalImages(context) {
+
+            return imageServices.getInitalImages()
+                .then(res => {
+                    console.log('actions', res)
+                    context.commit({ type: "setInitalImages", res })
+                })
+        },
+        getAdditionalImages(context){
+            var feedImages = context.state.imagesForFeed;
+            var startingPoint = 0;
+            if (feedImages.length !== 0) {
+                startingPoint = feedImages[feedImages.length - 1]._id;
+            }
+            console.log('actions startingPoint', startingPoint);
+            
+            return imageServices.getAdditionalImages(startingPoint)
+                .then(res => {
+                    console.log('actions', res)
+                    context.commit({ type: "setAddionalImages", res })
+                })
         }
 
     }

@@ -59,13 +59,28 @@ function createImgObj(imgDetails, image) {
             return res.data;
         })
 }
+function getInitalImages(){
+    return axios.get(`${BASE_URL}/initalFeedImages`)
+        .then(res => {
+            return res.data
+        })
+} 
+function getAdditionalImages(startingPoint){
+    console.log('services feed additional images startingPoint', startingPoint)
+    return axios.get(`${BASE_URL}/${startingPoint}/additionalFeedImages`)
+        .then(res => {
+            return res.data
+        })
+} 
 export default {
     getUserImages,
     getImageById,
     addUserComment,
     addUserLike,
     removeUserLike,
-    createImgObj
+    createImgObj,
+    getInitalImages,
+    getAdditionalImages
 
 }
 

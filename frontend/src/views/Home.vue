@@ -1,6 +1,9 @@
 <template>
- <div id="app">
-    <h1>Random User</h1>
+  <div id="user-feed">
+    <div class="user-feed" v-for="image in imagesForFeed">
+      <feedImage class="image-in-feed" :image="image"></feedImage>
+    </div>
+    <!-- <h1>Random User</h1>
     <div class="person" v-for="person in persons" :key="person.uuid">
       <div class="left">
         <img :src="person.picture.large">
@@ -10,7 +13,7 @@
         <ul>
           <li>
             <strong>Birthday:</strong> 
-            <!-- {{ formatDate(person.dob) }} -->
+            {{ formatDate(person.dob) }} 
           </li>
           <li class="text-capitalize">
             <strong>Location:</strong> {{ person.location.city }},
@@ -18,81 +21,80 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
+import axios from "axios";
 import moment from "moment";
-
-
+import feedImage from "../components/feed-image.vue";
 export default {
-  name: 'home',
-  data () {
-  return {
-    persons: []
-  }
-},
-methods: {
-  getInitialUsers () {
-    for (var i = 0; i < 5; i++) {
-      axios.get(`https://randomuser.me/api/`)
-        .then(response => {
-          this.persons.push(response.data.results[0]);
-        });
-    }
-    console.log("persons test", this.persons)
+  name: "home",
+  data() {
+    return {
+      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      feedImages: []
+    };
   },
-  scroll (persons) {
-    window.onscroll = () => {
-      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+  methods: {
+    getInitalImages() {
+      this.$store.dispatch({ type: "getInitalImages" });
+    },
+    getAdditionalImages() {
+      console.log('getAdditionalImages')
+      this.$store.dispatch({ type: "getAdditionalImages" });
+    },
 
-      if (bottomOfWindow) {
-        axios.get(`https://randomuser.me/api/`)
-          .then(response => {
-            persons.push(response.data.results[0]);
-          });
-      }
+    // getInitialUsers() {
+    //   for (var i = 0; i < 5; i++) {
+    //     axios.get(`https://randomuser.me/api/`).then(response => {
+    //       this.persons.push(response.data.results[0]);
+    //     });
+    //   }
+    //   console.log("persons test", this.persons);
+    // },
+    scroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight;
+        if (bottomOfWindow) {
+          this.getAdditionalImages();
+        }
+      };
     }
-  }
-},
-beforeMount() {
-  this.getInitialUsers();
-},
-mounted() {
-  this.scroll(this.persons);
-},
+  },
+  created() {
+    this.$store.dispatch({
+      type: "getLoggedInUser",
+      userId: this.loggedInUserId
+    });
+  },
+  beforeMount() {
+    this.getInitalImages();
+  },
+  mounted() {
+    this.scroll();
+  },
+  computed: {
+    imagesForFeed() {
+      return this.$store.getters.imagesForFeed;
+    },
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
+  },
+
   components: {
-    
+    feedImage
   }
-}
+};
 </script>
 <style lang="scss" scoped>
- /* Optional Styles */
- .person {
-    background: #ccc;
-    border-radius: 2px;
-    width: 20%;
-    margin: 0 auto 15px auto;
-    padding: 15px;
-
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 2px;
-    }
-
-    p:first-child {
-      text-transform: capitalize;
-      font-size: 2rem;
-      font-weight: 900;
-    }
-
-    .text-capitalize {
-      text-transform: capitalize;
-    }
-  }
+.image-in-feed {
+  margin-bottom: 6rem;
+}
 </style>
 

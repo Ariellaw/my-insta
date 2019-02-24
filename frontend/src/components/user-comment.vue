@@ -21,10 +21,7 @@ export default {
         this.commentOwner = res;
       });
   },
-  mounted() {
-      console.log("doc", document.querySelector(".comment-owner"));
-    
-  }
+  mounted() {}
 };
 </script>
 

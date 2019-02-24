@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="viewedImage && imageOwner">
+  <transition name="modal" v-if="image && imageOwner">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -7,7 +7,7 @@
         </button>
 
         <div class="modal-container" :class="{'displayVertical':displayVertically}">
-          <img :src="viewedImage.image" class="currImage" alt>
+          <img :src="image.image" class="currImage" alt>
 
           <div class="user-info bold-reg">
             <img
@@ -21,15 +21,15 @@
               <span
                 v-if="isFollowing"
                 :class="followingStatusClass"
-                @click="removeFollowers(viewedImage.ownerId)"
+                @click="removeFollowers(image.ownerId)"
               >Following</span>
               <span
                 v-else
                 :class="followingStatusClass"
                 class="follow"
-                @click="addFollowers(viewedImage.ownerId)"
+                @click="addFollowers(image.ownerId)"
               >Follow</span>
-              <p class="image-location">{{viewedImage.location}}</p>
+              <p class="image-location">{{image.location}}</p>
             </span>
           </div>
           <div class="comments">
@@ -59,7 +59,7 @@
                 :class="{'visibilityNone':likes.length===0}"
                 class="num-of-likes bold-reg"
               >{{likes.length}}&nbsp;Likes&nbsp;</span>
-              <span class="time-posted">{{ viewedImage.timePosted | moment }}</span>
+              <span class="time-posted">{{ image.timePosted | moment }}</span>
             </span>
           </div>
           <div class="add-a-comment">
@@ -67,7 +67,7 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
-              v-on:keyup.enter="addUserComment(userComment, viewedImage._id, loggedInUserId)"
+              v-on:keyup.enter="addUserComment(userComment, image._id, loggedInUserId)"
               v-model="userComment"
             ></textarea>
           </div>
@@ -83,19 +83,19 @@ import userComment from "./user-comment.vue";
 import socialMedia from "./social-media.vue"
 export default {
   name: "view-image",
-  props: ["viewedImage"],
+  props: ["image"],
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       userComment: null,
-      viewedImageComments: this.viewedImage.comments,
+      viewedImageComments: this.image.comments,
       displayVertically: false,
-      likes: this.viewedImage.likes,
+      likes: this.image.likes,
       displaySocialMedia:false
     };
   },
   created() {
-    this.getViewedImageOwner(this.viewedImage.ownerId);
+    this.getViewedImageOwner(this.image.ownerId);
   },
 
   filters: {
@@ -114,7 +114,7 @@ export default {
       this.$store
         .dispatch({
           type: "addUserLike",
-          imageId: this.viewedImage._id,
+          imageId: this.image._id,
           userId: this.loggedInUser._id
         })
         .then(likes => (this.likes = likes));
@@ -123,7 +123,7 @@ export default {
       this.$store
         .dispatch({
           type: "removeUserLike",
-          imageId: this.viewedImage._id,
+          imageId: this.image._id,
           userId: this.loggedInUser._id
         })
         .then(likes => (this.likes = likes));
@@ -144,20 +144,20 @@ export default {
           commentWriterId
         })
         .then(comments => {
-          this.viewedImageComments = comments;
+          this.imageComments = comments;
           this.userComment = null;
         });
     },
     addToUserFavorites() {
       this.$store.dispatch({
         type: "addToUserFavorites",
-        imageId: this.viewedImage._id
+        imageId: this.image._id
       });
     },
     removeFromUserFavorites() {
       this.$store.dispatch({
         type: "removeFromUserFavorites",
-        imageId: this.viewedImage._id
+        imageId: this.image._id
       });
     },
     goToImageOwnerProfile() {
@@ -182,7 +182,7 @@ export default {
       };
     },
     inUserFavorites() {
-      return this.loggedInUser.favorites.includes(this.viewedImage._id);
+      return this.loggedInUser.favorites.includes(this.image._id);
     },
     isLiked() {
       if (this.likes) {

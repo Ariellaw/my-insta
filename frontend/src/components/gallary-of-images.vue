@@ -1,6 +1,6 @@
 <template>
   <div>
-    <viewImage v-if="showModal" :viewedImage="viewedImage" @close="showModal = false"></viewImage>
+    <viewImage v-if="showModal" :image="viewedImage" @close="showModal = false"></viewImage>
 
     <h1 v-if="setIsLoadingFavorites">Loading...</h1>
 

@@ -53,6 +53,22 @@ function addImageRoutes(app) {
             return res.json(image)
         })
     })
+
+    app.get(`${BASE}/initalFeedImages`, (req, res) =>{
+        imageService.getInitalFeedImages()
+            .then(images =>{
+                return res.json(images)
+            })
+    })
+    app.get(`${BASE}/:startingPoint/additionalFeedImages`, (req, res) =>{
+        var startingPoint = req.params.startingPoint;
+        console.log('routes feed additional images startingPoint', startingPoint)
+
+        imageService.getAdditionalFeedImages(startingPoint)
+            .then(images =>{
+                return res.json(images)
+            })
+    })
 }
 
 module.exports = addImageRoutes;
