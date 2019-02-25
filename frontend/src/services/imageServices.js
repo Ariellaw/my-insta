@@ -16,12 +16,10 @@ function getUserImages(userId) {
             return res.data
         })
 }
-function addUserComment(userComment, imageId, commentWriterId) {
-    var id = utilService.makeId();
-    var timeStamp = Date.now;
-    var userComment = { commentOwnerId: commentWriterId, comment: userComment, timeStamp};
-    userComment.id = id;
-    return axios.put(`${BASE_URL}/${imageId}/comment`, { imageId, userComment })
+function addUserComment(comment, imageId, writerId) {
+    var comment = _createCommentObj(writerId, comment);
+
+    return axios.put(`${BASE_URL}/${imageId}/comment`, { imageId, comment })
         .then(res => {
             return res.data
         })
@@ -41,10 +39,12 @@ function removeUserLike(imageId, userId) {
         })
 }
 function createImgObj(imgDetails, image) {
-   var commentId = utilService.makeId();
+    var comment = _createCommentObj("5c5fecdbd16a8d56eaca3c98", imgDetails.text);
+    //TODO - change word text to comment
     var comments = [];
     var timeStamp = Date.now();
-    comments.push({ commentOwnerId: "5c5fecdbd16a8d56eaca3c98", comment: imgDetails.text, id: commentId, timeStamp })
+
+    comments.push(comment)
     var imgObj =
     {
         "image": image,
@@ -59,6 +59,8 @@ function createImgObj(imgDetails, image) {
             return res.data;
         })
 }
+
+
 function getInitalImages(){
     return axios.get(`${BASE_URL}/initalFeedImages`)
         .then(res => {
@@ -66,7 +68,6 @@ function getInitalImages(){
         })
 } 
 function getAdditionalImages(startingPoint){
-    console.log('services feed additional images startingPoint', startingPoint)
     return axios.get(`${BASE_URL}/${startingPoint}/additionalFeedImages`)
         .then(res => {
             return res.data
@@ -84,3 +85,10 @@ export default {
 
 }
 
+function _createCommentObj(writerId, comment){
+    var commentId = utilService.makeId();
+    var timeStamp = Date.now();
+    var comment = { writerId, comment, timeStamp, commentId};
+    return comment;
+
+}

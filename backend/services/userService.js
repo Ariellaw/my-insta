@@ -6,6 +6,7 @@ const ImageService = require('./imageService')
 
 
 function getById(userId) {
+    if(!userId) {return null}
     const _id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => {

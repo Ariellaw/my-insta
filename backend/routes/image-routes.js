@@ -21,8 +21,9 @@ function addImageRoutes(app) {
     })
     app.put(`${BASE}/:imageId/comment`, (req,res) =>{
         const imageId = req.body.imageId;
-        const userComment = req.body.userComment;
-        imageService.addComments(imageId, userComment)
+        const comment = req.body.comment;
+
+        imageService.addComments(imageId, comment)
             .then(commentThread =>{
                 return res.json(commentThread)
             })
@@ -62,7 +63,6 @@ function addImageRoutes(app) {
     })
     app.get(`${BASE}/:startingPoint/additionalFeedImages`, (req, res) =>{
         var startingPoint = req.params.startingPoint;
-        console.log('routes feed additional images startingPoint', startingPoint)
 
         imageService.getAdditionalFeedImages(startingPoint)
             .then(images =>{

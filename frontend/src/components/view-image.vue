@@ -34,7 +34,7 @@
           </div>
           <div class="comments">
             <user-comment
-              v-for="comment in viewedImageComments"
+              v-for="comment in imageComments"
               :comment="comment"
               :key="comment.id"
             ></user-comment>
@@ -67,8 +67,8 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
-              v-on:keyup.enter="addUserComment(userComment, image._id, loggedInUserId)"
-              v-model="userComment"
+              v-on:keyup.enter="addUserComment(comment, image._id, loggedInUserId)"
+              v-model="comment"
             ></textarea>
           </div>
         </div>
@@ -87,8 +87,8 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      userComment: null,
-      viewedImageComments: this.image.comments,
+      comment: null,
+      imageComments: this.image.comments,
       displayVertically: false,
       likes: this.image.likes,
       displaySocialMedia:false
@@ -135,13 +135,13 @@ export default {
       });
     },
 
-    addUserComment(userComment, imageId, commentWriterId) {
+    addUserComment(comment, imageId, writerId) {
       this.$store
         .dispatch({
           type: "addUserComment",
-          userComment,
+          comment,
           imageId,
-          commentWriterId
+          writerId
         })
         .then(comments => {
           this.imageComments = comments;

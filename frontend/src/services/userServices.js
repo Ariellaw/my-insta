@@ -3,6 +3,7 @@ import utilService from './utilServices'
 const BASE_URL = 'http://localhost:3003/user'
 
 function getUserById(userId) {
+
     return axios.get(`${BASE_URL}/${userId}`)
         .then(res =>{
             return res.data

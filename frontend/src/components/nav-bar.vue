@@ -82,7 +82,6 @@ export default {
     },
     findSearchResults(keyword){
       this.$router.push(`/`)
-      console.log('Search results', keyword)
     }
   },
   computed: {

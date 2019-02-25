@@ -18,11 +18,12 @@ function getImageById(imageId) {
             db.collection(imagesDb).findOne({ "_id": _id })
         )
 }
-function addComments(imageId, userComment) {
+function addComments(imageId, comment) {
     const _id = new ObjectId(imageId);
     return getImageById(imageId).then(image => {
         var comments = image.comments;
-        comments.push(userComment);
+        comments.push(comment);
+
         return mongoService.connect()
             .then(db =>
                 db.collection(imagesDb).findOneAndUpdate({ "_id": _id },
@@ -73,18 +74,17 @@ function addNewImage(imgObj) {
 function getInitalFeedImages() {
     return mongoService.connect()
         .then(db =>
-            db.collection(imagesDb).find().limit(5).toArray()
+            db.collection(imagesDb).find().limit(2).sort({ timePosted: -1 }).toArray()
         )
 
 }
 function getAdditionalFeedImages(startingPoint) {
 
     var last_id = new ObjectId(startingPoint);
-    console.log('services feed additional images startingPoint', startingPoint)
 
     return mongoService.connect()
         .then(db =>
-            db.collection(imagesDb).find({ '_id': { '$gt': last_id } }).limit(2).toArray()
+            db.collection(imagesDb).find({ '_id': { '$lt': last_id } }).limit(2).sort({ timePosted: -1 }).toArray()
         )
 
 }

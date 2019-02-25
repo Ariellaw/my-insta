@@ -56,7 +56,6 @@ export default {
         },
         setAddionalImages(state, {res}){
             state.imagesForFeed = state.imagesForFeed.concat(res);
-            console.log("all the images", state.imagesForFeed)
         }
 
     },
@@ -72,6 +71,7 @@ export default {
                 })
         },
         getViewedImageOwner(context, { userId }) {
+
             return userServices.getUserById(userId)
                 .then(user => {
                     context.commit({ type: 'setVisitedImageOwner', user })
@@ -89,13 +89,15 @@ export default {
                     return res.url;
                 })
         },
-        addUserComment(context, { userComment, imageId, commentWriterId }) {
-            return imageServices.addUserComment(userComment, imageId, commentWriterId)
+        addUserComment(context, { comment, imageId, writerId }) {
+
+            return imageServices.addUserComment(comment, imageId, writerId)
                 .then(res => {
                     context.commit({ type: 'setUserCommentsAndImage', res })
                     return res.value.comments;
                 })
         },
+  
         getUserFavoriteImages(context, { userId }) {
             context.commit({ type: 'setIsLoadingFavorites', isLoading: true })
             return userServices.getImagesByImageId(userId)
@@ -129,7 +131,6 @@ export default {
 
             return imageServices.getInitalImages()
                 .then(res => {
-                    console.log('actions', res)
                     context.commit({ type: "setInitalImages", res })
                 })
         },
@@ -139,11 +140,9 @@ export default {
             if (feedImages.length !== 0) {
                 startingPoint = feedImages[feedImages.length - 1]._id;
             }
-            console.log('actions startingPoint', startingPoint);
             
             return imageServices.getAdditionalImages(startingPoint)
                 .then(res => {
-                    console.log('actions', res)
                     context.commit({ type: "setAddionalImages", res })
                 })
         }

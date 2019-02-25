@@ -2,10 +2,12 @@
   <li class="comment" v-if="commentOwner">
     <span class="comment-owner bold-reg">{{commentOwner.userName}}:</span>
     {{comment.comment}}
+    {{ comment.timeStamp | moment }}
   </li>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "comment",
   props: ["comment"],
@@ -16,12 +18,16 @@ export default {
   },
   created() {
     this.$store
-      .dispatch({ type: "getUserById", userId: this.comment.commentOwnerId })
+      .dispatch({ type: "getUserById", userId: this.comment.writerId })
       .then(res => {
         this.commentOwner = res;
       });
   },
-  mounted() {}
+  filters: {
+    moment: function(date) {
+      return moment(date).fromNow();
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
-  <div id="user-feed">
-    <div class="user-feed" v-for="image in imagesForFeed">
+  <div id="user-feed" v-if="imagesForFeed">
+    <div class="user-feed" v-for="image in imagesForFeed" :key="image._id">
       <feedImage class="image-in-feed" :image="image"></feedImage>
     </div>
     <!-- <h1>Random User</h1>
@@ -43,18 +43,9 @@ export default {
       this.$store.dispatch({ type: "getInitalImages" });
     },
     getAdditionalImages() {
-      console.log('getAdditionalImages')
       this.$store.dispatch({ type: "getAdditionalImages" });
     },
 
-    // getInitialUsers() {
-    //   for (var i = 0; i < 5; i++) {
-    //     axios.get(`https://randomuser.me/api/`).then(response => {
-    //       this.persons.push(response.data.results[0]);
-    //     });
-    //   }
-    //   console.log("persons test", this.persons);
-    // },
     scroll() {
       window.onscroll = () => {
         let bottomOfWindow =
