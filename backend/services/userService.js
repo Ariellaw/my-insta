@@ -6,7 +6,10 @@ const ImageService = require('./imageService')
 
 
 function getById(userId) {
-    if(!userId) {return null}
+    // if(userId === "undefined") {
+    //     console.log("undifed user")
+    //     return null}
+    // console.log("dsad", userId)
     const _id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => {
@@ -14,7 +17,6 @@ function getById(userId) {
         })
 }
 
-//find out w
 
 function addFollowers(followeeId, followerId) {
 

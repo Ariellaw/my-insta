@@ -145,7 +145,7 @@ export default {
         })
         .then(comments => {
           this.imageComments = comments;
-          this.userComment = null;
+          this.comment = null;
         });
     },
     addToUserFavorites() {

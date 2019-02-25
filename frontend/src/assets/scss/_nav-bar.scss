@@ -3,14 +3,16 @@
   }
   
   .main-nav-bar {
-    height: 8rem;
+    height: 6rem;
     border-bottom: 1px solid $lighter-font-color;
     border-top: 1px solid $darker-font-color;
     background-color: $lighter-layout-color;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    position:sticky;
+    top:0px;
   
     .nav-buttons-container {
       display: flex;
