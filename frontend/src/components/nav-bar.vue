@@ -1,7 +1,7 @@
 <template>
   <nav class="main-nav-bar">
     <div class="nav-buttons-container page-container">
-      <div class="instagram-logo btn">
+      <div  @click="goToFeed" class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i> | AriellaGram
       </div>
       <input
@@ -64,6 +64,11 @@ export default {
     };
   },
   methods: {
+    goToFeed(){
+      console.log('feed')
+      this.$router.push(`/`);
+      // this.$router.go();
+    },
     getCloudinaryUrl() {
       var elForm = this.$refs.form;
       return this.$store
