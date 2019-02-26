@@ -1,8 +1,5 @@
-const express = require('express');
-const userService = require('../services/userService.js');
 const imageService = require('../services/imageService.js');
 const BASE = '/image';
-const app = express();
 
 function addImageRoutes(app) {
     app.get(`${BASE}/images/:userId`, (req, res) => {

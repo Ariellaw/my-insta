@@ -49,3 +49,12 @@ $dark-border-color:darken(#fafafa, 15%);
     border: 1px solid black;
     object-fit: cover;
 }
+
+@mixin submit-btn{
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bolder;
+
+  }

@@ -10,7 +10,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
+const addAuthRoutes = require('./routes/auth-routes.js');
 
 // const addUserRoutes = require('./routes/user-route')
 
@@ -23,10 +23,12 @@ app.use(cors({
 mongoService.initDbConnection();
 
 
+app.set('view engine', 'ejs');
 
 
 app.use(bodyParser.json())
 app.use(cookieParser());
+
 app.use(session({
   secret: 'puki muki',
   resave: false,
@@ -36,7 +38,7 @@ app.use(session({
 
 addUserRoutes(app);
 addImageRoutes(app);
-
+addAuthRoutes(app);
 app.get('/', (req, res) => {
     res.send('Hello World! YAY')
 })

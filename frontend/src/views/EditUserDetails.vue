@@ -66,8 +66,8 @@
     <input
       type="submit"
       value="Submit"
-      :class="{'sumbit-btn': !userMadeChanges, 'sumbit-btn-after-changes':userMadeChanges }"
-      class="btn"
+      class='sumbit-btn btn'
+      :class="{'sumbit-btn-after-changes':userMadeChanges }"
     >
   </form>
 </template>

@@ -2,15 +2,15 @@
   <div>
     <div class="loginpanel">
       <div class="txt">
-        <input id="user" type="text" placeholder="Username">
+        <input id="user" type="text" placeholder="Username" v-model="user.name" required>
         <label for="user" class="entypo-user"></label>
       </div>
       <div class="txt">
-        <input id="pwd" type="password" placeholder="Password">
+        <input id="pwd" type="password" placeholder="Password" v-model="user.password" required>
         <label for="pwd" class="entypo-lock"></label>
       </div>
       <div class="buttons">
-        <input type="button" value="Login">
+        <input type="button" value="Login" @click="loginOrSignUp">
         <span>
           <a href="javascript:void(0)" class="entypo-user-add register">Register</a>
         </span>
@@ -36,6 +36,19 @@
 <script>
 export default {
     name:'authentication',
+    data(){
+      return{
+        user:{
+          name:null,
+          password:null
+        }
+      }
+    },
+    methods:{
+      loginOrSignUp(){
+       this.$store.dispatch({type:'authenticateUser', user})
+      }
+    }
 };
 </script>
 

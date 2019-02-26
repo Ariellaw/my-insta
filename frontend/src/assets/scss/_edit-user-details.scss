@@ -1,13 +1,4 @@
-@mixin submit-btn{
-  align-self: center;
-  background-color: #3897f0;
-  border: 1px solid #3897f0;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: bolder;
-  height: 4rem;
-  width: 10rem;
-}
+
 
 
 
@@ -74,9 +65,11 @@
     .sumbit-btn {
       @include submit-btn;
       opacity: .3;  
+      height: 4rem;
+      width: 10rem;
+      align-self: center;
     }
     .sumbit-btn-after-changes {
-      @include submit-btn;
       opacity: 1;  
     }
     

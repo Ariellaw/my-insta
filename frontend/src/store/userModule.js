@@ -101,6 +101,12 @@ export default {
                     context.commit({ type: 'updateLoggedInUser', user:user.value })
                     return user.value;
                 } )
+        },
+        authenticateUser(context, {user}){
+            userServices.authenticateUser(user)
+                .then(user =>{
+                    console.log('actions return user', user)
+                })
         }
 
     }

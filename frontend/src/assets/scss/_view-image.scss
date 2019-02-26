@@ -62,8 +62,7 @@
       .likes-and-followers {
         order:3;
         height: 6%;
-        // border-bottom: 1px solid $lighter-font-color;
-        // display: flex;
+        margin-left:0px;
         flex-direction: row;
         justify-content: flex-start;
         .icons {

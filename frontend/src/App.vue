@@ -12,7 +12,10 @@ export default {
     NavBar
   }
 };
+//change ID on URL to profile to userName
+
 </script>
+
 
 <style>
 </style>

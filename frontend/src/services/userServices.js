@@ -58,6 +58,12 @@ function updateUserDetails(userDetails){
             return res.data
         })
 }
+function authenticateUser(user){
+    return axios.post(`login`, {user})
+        .then(res =>{
+            return res.data
+        })
+}
 export default {
     getUserById,
     updateFollowers,
@@ -66,5 +72,6 @@ export default {
     addToUserFavorites,
     removeFromUserFavorites,
     getImagesByImageId,
-    updateUserDetails
+    updateUserDetails,
+    authenticateUser
 }

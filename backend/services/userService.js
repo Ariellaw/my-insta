@@ -16,7 +16,12 @@ function getById(userId) {
             return db.collection(userDb).findOne({ "_id": _id })
         })
 }
-
+function getByUserName(username){
+    return mongoService.connect()
+        .then(db => {
+            return db.collection(userDb).findOne({"userName": username})
+        })
+}
 
 function addFollowers(followeeId, followerId) {
 
@@ -180,6 +185,7 @@ function getImagesByImageId(userId) {
         removeFromUserFavorites,
         addToUserFavorites,
         getImagesByImageId,
-        updateUserDetails
+        updateUserDetails,
+        getByUserName
 
     }

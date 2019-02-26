@@ -32,8 +32,12 @@
           font-size: 2.5rem;
           .edit-profile-or-following-btn {
             @include general-button;
-            margin-right: 1rem;
-        
+            margin-right: 1rem;  
+          }
+          .follower-user-btn{
+            @include submit-btn;
+            width: 89px;
+            height: 30px;
           }
         }
         .numbers {

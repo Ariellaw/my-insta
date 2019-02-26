@@ -14,15 +14,15 @@
             <button
               @click="removeFollowers(visitedUser._id)"
               v-else-if="followingVisitedUser"
-              class="edit-profile-or-following-btn"
+              class="edit-profile-or-following-btn btn"
             >Following</button>
             <button
               @click="addFollowers(visitedUser._id)"
               v-else
-              class="edit-profile-or-following-btn"
+              class="follower-user-btn btn"
             >Follow</button>
             
-            <i class="fas fa-cog btn"></i>
+            <!-- <i class="fas fa-cog btn"></i> -->
           </div>
         </div>
         <div class="numbers">

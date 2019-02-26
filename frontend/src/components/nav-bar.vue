@@ -1,17 +1,26 @@
 <template>
   <nav class="main-nav-bar">
     <div class="nav-buttons-container page-container">
-      <div  @click="goToFeed" class="instagram-logo btn">
+      <div @click="goToFeed" class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i> | AriellaGram
       </div>
-      <input
-        type="text"
-        autocapitalize="none"
-        size="35"
-        placeholder="Search....."
-        v-model="searchKeyword"
-        @keyup="findSearchResults(searchKeyword)"
-      >
+      <ul>
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropbtn">
+            <input
+              type="text"
+              autocapitalize="none"
+              size="45"
+              placeholder="Search....."
+              v-model="searchKeyword"
+            >
+          </a>
+          <div class="dropdown-content" :class="{'display-content':searchKeyword}">
+            <search-result></search-result>
+
+          </div>
+        </li>
+      </ul>
       <div class="menu-icons">
         <form
           class="update-user-cover-pic"
@@ -48,8 +57,7 @@
 
 <script>
 import uploadPost from "./upload-post.vue";
-/* @change="getCloudinaryUrl()"                    @input="user.coverPic = $event.target.value"
-  @input="post.file = $event.target.value" */
+import searchResult from "./search-result.vue"
 
 export default {
   name: "nav-bar",
@@ -64,8 +72,8 @@ export default {
     };
   },
   methods: {
-    goToFeed(){
-      console.log('feed')
+    goToFeed() {
+      console.log("feed");
       this.$router.push(`/`);
       // this.$router.go();
     },
@@ -85,8 +93,8 @@ export default {
       this.$router.push(`/user/${loggedInUserId}`);
       this.$router.go();
     },
-    findSearchResults(keyword){
-      this.$router.push(`/`)
+    findSearchResults(keyword) {
+      this.$router.push(`/`);
     }
   },
   computed: {
@@ -95,11 +103,43 @@ export default {
     }
   },
   components: {
-    uploadPost
+    uploadPost,
+    searchResult
   }
 };
 </script>
 
  <style lang="scss" scoped>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fafafa;
+  min-width: 250px;
+  height: 500px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 8;
+  margin: 0px 50px;
+  overflow-y: auto;
+
+  // a {
+  //   color: black;
+  //   padding: 12px 16px;
+  //   text-decoration: none;
+  //   display: block;
+  //   text-align: left;
+  // }
+}
+
+.display-content {
+  display: block;
+}
+
+
 </style>
 
