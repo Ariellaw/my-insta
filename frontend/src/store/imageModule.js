@@ -145,6 +145,13 @@ export default {
                 .then(res => {
                     context.commit({ type: "setAddionalImages", res })
                 })
+        },
+        getImagesByLocation(context,{location}){
+            return imageServices.getImagesByLocation(location)
+                .then(images => {
+                    console.log(images)
+                    return images;
+                })
         }
 
     }

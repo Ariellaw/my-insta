@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import userProfile from './views/Profile.vue'
 import editUserDetails from './views/EditUserDetails.vue'
 import Authentication from './views/Authentication.vue'
+import locationSearchResults from './views/locationSearchResults.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,10 @@ export default new Router({
      path:'/authentication',
      name: 'authentication',
      component:Authentication
+    },
+    {
+      path:'/locations/:location',
+      component:locationSearchResults
     },
     {
       path: '/about',

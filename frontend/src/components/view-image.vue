@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="image && imageOwner">
+  <transition name="modal" v-if="image && imageOwner && loggedInUser">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -29,15 +29,11 @@
                 class="follow"
                 @click="addFollowers(image.ownerId)"
               >Follow</span>
-              <p class="image-location">{{image.location}}</p>
+              <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
             </span>
           </div>
           <div class="comments">
-            <user-comment
-              v-for="comment in imageComments"
-              :comment="comment"
-              :key="comment.id"
-            ></user-comment>
+            <user-comment v-for="comment in imageComments" :comment="comment" :key="comment.id"></user-comment>
           </div>
           <div class="likes-and-followers">
             <div v-if="loggedInUser" class="icons">
@@ -45,8 +41,8 @@
               <i @click="addUserLike" v-else class="far fa-heart btn"></i>
               
               <i @click="displaySocialMedia=true" class="fas fa-share-alt btn"></i>
-              <social-media @close="displaySocialMedia=false"  v-if="displaySocialMedia"></social-media>
-              
+              <social-media @close="displaySocialMedia=false" v-if="displaySocialMedia"></social-media>
+
               <i
                 v-if="inUserFavorites"
                 @click="removeFromUserFavorites"
@@ -80,7 +76,7 @@
 <script>
 import moment from "moment";
 import userComment from "./user-comment.vue";
-import socialMedia from "./social-media.vue"
+import socialMedia from "./social-media.vue";
 export default {
   name: "view-image",
   props: ["image"],
@@ -91,11 +87,15 @@ export default {
       imageComments: this.image.comments,
       displayVertically: false,
       likes: this.image.likes,
-      displaySocialMedia:false
+      displaySocialMedia: false
     };
   },
   created() {
     this.getViewedImageOwner(this.image.ownerId);
+    this.$store.dispatch({
+      type: "getLoggedInUser",
+      userId: this.loggedInUserId
+    });
   },
 
   filters: {
@@ -164,6 +164,9 @@ export default {
       var imageOwnerId = this.imageOwner._id;
       this.$router.push(`/user/${imageOwnerId}`);
       this.$router.go();
+    },
+    goToLocationImages() {
+      this.$router.push(`/locations/${this.image.location.toLowerCase()}`);
     }
   },
   computed: {

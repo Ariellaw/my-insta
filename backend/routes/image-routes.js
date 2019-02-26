@@ -66,6 +66,14 @@ function addImageRoutes(app) {
                 return res.json(images)
             })
     })
+    app.get(`${BASE}/:location/explore`, (req, res)=>{
+        var location =  req.params.location;
+        imageService.getImagesByLocation(location)
+        .then(images =>{
+            console.log("location images", images)
+            return res.json(images)
+        })
+    })
 }
 
 module.exports = addImageRoutes;

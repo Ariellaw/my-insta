@@ -88,7 +88,12 @@ function getAdditionalFeedImages(startingPoint) {
         )
 
 }
-
+function getImagesByLocation(location) {
+    var upperCaseLocation = location.charAt(0).toUpperCase() + location.slice(1);
+    return mongoService.connect()
+        .then(db =>
+            db.collection(imagesDb).find({ $or:[{location:location},{location:upperCaseLocation}]}).limit(100).sort({ timePosted: -1 }).toArray())
+}
 
 module.exports = {
     getImagesByUserId,
@@ -98,5 +103,6 @@ module.exports = {
     removeUserLike,
     addNewImage,
     getInitalFeedImages,
-    getAdditionalFeedImages
+    getAdditionalFeedImages,
+    getImagesByLocation
 }

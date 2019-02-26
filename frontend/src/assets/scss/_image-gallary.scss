@@ -1,0 +1,12 @@
+.user-posts {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-gap: .5rem;
+    padding: 1rem;
+
+    .visitedUserImg {
+      height: 300px;
+      object-fit: cover;
+      width: 100%;
+    }
+  }

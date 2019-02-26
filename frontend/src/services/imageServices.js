@@ -59,7 +59,7 @@ function createImgObj(imgDetails, image) {
             return res.data;
         })
 }
-
+    
 
 function getInitalImages(){
     return axios.get(`${BASE_URL}/initalFeedImages`)
@@ -73,6 +73,13 @@ function getAdditionalImages(startingPoint){
             return res.data
         })
 } 
+
+function getImagesByLocation(location){
+    return axios.get(`${BASE_URL}/${location}/explore`)
+        .then(res =>{
+            return res.data
+        })
+}
 export default {
     getUserImages,
     getImageById,
@@ -81,7 +88,8 @@ export default {
     removeUserLike,
     createImgObj,
     getInitalImages,
-    getAdditionalImages
+    getAdditionalImages,
+    getImagesByLocation
 
 }
 

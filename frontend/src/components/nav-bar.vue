@@ -14,6 +14,7 @@
               placeholder="Search....."
               v-model="keyword"
               @keyup="findRelevantUsers"
+              class="search-users-field"
             >
           </a>
           <div class="dropdown-content" :class="{'display-content':keyword}">
@@ -104,7 +105,7 @@ export default {
         keyword: this.keyword
       });
     },
-    resetKeyword(){
+    resetKeyword() {
       this.keyword = null;
     }
   },
@@ -134,7 +135,7 @@ ul {
   display: none;
   position: absolute;
   background-color: #fafafa;
-  min-width: 250px;
+  width: 250px;
   max-height: 60vh;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 8;
@@ -152,6 +153,14 @@ ul {
 
 .display-content {
   display: block;
+  margin: 0 auto;
+}
+
+.search-users-field {
+  width: 250px;
+  height: 30px;
+  font-size: 2rem;
+  font-family: cursive;
 }
 </style>
 
