@@ -1,15 +1,24 @@
-<template>
-  <a href="https://www.facebook.com/" class="search-result btn">
-    <img src="https://randomuser.me/api/portraits/women/51.jpg" alt class="search-result-img">
+<template v-if="user">
+  <div @click="goToUserProfile" class="search-result btn">
+    <img :src="user.profilePic" alt class="search-result-img">
     <div class="search-result-name">
-      <span class="username bold-reg">Ariella-Wills</span>
-      <span class="name">Ariella Wills</span>
+      <span class="username bold-reg">{{user.userName}}</span>
+      <span class="name">{{user.firstName}} {{user.lastName}}</span>
     </div>
-  </a>
+  </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props:['user'],
+  methods:{
+    goToUserProfile(){
+      this.$router.push(`/user/${this.user._id}`);
+      this.$router.go();
+      this.$emit("resetKeyword");
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -17,7 +26,7 @@ export default {};
   border-bottom: solid 1px darken(#fafafa, 15%);
   display: flex;
   flex-direction: row;
-  height: 65px;
+  height: 68px;
   padding: 8px 14px;
   align-items: center;
   background-color: #fafafa;
@@ -40,6 +49,9 @@ export default {};
     flex-direction: column;
     font-size: 14px;
     text-align: left;
+      .name{
+        color:darkgray;
+      }
   }
 }
 </style>

@@ -178,6 +178,16 @@ function getImagesByImageId(userId) {
                 )
         })
     }
+
+    function findRelevantUsers(keyword){
+        return mongoService.connect()
+            .then(db => 
+                db.collection(userDb).find({ $text: { $search:  "\"lorem\"" } }, {$caseSensitive: false})
+                .limit(100).sort({userName: -1}).toArray()
+            )
+    }
+   
+
     module.exports = {
         getById,
         removeFollowers,
@@ -186,6 +196,7 @@ function getImagesByImageId(userId) {
         addToUserFavorites,
         getImagesByImageId,
         updateUserDetails,
-        getByUserName
+        getByUserName,
+        findRelevantUsers
 
     }

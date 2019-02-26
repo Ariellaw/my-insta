@@ -64,6 +64,13 @@ function authenticateUser(user){
             return res.data
         })
 }
+
+function findRelevantUsers(keyword){
+    return axios.get(`${BASE_URL}/searchResults/users/${keyword}`)
+        .then(res => {
+            return res.data;
+        })
+}
 export default {
     getUserById,
     updateFollowers,
@@ -73,5 +80,6 @@ export default {
     removeFromUserFavorites,
     getImagesByImageId,
     updateUserDetails,
-    authenticateUser
+    authenticateUser,
+    findRelevantUsers
 }

@@ -6,14 +6,14 @@ export default {
 
         visitedUser: null,
         loggedInUser: null,
-        // isLoadingImages: false,
+        searchedUsers:null
 
 
     },
     getters: {
         visitedUser: state => { return state.visitedUser },
         loggedInUser: state => { return state.loggedInUser },
-        // isLoadingImages: state => { return state.isLoadingImages },
+        searchedUsers: state => {return state.searchedUsers}
 
 
 
@@ -40,9 +40,9 @@ export default {
             // state.visitedUserFavorites = data.favorites;
         },
 
-        // updateLoggedInUsersImages(state, {image}){
-        //     state.loggedInUser.
-        // }
+        setSeachedUsers(state, {res}){
+            state.searchedUsers = res;
+        }
     },
     actions: {
         getVisitedUser(context, { userId }) {
@@ -102,13 +102,18 @@ export default {
                     return user.value;
                 } )
         },
-        authenticateUser(context, {user}){
-            userServices.authenticateUser(user)
-                .then(user =>{
-                    console.log('actions return user', user)
-                })
+        // authenticateUser(context, {user}){
+        //     userServices.authenticateUser(user)
+        //         .then(user =>{
+        //             console.log('actions return user', user)
+        //         })
+        // }
+        findRelevantUsers(context, {keyword}){
+           userServices.findRelevantUsers(keyword)
+            .then(res =>{
+                context.commit({type:"setSeachedUsers", res})
+            })
         }
-
     }
 }
    

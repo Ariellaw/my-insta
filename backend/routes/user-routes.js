@@ -65,6 +65,16 @@ function addUserRoutes(app) {
                 return res.json(user);
             })
     })
+
+    app.get(`${BASE}/searchResults/users/:keyword`, (req, res) =>{
+        const keyword = req.params.keyword;
+        console.log("keyword", keyword)
+        userService.findRelevantUsers(keyword)
+            .then(users => {
+                return res.json(users)
+            } )
+    })
+
 }
 
 module.exports = addUserRoutes;

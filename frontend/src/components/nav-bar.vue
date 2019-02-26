@@ -12,12 +12,17 @@
               autocapitalize="none"
               size="45"
               placeholder="Search....."
-              v-model="searchKeyword"
+              v-model="keyword"
+              @keyup="findRelevantUsers"
             >
           </a>
-          <div class="dropdown-content" :class="{'display-content':searchKeyword}">
-            <search-result></search-result>
-
+          <div class="dropdown-content" :class="{'display-content':keyword}">
+            <search-result
+              @resetKeyword="resetKeyword"
+              v-for="user in searchedUsers"
+              :key="user._id"
+              :user="user"
+            ></search-result>
           </div>
         </li>
       </ul>
@@ -57,14 +62,14 @@
 
 <script>
 import uploadPost from "./upload-post.vue";
-import searchResult from "./search-result.vue"
+import searchResult from "./search-result.vue";
 
 export default {
   name: "nav-bar",
   data() {
     return {
       showModal: false,
-      searchKeyword: null,
+      keyword: null,
 
       image: {
         file: null
@@ -93,13 +98,22 @@ export default {
       this.$router.push(`/user/${loggedInUserId}`);
       this.$router.go();
     },
-    findSearchResults(keyword) {
-      this.$router.push(`/`);
+    findRelevantUsers(keyword) {
+      this.$store.dispatch({
+        type: "findRelevantUsers",
+        keyword: this.keyword
+      });
+    },
+    resetKeyword(){
+      this.keyword = null;
     }
   },
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    searchedUsers() {
+      return this.$store.getters.searchedUsers;
     }
   },
   components: {
@@ -121,7 +135,7 @@ ul {
   position: absolute;
   background-color: #fafafa;
   min-width: 250px;
-  height: 500px;
+  max-height: 60vh;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 8;
   margin: 0px 50px;
@@ -139,7 +153,5 @@ ul {
 .display-content {
   display: block;
 }
-
-
 </style>
 
