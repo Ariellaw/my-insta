@@ -16,10 +16,11 @@ function getById(userId) {
             return db.collection(userDb).findOne({ "_id": _id })
         })
 }
-function getByUserName(username){
+function getByUserName(username) {
+    console.log("in getByUserName", username);
     return mongoService.connect()
         .then(db => {
-            return db.collection(userDb).findOne({"userName": username})
+            return db.collection(userDb).findOne({ "userName": username })
         })
 }
 
@@ -150,53 +151,61 @@ function getImagesByImageId(userId) {
         for (var i = 0; i < favorites.length; i++) {
             favorites[i] = new ObjectId(favorites[i]);
         }
-            return mongoService.connect()
-                .then(db =>
-                    db.collection(imagesDb).find({ "_id": { "$in": favorites } }).sort({timePosted:-1}).toArray()
-                )
-   
+        return mongoService.connect()
+            .then(db =>
+                db.collection(imagesDb).find({ "_id": { "$in": favorites } }).sort({ timePosted: -1 }).toArray()
+            )
+
 
     })
 }
-    function updateUserDetails(userDetails) {
-        var userId = userDetails._id;
-        const _id = new ObjectId(userId);
+function updateUserDetails(userDetails) {
+    var userId = userDetails._id;
+    const _id = new ObjectId(userId);
 
-        return getById(userId).then(user => {
-            var firstName = userDetails.firstName || user.firstName;
-            var lastName = userDetails.lastName || user.lastName;
-            var email = userDetails.email || user.email;
-            var userName = userDetails.userName || user.userName;
-            var profilePic = userDetails.profilePic || user.profilePic;
+    return getById(userId).then(user => {
+        var firstName = userDetails.firstName || user.firstName;
+        var lastName = userDetails.lastName || user.lastName;
+        var email = userDetails.email || user.email;
+        var userName = userDetails.userName || user.userName;
+        var profilePic = userDetails.profilePic || user.profilePic;
 
 
-            return mongoService.connect()
-                .then(db =>
-                    db.collection(userDb).findOneAndUpdate({ "_id": _id },
-                        { $set: { 'firstName': firstName, 'lastName': lastName, 'email': email, 'userName': userName, 'profilePic': profilePic } }, { returnOriginal: false })
-
-                )
-        })
-    }
-
-    function findRelevantUsers(keyword){
         return mongoService.connect()
-            .then(db => 
-                db.collection(userDb).find({ $text: { $search:  "\"lorem\"" } }, {$caseSensitive: false})
-                .limit(100).sort({userName: -1}).toArray()
+            .then(db =>
+                db.collection(userDb).findOneAndUpdate({ "_id": _id },
+                    { $set: { 'firstName': firstName, 'lastName': lastName, 'email': email, 'userName': userName, 'profilePic': profilePic } }, { returnOriginal: false })
+
             )
-    }
-   
+    })
+}
 
-    module.exports = {
-        getById,
-        removeFollowers,
-        addFollowers,
-        removeFromUserFavorites,
-        addToUserFavorites,
-        getImagesByImageId,
-        updateUserDetails,
-        getByUserName,
-        findRelevantUsers
+function findRelevantUsers(keyword) {
+    return mongoService.connect()
+        .then(db =>
+            db.collection(userDb).find({
+                $or: [{ bio: { $regex: `.*${keyword}.*`, $options: "i" } },
+                { userName: { $regex: `.*${keyword}.*`, $options: "i" } },
+                ]
+            }).limit(100).sort({ userName: 1 }).toArray()
+        )
 
-    }
+    // .then(db => 
+    //     db.collection(userDb).find({ $text: { $search: keyword, $caseSensitive: false } })
+    //     .limit(100).sort({userName: 1}).toArray()
+    // )
+}
+
+
+module.exports = {
+    getById,
+    removeFollowers,
+    addFollowers,
+    removeFromUserFavorites,
+    addToUserFavorites,
+    getImagesByImageId,
+    updateUserDetails,
+    getByUserName,
+    findRelevantUsers
+
+}

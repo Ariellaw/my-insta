@@ -99,11 +99,14 @@ export default {
       this.$router.push(`/user/${loggedInUserId}`);
       this.$router.go();
     },
-    findRelevantUsers(keyword) {
-      this.$store.dispatch({
-        type: "findRelevantUsers",
-        keyword: this.keyword
-      });
+    findRelevantUsers() {
+      console.log("wat is causing the error", this.keyword);
+      if (this.keyword) {
+        this.$store.dispatch({
+          type: "findRelevantUsers",
+          keyword: this.keyword
+        });
+      }
     },
     resetKeyword() {
       this.keyword = null;
@@ -138,7 +141,7 @@ ul {
   width: 250px;
   max-height: 60vh;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 8;
+  z-index: 999999;
   margin: 0px 50px;
   overflow-y: auto;
 
@@ -154,6 +157,7 @@ ul {
 .display-content {
   display: block;
   margin: 0 auto;
+  z-index: 999999;
 }
 
 .search-users-field {

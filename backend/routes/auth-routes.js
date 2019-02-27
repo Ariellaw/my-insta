@@ -4,6 +4,7 @@ const userService = require('../services/userService.js')
 
 passport.use(new LocalStrategy(
     function (username, password, done) {
+        console.log('before getByUserName');
         userService.getByUserName(username)
             .then(user => {
                 if (!user) {
@@ -20,7 +21,7 @@ passport.use(new LocalStrategy(
 ));
 
 function addAuthRoutes(app) {
-    app.post('/login',
+    app.get('/login',
         passport.authenticate('local'),
         function (req, res) {
             console.log('This is an athentication')

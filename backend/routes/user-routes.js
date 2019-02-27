@@ -68,9 +68,9 @@ function addUserRoutes(app) {
 
     app.get(`${BASE}/searchResults/users/:keyword`, (req, res) =>{
         const keyword = req.params.keyword;
-        console.log("keyword", keyword)
         userService.findRelevantUsers(keyword)
             .then(users => {
+
                 return res.json(users)
             } )
     })
