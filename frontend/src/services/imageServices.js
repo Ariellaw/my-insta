@@ -17,9 +17,11 @@ function getUserImages(userId) {
         })
 }
 function addUserComment(comment, imageId, writerId) {
+   var newHashtags = _findHashtags(comment, imageId);
+
     var comment = _createCommentObj(writerId, comment);
 
-    return axios.put(`${BASE_URL}/${imageId}/comment`, { imageId, comment })
+    return axios.put(`${BASE_URL}/${imageId}/comment`, { imageId, comment, newHashtags })
         .then(res => {
             return res.data
         })
@@ -99,4 +101,10 @@ function _createCommentObj(writerId, comment){
     var comment = { writerId, comment, timeStamp, commentId};
     return comment;
 
+}
+
+function _findHashtags(comment, imageId){
+    comment = comment.split(" ");
+    var hashtags = comment.filter(word => word[0]==='#');
+    return hashtags;  
 }

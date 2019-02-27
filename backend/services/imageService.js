@@ -18,16 +18,18 @@ function getImageById(imageId) {
             db.collection(imagesDb).findOne({ "_id": _id })
         )
 }
-function addComments(imageId, comment) {
+function addComments(imageId, comment, newHashtags) {
     const _id = new ObjectId(imageId);
     return getImageById(imageId).then(image => {
         var comments = image.comments;
         comments.push(comment);
+        var hashtags = image.hashtags;
+        hashtags = hashtags.concat(newHashtags)
 
         return mongoService.connect()
             .then(db =>
                 db.collection(imagesDb).findOneAndUpdate({ "_id": _id },
-                    { $set: { 'comments': comments } }, { returnOriginal: false }))
+                    { $set: { 'comments': comments, 'hashtags':hashtags } }, { returnOriginal: false }))
 
     })
 }

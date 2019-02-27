@@ -19,8 +19,9 @@ function addImageRoutes(app) {
     app.put(`${BASE}/:imageId/comment`, (req,res) =>{
         const imageId = req.body.imageId;
         const comment = req.body.comment;
+        const newHashtags = req.body.newHashtags;
 
-        imageService.addComments(imageId, comment)
+        imageService.addComments(imageId, comment, newHashtags)
             .then(commentThread =>{
                 return res.json(commentThread)
             })
