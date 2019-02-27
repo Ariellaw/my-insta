@@ -1,10 +1,18 @@
 <template>
   <div>
-    <div id="locations-page">
+    <div class="location-page">
       <div id="myMap"></div>
     </div>
 
     <div v-if="images" class="page-container">
+      <div class="location-info-container">
+        <img
+          src="https://www.st-christophers.co.uk/__data/assets/image/0004/454954/berlin_hero_updated.jpg"
+          alt
+          class="location-img"
+        >
+        <h3 class="location-name">{{this.city}}, {{this.country}}</h3>
+      </div>
       <gallary-of-images :displayedImages="images"></gallary-of-images>
     </div>
   </div>
@@ -19,6 +27,8 @@ export default {
   data() {
     return {
       images: null,
+      city: null,
+      country: null
     };
   },
   components: {
@@ -27,30 +37,41 @@ export default {
   },
   created() {
     const location = this.$route.params.location;
+    this.city = location.charAt(0).toUpperCase() + location.slice(1);
     this.$store
       .dispatch({ type: "getImagesByLocation", location })
       .then(images => (this.images = images));
-    
+
     axios
       .get(
         `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=60102dc9f3ca4456a6895c9883e11be7`
       )
       .then(res => {
-        var searchResult = res.data.results[0].geometry;
+        var searchResult = res.data.results[0];
+        this.loadMap(searchResult.geometry.lat, searchResult.geometry.lng);
+        this.getImageOfCity(
+          searchResult.geometry.lat,
+          searchResult.geometry.lng
+        );
+        this.country = searchResult.components.country;
+        console.log(searchResult.geometry.lat, searchResult.components.country);
 
-        // this.geometry.lat = searchResult.lat;
-        // this.geometry.lng = searchResult.lng;
-        // console.log("fdsf",  this.geometry.lat,  this.geometry.lng);
-        this.loadMap(searchResult.lat,searchResult.lng);
+        // axios
+        //   .get(
+        //     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDpSWIvjhFLJtTnjOd58CwmW81GEIBtSbA&location=${
+        //       searchResult.lat
+        //     },${searchResult.lng}&radius=1000`
+        //   )
+        //   .then(res => {
+        //     console.log("photo reference", res);
+        //   });
       });
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     loadMap(lat, lng) {
-      var myLatLng = { lat, lng};
-
-      // console.log("map: ", google.maps);
+      var myLatLng = { lat, lng };
+      console.log("myLatLng", myLatLng);
       this.map = new google.maps.Map(document.getElementById("myMap"), {
         center: myLatLng,
         scrollwheel: false,
@@ -61,15 +82,17 @@ export default {
         map: this.map,
         title: "Hello World!"
       });
+    },
+    getImageOfCity(lat, lng) {
+      console.log("photo reference", lat, lng);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-#myMap {
-  height: 300px;
-  width: 100%;
-}
+// .location-page {
+
+// }
 </style>
 

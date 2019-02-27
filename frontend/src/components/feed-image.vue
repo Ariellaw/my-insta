@@ -111,7 +111,6 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
-      console.log("comment", comment)
       this.$store
         .dispatch({
           type: "addUserComment",

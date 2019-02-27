@@ -6,10 +6,7 @@ const ImageService = require('./imageService')
 
 
 function getById(userId) {
-    // if(userId === "undefined") {
-    //     console.log("undifed user")
-    //     return null}
-    // console.log("dsad", userId)
+
     const _id = new ObjectId(userId);
     return mongoService.connect()
         .then(db => {
@@ -17,7 +14,6 @@ function getById(userId) {
         })
 }
 function getByUserName(username) {
-    console.log("in getByUserName", username);
     return mongoService.connect()
         .then(db => {
             return db.collection(userDb).findOne({ "userName": username })

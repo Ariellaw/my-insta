@@ -70,7 +70,6 @@ function addImageRoutes(app) {
         var location =  req.params.location;
         imageService.getImagesByLocation(location)
         .then(images =>{
-            console.log("location images", images)
             return res.json(images)
         })
     })

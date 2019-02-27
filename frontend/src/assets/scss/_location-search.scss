@@ -1,0 +1,23 @@
+
+  #myMap {
+    height: 30rem;
+    width: 100%;
+  }
+  .location-info-container {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    height:  30rem;
+    .location-img {
+      height: 20rem;
+      width: 20rem;
+      margin-right: 5rem;
+      @include profilePic;
+    }
+    .location-name {
+      font-size: 3rem;
+      font-weight: 100;
+    }
+  }

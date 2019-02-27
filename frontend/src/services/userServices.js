@@ -68,7 +68,6 @@ function authenticateUser(user){
 function findRelevantUsers(keyword){
     return axios.get(`${BASE_URL}/searchResults/users/${keyword}`)
         .then(res => {
-            console.log("search results for usres",res.data)
             return res.data;
         })
 }

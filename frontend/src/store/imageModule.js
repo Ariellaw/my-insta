@@ -149,7 +149,6 @@ export default {
         getImagesByLocation(context,{location}){
             return imageServices.getImagesByLocation(location)
                 .then(images => {
-                    console.log(images)
                     return images;
                 })
         }

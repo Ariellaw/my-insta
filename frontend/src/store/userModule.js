@@ -102,12 +102,7 @@ export default {
                     return user.value;
                 } )
         },
-        // authenticateUser(context, {user}){
-        //     userServices.authenticateUser(user)
-        //         .then(user =>{
-        //             console.log('actions return user', user)
-        //         })
-        // }
+   
         findRelevantUsers(context, {keyword}){
            userServices.findRelevantUsers(keyword)
             .then(res =>{

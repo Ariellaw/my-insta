@@ -16,9 +16,13 @@ const addAuthRoutes = require('./routes/auth-routes.js');
 
 const app = express();
 app.use(cors({
+  
   origin: ['http://localhost:8080'],
-  credentials: true // enable set cookie
+  credentials: true, // enable set cookie
+  
 }));
+
+
 
 mongoService.initDbConnection();
 

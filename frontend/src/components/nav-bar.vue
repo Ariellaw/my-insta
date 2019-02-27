@@ -79,7 +79,6 @@ export default {
   },
   methods: {
     goToFeed() {
-      console.log("feed");
       this.$router.push(`/`);
       // this.$router.go();
     },
@@ -100,7 +99,7 @@ export default {
       this.$router.go();
     },
     findRelevantUsers() {
-      console.log("wat is causing the error", this.keyword);
+
       if (this.keyword) {
         this.$store.dispatch({
           type: "findRelevantUsers",
@@ -141,7 +140,7 @@ ul {
   width: 250px;
   max-height: 60vh;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 999999;
+  z-index: 10000003;
   margin: 0px 50px;
   overflow-y: auto;
 
