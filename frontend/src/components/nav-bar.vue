@@ -2,7 +2,7 @@
   <nav class="main-nav-bar">
     <div class="nav-buttons-container page-container">
       <div @click="goToFeed" class="instagram-logo btn">
-        <i class="fab fa-instagram btn"></i> | AriellaGram
+        <i class="fab fa-instagram btn"></i> <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
       </div>
       <ul>
         <li class="dropdown">
@@ -50,7 +50,7 @@
             >
           </div>
         </form>
-        <i class="fas fa-user-friends btn"></i>
+        <!-- <i class="fas fa-user-friends btn"></i> -->
         <i class="fas fa-comment btn"></i>
         <i class="far fa-heart btn"></i>
         <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i>

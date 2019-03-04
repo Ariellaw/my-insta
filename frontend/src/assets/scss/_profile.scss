@@ -1,82 +1,109 @@
-
 .profile {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0 auto;
+  .profile-pic-container {
+    height: 40%;
+    margin-top: 2rem;
+    padding: 1rem;
     display: flex;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0 auto;
-    .profile-pic-container {
-      height: 40%;
-      margin-top: 2rem;
-      padding: 1rem;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-  
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .profile-pic {
+      @include profilePic;
+      margin-right: 5rem;
+      height: 15rem;
+      width: 15rem;
+    }
+    @media only screen and (max-width: 800px) {
       .profile-pic {
-        @include profilePic;
-        margin-right: 10rem;
-        height: 15rem;
-        width:15rem;
-      }
-      .user-details {
-        display: flex;
-        flex-direction: column;
-        line-height: 4rem;
-        width: 40%;
-        height: 100%;
-        div {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-        }
-        .username {
-          font-size: 2.5rem;
-          .edit-profile-or-following-btn {
-            @include general-button;
-          }
-          .follower-user-btn{
-            @include submit-btn;
-            width: 89px;
-            height: 30px;
-          }
-        }
-        .numbers {
-          font-size: 1.5rem;
-        }
-        .fullname {
-          font-size: 2rem;
-        }
-        .bio{
-          font-size: 1.5rem;
-          line-height: 1;
-          margin-top: 1rem;
-          font-weight: 500;
-          overflow:auto;
-          padding:.5rem
-        }
+        margin-right: 3rem;
       }
     }
-    .posts-container {
-      color:$darker-font-color;
-      height: 60%;
-      .filter-nav {
-        border-top: 1px solid $lighter-font-color;
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      line-height: 4rem;
+      width: 70%;
+      height: 100%;
+      div {
         display: flex;
-        justify-content: center;
-        span {
-          margin: 0rem 9rem;
-          font-size: 1.5rem;
-          padding:1rem;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .username {
+        font-size: 2.5rem;
+        .edit-profile-or-following-btn {
+          @include general-button;
+        }
+        .follower-user-btn {
+          @include submit-btn;
+          width: 9rem;
+          height: 3rem;
         }
       }
+      .numbers {
+        font-size: 1.5rem;
+      }
+      .fullname {
+        font-size: 2rem;
+      }
+      .bio {
+        font-size: 1.7rem;
+        line-height: 1;
+        margin-top: 1rem;
+        font-weight: 500;
+        overflow: auto;
+        padding: 0.5rem;
+      }
+    }
 
-      .chosen-filter {
-        color: black;
-        font-weight: bold;
-        border-top: 1px solid #262626;
-       
-        // color:green;
-        //add a thicker line to the line above
+    @media only screen and (max-width: 2500px) {
+      .user-details {
+        width: 50%;
+      }
+    }
+    @media only screen and (max-width: 1500px) {
+      .user-details {
+        width: 56%;
+      }
+    }
+    @media only screen and (max-width: 1200px) {
+      .user-details {
+        width: 63%;
+      }
+    }
+    @media only screen and (max-width: 1000px) {
+      .user-details {
+        width: 70%;
       }
     }
   }
+
+
+  .posts-container {
+    color: $darker-font-color;
+    height: 60%;
+    .filter-nav {
+      border-top: 1px solid $lighter-font-color;
+      display: flex;
+      justify-content: center;
+      span {
+        margin: 0rem 9rem;
+        font-size: 1.5rem;
+        padding: 1rem;
+      }
+    }
+
+    .chosen-filter {
+      color: black;
+      font-weight: bold;
+      border-top: 1px solid #262626;
+
+      // color:green;
+      //add a thicker line to the line above
+    }
+  }
+}

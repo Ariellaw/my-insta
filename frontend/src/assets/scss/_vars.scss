@@ -13,6 +13,10 @@ $dark-border-color:darken(#fafafa, 15%);
     color: white;
     font-size:5rem;
     position: relative;
+    @media only screen 
+    and (max-width: 1000px) {
+        font-size:4rem;
+    }
 }
 
 @mixin textarea {

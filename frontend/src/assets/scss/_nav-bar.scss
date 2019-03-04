@@ -1,31 +1,46 @@
 .image-upload > input {
-    display: none;
-  }
-  
-  .main-nav-bar {
-    height: 6rem;
-    border-bottom: 1px solid $lighter-font-color;
-    border-top: 1px solid $darker-font-color;
-    background-color: $lighter-layout-color;
+  display: none;
+}
+
+.main-nav-bar {
+  height: 6rem;
+  border-bottom: 1px solid $dark-border-color;
+  border-top: 1px solid $dark-border-color;
+  background-color: $lighter-layout-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.2rem;
+  position: sticky;
+  top: 0px;
+  z-index: 10000003;
+
+  .nav-buttons-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.2rem;
-    position:sticky;
-    top:0px;
-    z-index:10000003;
-  
-    .nav-buttons-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      .menu-icons {
-        width: 18rem;
-        display: flex;
-        justify-content: space-between;
-      }
-      .instagram-logo {
-        font-family: lily;
+    flex-direction: row;
+    justify-content: space-between;
+    @media only screen and (max-width: 700px) {
+      justify-content: center;
+    }
+
+    .search-users-field {
+      @media only screen and (max-width: 700px) {
+        display: none;
       }
     }
+    .menu-icons {
+      // width: 18rem;
+      display: flex;
+      justify-content: space-between;
+      @media only screen and (max-width: 700px) {
+        display: none;
+      }
+      i {
+        margin-right: 1rem;
+      }
+    }
+    .instagram-logo {
+      font-family: lily;
+    }
   }
+}

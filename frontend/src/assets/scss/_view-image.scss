@@ -1,132 +1,40 @@
+.modal-default-button {
+  @include popup-button;
+}
 
-  
 
-  
-  .modal-default-button {
-    @include popup-button;
-  }
+.displayVertical {
+  &.modal-container {
+    flex-direction: column;
+    width: 700px;
+    height: 87vh;
+    margin-top: 3rem;
 
-  .displayVertical{
-    &.modal-container{
-      flex-direction: column;
-      width:700px;
-      height: 90vh;
-      // align-content: flex-start;
- 
     .currImage {
       width: auto;
       max-width: 100%;
       height: 59%;
       object-fit: cover;
-      order:2;
+      order: 2;
     }
     // .modal-body {
     //   height: 100%;
     //   width: 35%;
     //   padding: 1rem;
-      div {
-        display: flex;
-        padding: 0.5rem;
-        width:100%;
-      }
-      .user-info {
-        order:1;
-        padding: 1rem;
-        height: 8%;
-        justify-content: flex-start;
-        flex-direction: row;
-        align-items: center;
-        border-bottom: 1px solid $lighter-font-color;
-    
-        .profile-pic {
-          @include profilePic;
-          width: 55px;
-          height: 55px;
-          flex-direction: row;
-          margin: 1rem;
-        }
-        .image-location{
-          font-family: monst-light;
-          font-weight: 100;
-        }
-      }
-      .comments {
-        height: 18%;
-        border-bottom: 1px solid $lighter-font-color;
-        flex-direction: column;
-        overflow-y: auto;
-        order:4;
-
-    
-      }
-      .likes-and-followers {
-        order:3;
-        height: 6%;
-        margin-left:0px;
-        flex-direction: row;
-        justify-content: flex-start;
-        .icons {
-          width: auto;    
-          i {
-            font-size: 2.8rem;
-            margin-right: 1rem;
-          }
-          .fa-bookmark {
-            justify-self: flex-end;
-            //ToDo - put on right side of box
-          }
-        }
-        .column{
-          flex-direction: column;
-          display: flex;
-          justify-content:center;
-
-    
-        .num-of-likes {
-          margin-bottom: 0.5rem;
-        }
-        .time-posted {
-          color: $darker-font-color;
-        }
-      }
-      }
-      .add-a-comment {
-        height: 9%;
-        order:5;
-        .viewed-image-text-area {
-         @include textarea;
-         height: 95%;
-        }
-      }
-    
-  }
-  }
-
-
-  .modal-container{
-    flex-direction: column;
-    width: 1100px;
-    height: 700px;
-    flex-wrap:wrap;
-  .currImage {
-    width: 65%;
-    height: 100%;
-    object-fit: cover;
-  }
-
     div {
       display: flex;
       padding: 0.5rem;
-          width: 35%;
-
+      width: 100%;
     }
     .user-info {
+      order: 1;
       padding: 1rem;
-      height: 10%;
+      height: 8%;
       justify-content: flex-start;
+      flex-direction: row;
       align-items: center;
       border-bottom: 1px solid $lighter-font-color;
-  
+
       .profile-pic {
         @include profilePic;
         width: 55px;
@@ -134,41 +42,123 @@
         flex-direction: row;
         margin: 1rem;
       }
-
-      .image-location{
+      .image-location {
         font-family: monst-light;
         font-weight: 100;
       }
     }
     .comments {
-      height: 63%;
+      height: 18%;
       border-bottom: 1px solid $lighter-font-color;
       flex-direction: column;
       overflow-y: auto;
-  
+      order: 4;
     }
     .likes-and-followers {
-      height: 15%;
-      border-bottom: 1px solid $lighter-font-color;
-      display: flex;
-      flex-direction: column;
-      margin-left:.5rem;
+      order: 3;
+      height: 6%;
+      margin-left: 0px;
+      flex-direction: row;
+      justify-content: flex-start;
       .icons {
-        width: 100%;
-        margin-bottom: 0.5rem;
-  
+        width: auto;
         i {
-          font-size: 2.5rem;
-          margin-right: 0.5rem;
+          font-size: 2.8rem;
+          margin-right: 1rem;
         }
         .fa-bookmark {
-          float: right;
+          justify-self: flex-end;
           //ToDo - put on right side of box
         }
       }
-      .column{
-        display: flex;
+      .column {
         flex-direction: column;
+        display: flex;
+        justify-content: center;
+
+        .num-of-likes {
+          margin-bottom: 0.5rem;
+        }
+        .time-posted {
+          color: $darker-font-color;
+        }
+      }
+    }
+    .add-a-comment {
+      height: 9%;
+      order: 5;
+      .viewed-image-text-area {
+        @include textarea;
+        height: 95%;
+      }
+    }
+  }
+}
+
+.modal-container {
+  flex-direction: column;
+  width: 1100px;
+  height: 700px;
+  flex-wrap: wrap;
+  .currImage {
+    width: 65%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  div {
+    display: flex;
+    padding: 0.5rem;
+    width: 35%;
+  }
+  .user-info {
+    padding: 1rem;
+    height: 10%;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid $lighter-font-color;
+
+    .profile-pic {
+      @include profilePic;
+      width: 55px;
+      height: 55px;
+      flex-direction: row;
+      margin: 1rem;
+    }
+
+    .image-location {
+      font-family: monst-light;
+      font-weight: 100;
+    }
+  }
+  .comments {
+    height: 63%;
+    border-bottom: 1px solid $lighter-font-color;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .likes-and-followers {
+    height: 15%;
+    border-bottom: 1px solid $lighter-font-color;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+    .icons {
+      width: 100%;
+      margin-bottom: 0.5rem;
+
+      i {
+        font-size: 2.5rem;
+        margin-right: 0.5rem;
+      }
+      .fa-bookmark {
+        float: right;
+        //ToDo - put on right side of box
+      }
+    }
+    .column {
+      display: flex;
+      flex-direction: column;
       .num-of-likes {
         margin-bottom: 0.5rem;
       }
@@ -176,11 +166,14 @@
         color: $darker-font-color;
       }
     }
-    }
-    .add-a-comment {
-      height: 12%;
-      textarea {
-       @include textarea;
-      }
+  }
+  .add-a-comment {
+    height: 12%;
+    textarea {
+      @include textarea;
     }
   }
+}
+
+
+

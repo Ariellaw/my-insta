@@ -1,10 +1,17 @@
-*, *::after, *::before{
+ *, *::after, *::before{
     margin: 0;
     padding:0;
     box-sizing: inherit;
 }
 html{
     font-size:10px;
+    @media only screen and (max-width: 800px) {
+        font-size:9px;
+    }
+    @media only screen and (max-width: 600px) {
+        font-size:8.5px;
+    }
+    
 }
 body{
     box-sizing: border-box;
@@ -12,3 +19,4 @@ body{
     font-family: monst-light;
     font-size:1.5rem;
 }
+

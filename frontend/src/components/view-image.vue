@@ -92,7 +92,8 @@ export default {
       imageComments: this.image.comments,
       displayVertically: false,
       likes: this.image.likes,
-      displaySocialMedia: false
+      displaySocialMedia: false,
+      windowWidth: null
     };
   },
   created() {
@@ -177,9 +178,7 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
-      this.$router.push(
-        `/search/hashtag/${word.toLowerCase()}`
-      );
+      this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
       this.$router.go();
     }
   },
@@ -204,6 +203,22 @@ export default {
     isLiked() {
       if (this.likes) {
         return this.likes.includes(this.loggedInUser._id);
+      }
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.windowWidth = window.innerWidth;
+      });
+    });
+  },
+  watch: {
+    windowWidth() {
+      if (this.windowWidth <= 1100) {
+        this.displayVertically = true;
+      } else {
+        this.displayVertically = false;
       }
     }
   },
