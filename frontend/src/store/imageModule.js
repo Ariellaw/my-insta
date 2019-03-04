@@ -151,6 +151,13 @@ export default {
                 .then(images => {
                     return images;
                 })
+        },
+        getImagesByHashtag( contxt, {hashtag}){
+            console.log('hashtag actions', hashtag)
+            return imageServices.getImagesByHashtag(hashtag)
+            .then(images => {
+                return images;
+            })
         }
 
     }

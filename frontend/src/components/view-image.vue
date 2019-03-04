@@ -33,7 +33,12 @@
             </span>
           </div>
           <div class="comments">
-            <user-comment v-for="comment in imageComments" :comment="comment" :key="comment.id"></user-comment>
+            <user-comment
+              @searchHashtagImages="searchHashtagImages"
+              v-for="(comment,idx) in imageComments"
+              :comment="comment"
+              :key="idx"
+            ></user-comment>
           </div>
           <div class="likes-and-followers">
             <div v-if="loggedInUser" class="icons">
@@ -166,7 +171,16 @@ export default {
       this.$router.go();
     },
     goToLocationImages() {
-      this.$router.push(`/locations/${this.image.location.toLowerCase()}`);
+      this.$router.push(
+        `/search/locations/${this.image.location.toLowerCase()}`
+      );
+    },
+    searchHashtagImages(word) {
+      word = word.slice(1);
+      this.$router.push(
+        `/search/hashtag/${word.toLowerCase()}`
+      );
+      this.$router.go();
     }
   },
   computed: {

@@ -2,7 +2,7 @@
   <div class="profile page-container" v-if="visitedUser">
     <section class="profile-pic-container">
       <img :src="visitedUser.profilePic" class="profile-pic">
-      <div class="loggedin-user-details">
+      <div class="user-details">
         <div class="username">
           {{visitedUser.userName}}
           <div v-if="loggedInUser" class="right">
@@ -122,11 +122,11 @@ export default {
   },
   created() {
     const userId = this.$route.params.userId;
-    this.$store.dispatch({ type: "getVisitedUser", userId });
+    this.$store.dispatch({ type: "getVisitedUser", userId })
     this.$store.dispatch({
       type: "getUserFavoriteImages",
       userId
-    });
+    })
     this.getVisitedUserImages(userId);
     this.$store.dispatch({
       type: "getLoggedInUser",

@@ -74,6 +74,15 @@ function addImageRoutes(app) {
             return res.json(images)
         })
     })
+    app.get(`${BASE}/:hashtag/search`, (req, res)=>{
+        var hashtag =  req.params.hashtag;
+        console.log(" routes hashtag", hashtag)
+        imageService.getImagesByHashtag(hashtag)
+        .then(images =>{
+            console.log("images hashtag", images)
+            return res.json(images)
+        })
+    })
 }
 
 module.exports = addImageRoutes;

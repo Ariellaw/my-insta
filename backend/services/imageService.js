@@ -97,6 +97,13 @@ function getImagesByLocation(location) {
             db.collection(imagesDb).find({ $or:[{location:location},{location:upperCaseLocation}]}).limit(100).sort({ timePosted: -1 }).toArray())
 }
 
+function getImagesByHashtag(hashtag) {
+    hashtag = "#" + hashtag;
+    console.log("backened", hashtag, typeof hashtag)
+    return mongoService.connect()
+        .then(db =>
+            db.collection(imagesDb).find({ hashtags: hashtag  }).limit(100).sort({ timePosted: -1 }).toArray())
+}
 module.exports = {
     getImagesByUserId,
     getImageById,
@@ -106,5 +113,6 @@ module.exports = {
     addNewImage,
     getInitalFeedImages,
     getAdditionalFeedImages,
-    getImagesByLocation
+    getImagesByLocation,
+    getImagesByHashtag
 }

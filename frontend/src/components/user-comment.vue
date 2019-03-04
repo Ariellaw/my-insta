@@ -2,12 +2,12 @@
   <li class="comment" v-if="commentOwner && words">
     <span class="comment-owner bold-reg">{{commentOwner.userName+": "}}</span>
     <!-- {{comment.comment}} -->
-    <p v-for="word in words" v-if="word[0]!=='#'" class="word">{{word+" "}}</p>
-
-    <a v-else href="javascript:void(0)" class="hashtag word">{{word+" "}}</a>
+        <span :class="{'hashtag':word[0]==='#'}" @click="findHashtagImages(word)"  v-for="(word, index) in words" :key="index">{{word}}
+</span>
+          
 
     <!-- <p class="ff">fsdfsaf </p>
-    <a   href="javascript:void(0)" class=" ff">@fh </a>
+    @fh </a>
     <p  class="ff">fsfds </p>-->
     <a href="javascript:void(0)" class="dropbtn"></a>
     <!-- {{ comment.timeStamp | moment }} -->
@@ -36,6 +36,27 @@ export default {
   filters: {
     moment: function(date) {
       return moment(date).fromNow();
+    },
+    isALink(word){
+      if(word[0]==="#"){
+        return word.toUpperCase();
+      }
+      else return word
+    }
+  },
+  computed:{
+    
+    
+  },
+  methods:{
+    findHashtagImages(word){
+      if(word[0]!=='#'){
+       return;
+      }
+      else{
+        this.$emit("searchHashtagImages", word);
+      };
+      
     }
   }
 };
@@ -48,12 +69,12 @@ export default {
   margin-bottom: 2px;
   display: block;
 }
-.word {
-  display: inline;
-}
+
 .hashtag {
   text-decoration: none;
   font-weight: 600;
+  color: blue;
+  cursor: pointer;
 }
 </style>
 >

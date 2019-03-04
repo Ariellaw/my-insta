@@ -17,7 +17,7 @@ function getUserImages(userId) {
         })
 }
 function addUserComment(comment, imageId, writerId) {
-   var newHashtags = _findHashtags(comment, imageId);
+    var newHashtags = _findHashtags(comment);
 
     var comment = _createCommentObj(writerId, comment);
 
@@ -56,29 +56,37 @@ function createImgObj(imgDetails, image) {
         "timePosted": timeStamp,
         "location": imgDetails.location,
     }
-    return axios.post(`${BASE_URL}/newImage`, {imgObj})
-        .then(res =>{
+    return axios.post(`${BASE_URL}/newImage`, { imgObj })
+        .then(res => {
             return res.data;
         })
 }
-    
 
-function getInitalImages(){
+
+function getInitalImages() {
     return axios.get(`${BASE_URL}/initalFeedImages`)
         .then(res => {
             return res.data
         })
-} 
-function getAdditionalImages(startingPoint){
+}
+function getAdditionalImages(startingPoint) {
     return axios.get(`${BASE_URL}/${startingPoint}/additionalFeedImages`)
         .then(res => {
             return res.data
         })
-} 
+}
 
-function getImagesByLocation(location){
+function getImagesByLocation(location) {
     return axios.get(`${BASE_URL}/${location}/explore`)
-        .then(res =>{
+        .then(res => {
+            return res.data
+        })
+}
+function getImagesByHashtag(hashtag) {
+    console.log('services', hashtag)
+    return axios.get(`${BASE_URL}/${hashtag}/search`)
+        .then(res => {
+            console.log("hastag", res.data)
             return res.data
         })
 }
@@ -91,20 +99,23 @@ export default {
     createImgObj,
     getInitalImages,
     getAdditionalImages,
-    getImagesByLocation
+    getImagesByLocation,
+    getImagesByHashtag
 
 }
 
-function _createCommentObj(writerId, comment){
-    var commentId = utilService.makeId();
+function _createCommentObj(writerId, comment) {
     var timeStamp = Date.now();
-    var comment = { writerId, comment, timeStamp, commentId};
+    var comment = { writerId, comment, timeStamp };
     return comment;
 
 }
 
-function _findHashtags(comment, imageId){
+function _findHashtags(comment) {
     comment = comment.split(" ");
-    var hashtags = comment.filter(word => word[0]==='#');
-    return hashtags;  
+    var hashtags = comment.filter(word => 
+       word[0] === '#'
+    )
+    hashtags.forEach((word, idx) => hashtags[idx] = word.toLowerCase())
+    return hashtags;
 }

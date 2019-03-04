@@ -46,9 +46,12 @@ export default {
     },
     actions: {
         getVisitedUser(context, { userId }) {
+            console.log("userId", userId)
+
             return userServices.getUserById(userId)
                 .then(user => {
                     context.commit({ type: 'setVisitedUser', user })
+                    console.log("user", user)
                     return user;
                 })
         },

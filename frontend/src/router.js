@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import userProfile from './views/Profile.vue'
 import editUserDetails from './views/EditUserDetails.vue'
 import Authentication from './views/Authentication.vue'
-import locationSearchResults from './views/locationSearchResults.vue'
+import SearchResults from './views/searchResults.vue'
 
 Vue.use(Router)
 
@@ -31,8 +31,8 @@ export default new Router({
      component:Authentication
     },
     {
-      path:'/locations/:location',
-      component:locationSearchResults
+      path:'/search/:type/:keyword',
+      component:SearchResults
     },
     {
       path: '/about',
