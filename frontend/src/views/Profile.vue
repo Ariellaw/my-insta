@@ -1,6 +1,46 @@
 <template>
   <div class="profile page-container" v-if="visitedUser">
-    <section class="profile-pic-container">
+    <section class="profile-pic-container" v-if="cellphoneDisplay">
+      <div class="upperpart-of-profile">
+        <img :src="visitedUser.profilePic" class="profile-pic">
+        <div class="column">
+          <div class="numbers">
+            <p>
+              <span class="bold-reg" v-if="usersImages">{{usersImages.length+" "}}</span>posts
+            </p>
+            <p>
+              <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
+            </p>
+            <p>
+              <span class="bold-reg">{{visitedUser.followees.length+" "}}</span>following
+            </p>
+          </div>
+
+          <div v-if="loggedInUser" class="right">
+            <button
+              @click="editProfile"
+              v-if="loggedInUser._id === visitedUser._id"
+              class="edit-profile-or-following-btn btn"
+            >Edit Profile</button>
+            <div v-else-if="followingVisitedUser">
+              <button class="mobile-following"><i class="far fa-envelope"></i></button> 
+              <button class="mobile-following"><i class="fas fa-user-check"></i></button>                    
+            </div>
+            <button
+              @click="addFollowers(visitedUser._id)"
+              v-else
+              class="follower-user-btn btn"
+            >Follow</button>
+
+            <!-- <i class="fas fa-cog btn"></i> -->
+          </div>
+        </div>
+      </div>
+          <div class="fullname bold-reg">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
+
+      <div class="bio">{{visitedUser.bio}}</div>
+    </section>
+    <section class="profile-pic-container" v-else>
       <img :src="visitedUser.profilePic" class="profile-pic">
       <div class="user-details">
         <div class="username">
@@ -21,7 +61,7 @@
               v-else
               class="follower-user-btn btn"
             >Follow</button>
-            
+
             <!-- <i class="fas fa-cog btn"></i> -->
           </div>
         </div>
@@ -47,14 +87,14 @@
           @click="changeFilter('album')"
           :class="{ 'chosen-filter': filter==='album'}"
         >
-          <i class="far fa-images"></i> Posts
+          <i class="far fa-images"></i>
         </span>
         <span
           class="btn"
           @click="changeFilter('favorites')"
           :class="{ 'chosen-filter': filter==='favorites'}"
         >
-          <i class="far fa-star"></i> Favorites
+          <i class="far fa-star"></i>
         </span>
         
         <span
@@ -62,13 +102,12 @@
           @click="changeFilter('tagged')"
           :class="{ 'chosen-filter': filter==='tagged'}"
         >
-          <i class="fas fa-camera-retro"></i> Tagged
+          <i class="fas fa-camera-retro"></i>
         </span>
       </div>
 
-      <galleryOfImages  v-if="filter==='album'" :displayedImages="usersImages"></galleryOfImages>
-        <galleryOfImages v-else-if="filter==='favorites'" :displayedImages="userFavorites"></galleryOfImages>
-
+      <galleryOfImages v-if="filter==='album'" :displayedImages="usersImages"></galleryOfImages>
+      <galleryOfImages v-else-if="filter==='favorites'" :displayedImages="userFavorites"></galleryOfImages>
     </section>
   </div>
 </template>
@@ -82,6 +121,8 @@ export default {
     return {
       filter: "album",
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      cellphoneDisplay: false,
+      windowWidth: null
     };
   },
   methods: {
@@ -98,9 +139,8 @@ export default {
     removeFollowers(followeeId) {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
     },
-    editProfile(){
-     this.$router.push(`/edit/${this.loggedInUserId}`);
-
+    editProfile() {
+      this.$router.push(`/edit/${this.loggedInUserId}`);
     }
   },
   computed: {
@@ -122,19 +162,38 @@ export default {
   },
   created() {
     const userId = this.$route.params.userId;
-    this.$store.dispatch({ type: "getVisitedUser", userId })
+    this.$store.dispatch({ type: "getVisitedUser", userId });
     this.$store.dispatch({
       type: "getUserFavoriteImages",
       userId
-    })
+    });
     this.getVisitedUserImages(userId);
     this.$store.dispatch({
       type: "getLoggedInUser",
       userId: this.loggedInUserId
     });
+    if (window.innerWidth <= 700) {
+      this.cellphoneDisplay = true;
+    }
   },
   components: {
     galleryOfImages
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.windowWidth = window.innerWidth;
+      });
+    });
+  },
+  watch: {
+    windowWidth() {
+      if (this.windowWidth <= 700) {
+        this.cellphoneDisplay = true;
+      } else {
+        this.cellphoneDisplay = false;
+      }
+    }
   }
 };
 </script>

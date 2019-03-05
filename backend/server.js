@@ -16,8 +16,9 @@ const addAuthRoutes = require('./routes/auth-routes.js');
 
 const app = express();
 app.use(cors({
+  // origin: ['http://localhost:8080'],
+  origin: ['http://192.168.1.105:8080'],
   
-  origin: ['http://localhost:8080'],
   credentials: true, // enable set cookie
   
 }));

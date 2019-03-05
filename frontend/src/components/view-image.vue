@@ -102,6 +102,9 @@ export default {
       type: "getLoggedInUser",
       userId: this.loggedInUserId
     });
+    if (window.innerWidth <= 1100) {
+      this.displayVertically = true;
+    }
   },
 
   filters: {
@@ -210,17 +213,11 @@ export default {
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
         this.windowWidth = window.innerWidth;
+        if (this.windowWidth <= 1100) {
+          this.displayVertically = true;
+        }
       });
     });
-  },
-  watch: {
-    windowWidth() {
-      if (this.windowWidth <= 1100) {
-        this.displayVertically = true;
-      } else {
-        this.displayVertically = false;
-      }
-    }
   },
   components: {
     userComment,

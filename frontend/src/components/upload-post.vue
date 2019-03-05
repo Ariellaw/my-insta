@@ -4,7 +4,7 @@
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')"><i class="fas fa-times"></i></button>
 
-        <div class="modal-container">
+        <div class="new-image-modal-container">
 
                   <img class="new-image" :src="image" alt="">
                   <div class="new-post-comments">
