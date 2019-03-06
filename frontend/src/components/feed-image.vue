@@ -17,11 +17,17 @@
           class="follow"
           @click="addFollowers(image.ownerId)"
         >Follow</span>
-        <p class="image-location">{{image.location}}</p>
+        <p @click="goToLocationImages"  class="image-location">{{image.location}}</p>
       </span>
     </div>
     <div class="comments">
-      <user-comment v-for="comment in imageComments" :comment="comment" :key="comment.id"></user-comment>
+      <user-comment
+        @goToUserProfile="goToUserProfile"
+        @searchHashtagImages="searchHashtagImages"
+        v-for="comment in imageComments"
+        :comment="comment"
+        :key="comment.id"
+      ></user-comment>
     </div>
     <div class="likes-and-followers">
       <div v-if="loggedInUser" class="icons">
@@ -109,6 +115,17 @@ export default {
         userId
       });
     },
+    goToLocationImages() {
+      this.$router.push(
+        `/search/locations/${this.image.location.toLowerCase()}`
+      );
+    },
+    searchHashtagImages(word) {
+      word = word.slice(1);
+      console.log(word);
+      this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
+      this.$router.go();
+    },
 
     addUserComment(comment, imageId, writerId) {
       this.$store
@@ -121,6 +138,21 @@ export default {
         .then(comments => {
           this.imageComments = comments;
           this.comment = null;
+        });
+    },
+    goToUserProfile(word) {
+      this.$store
+        .dispatch({ type: "getUserByUsername", userName: word })
+        .then(res => {
+          if (res !== null) {
+            this.$router.push({
+              name: "user-profile",
+              params: { userName: res.userName }
+            });
+            this.$router.go();
+          } else {
+            return;
+          }
         });
     },
     addToUserFavorites() {
@@ -137,9 +169,14 @@ export default {
     },
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
-      this.$router.push({name: 'user-profile', params: { userName }});
+      this.$router.push({ name: "user-profile", params: { userName } });
       // this.$router.go();
-    }
+    },
+     goToLocationImages() {
+      this.$router.push(
+        `/search/locations/${this.image.location.toLowerCase()}`
+      );
+    },
   },
   computed: {
     loggedInUser() {

@@ -6,7 +6,7 @@
       @click="findHashtagImages(word)"
       v-for="(word, index) in words"
       :key="index"
-    >{{word}}</span>
+    >{{word+' '}}</span>
   </li>
 </template>
 

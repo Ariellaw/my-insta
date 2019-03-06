@@ -154,15 +154,16 @@ export default {
                     return images;
                 })
         },
-        getImagesByHashtag( contxt, {hashtag}){
+        getImagesByHashtag( context, {hashtag}){
             return imageServices.getImagesByHashtag(hashtag)
             .then(images => {
                 return images;
             })
         },
-        getImageById(context, {ImageId}){
-            return imageServices.getImageById(ImageId)
+        getImageById(context, {imageId}){
+            return imageServices.getImageById(imageId)
                 .then(image => {
+
                     return image
                 })
         }

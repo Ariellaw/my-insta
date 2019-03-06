@@ -1,6 +1,10 @@
 <template>
   <nav class="main-nav-bar">
-    <div class="nav-buttons-container page-container">
+    <div class="dd" v-if="cellphoneDisplay && navbarTitle" @click="goBackToLastWindow()">
+      <i class="fas fa-arrow-left btn"></i>
+      {{navbarTitle}}
+    </div>
+    <div v-else class="nav-buttons-container page-container">
       <div @click="goToFeed" class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i>
         <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
@@ -71,17 +75,42 @@ export default {
     return {
       showModal: false,
       keyword: null,
-      // params: null,
-
+      navbarTitle: "Locations",
+      lastWindow: null,
+      windowWidth: null,
+      cellphoneDisplay: false,
       image: {
         file: null
       }
     };
   },
   methods: {
+    getNavBarTitle() {
+      console.log(this.$route);
+      if (this.$route.params.imageId) {
+        this.navbarTitle = "Photo";
+      } else if (this.$route.name === "searh-results-page") {
+        if (this.$route.params.type === "locations") {
+          this.navbarTitle = "Locations";
+        } else {
+          this.navbarTitle = "Hashtags";
+        }
+      } else if (this.$route.name === "user-profile") {
+        this.navbarTitle = this.visitedUser.userName;
+      } else {
+        this.navbarTitle = null;
+      }
+    },
+    goBackToLastWindow() {
+      console.log("last window", this.lastWindow);
+      if (this.$route.params.imageId) {
+        this.$router.push({ params: { imageId: null } });
+      } else {
+        this.$router.push({ name: "home" });
+      }
+    },
     goToFeed() {
-      this.$router.push(`/`);
-      // this.$router.go();
+      this.$router.push({ name: "home" });
     },
     getCloudinaryUrl() {
       var elForm = this.$refs.form;
@@ -96,7 +125,7 @@ export default {
     },
     goToLoggedInUserProfile() {
       var username = this.loggedInUser.userName;
-      this.$router.push({name: 'user-profile', params: { userName }});
+      this.$router.push({ name: "user-profile", params: { userName } });
       this.$router.go();
     },
     findRelevantUsers() {
@@ -111,7 +140,13 @@ export default {
       this.keyword = null;
     }
   },
-  created() {},
+  created() {
+    this.getNavBarTitle();
+    if (window.innerWidth <= 700) {
+      this.windowWidth = window.innerWidth;
+      this.cellphoneDisplay = true;
+    }
+  },
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
@@ -119,15 +154,28 @@ export default {
     searchedUsers() {
       return this.$store.getters.searchedUsers;
     },
-    // params() {
-    //   console.log(this.params);
-    //   return this.$route;
-    // }
+    visitedUser() {
+      return this.$store.getters.visitedUser;
+    }
   },
   watch: {
-     $route() {
-      console.log(this.$route);
+    $route() {
+      this.getNavBarTitle();
+    },
+    windowWidth() {
+      if (this.windowWidth <= 700) {
+        this.cellphoneDisplay = true;
+      } else {
+        this.cellphoneDisplay = false;
+      }
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", () => {
+        this.windowWidth = window.innerWidth;
+      });
+    });
   },
   components: {
     uploadPost,
@@ -174,6 +222,9 @@ ul {
   height: 30px;
   font-size: 2rem;
   font-family: cursive;
+}
+.dd {
+  background-color: hotpink;
 }
 </style>
 

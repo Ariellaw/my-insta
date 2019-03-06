@@ -7,7 +7,7 @@
     <div v-if="images" class="page-container">
       <div class="location-info-container">
         <img :src="image" alt class="location-img">
-        <h3 class="location-name">{{this.city}}, {{this.country}}</h3>
+        <h3 v-if="type==='locations'" class="location-name">{{this.city}}, {{this.country}}</h3>
       </div>
       <gallary-of-images :displayedImages="images"></gallary-of-images>
     </div>
@@ -27,7 +27,6 @@ export default {
       type: null,
       image: null,
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-  
 
     };
   },
@@ -53,17 +52,17 @@ export default {
     if (this.type === "hashtag") {
       this.image =
         "https://www.st-christophers.co.uk/__data/assets/image/0004/454954/berlin_hero_updated.jpg";
-      var hashtag =  keyword;
+      var hashtag = keyword;
       this.$store
         .dispatch({ type: "getImagesByHashtag", hashtag })
         .then(images => (this.images = images));
     }
   },
   mounted() {},
-  computed:{
+  computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
-    },
+    }
   },
   methods: {
     loadMap(lat, lng) {
@@ -79,13 +78,14 @@ export default {
         title: "Hello World!"
       });
     },
-    getImageOfCity(lat, lng) {
-    },
+    getImageOfCity(lat, lng) {},
 
     getCountryInfo(location) {
       axios
         .get(
-          `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${this.opencagedataAPI} `
+          `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${
+            this.opencagedataAPI
+          } `
         )
         .then(res => {
           var searchResult = res.data.results[0];
@@ -95,7 +95,6 @@ export default {
             searchResult.geometry.lng
           );
           this.country = searchResult.components.country;
-
 
           // axios
           //   .get(

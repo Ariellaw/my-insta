@@ -183,6 +183,7 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
+      console.log(word)
       this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
       this.$router.go();
     },

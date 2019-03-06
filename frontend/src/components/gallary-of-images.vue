@@ -44,12 +44,21 @@ export default {
   created() {
     const imageId = this.$route.params.imageId;
     if (imageId) {
-      this.$store
-        .dispatch({ type: "getImageById", imageId })
-        .then(image => console.log("fsd", image));
+      console.log("cmp", imageId);
+      this.$store.dispatch({ type: "getImageById", imageId }).then(image => {
+        console.log("cmp",image)
+        this.viewedImage = image;
+        this.showModal = true;
+      });
     }
   },
-
+  watch: {
+    showModal() {
+      if (this.showModal === false) {
+        this.$router.push({ params: { imageId: null } });
+      }
+    }
+  },
   components: {
     viewImage
   }
