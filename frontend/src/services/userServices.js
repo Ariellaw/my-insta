@@ -10,6 +10,13 @@ function getUserById(userId) {
             
         })
 }
+function getUserByUsername(userName){
+    return axios.get(`${BASE_URL}/${userName}/nickname`)
+    .then(res =>{
+        return res.data
+        
+    })
+}
 function updateFollowers(followeeId, followerId){
 //TODO - ask Eyali about best practices - https://blog.mwaysolutions.com/2014/06/05/10-best-practices-for-better-restful-api/
    return axios.put(`${BASE_URL}/updateFollowers`, {followeeId, followerId})
@@ -81,5 +88,6 @@ export default {
     getImagesByImageId,
     updateUserDetails,
     authenticateUser,
-    findRelevantUsers
+    findRelevantUsers,
+    getUserByUsername
 }

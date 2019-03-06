@@ -136,9 +136,9 @@ export default {
       });
     },
     goToImageOwnerProfile() {
-      var imageOwnerId = this.imageOwner._id;
-      this.$router.push(`/user/${imageOwnerId}`);
-      this.$router.go();
+      var userName = this.imageOwner.userName;
+      this.$router.push({name: 'user-profile', params: { userName }});
+      // this.$router.go();
     }
   },
   computed: {

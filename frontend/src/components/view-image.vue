@@ -34,6 +34,7 @@
           </div>
           <div class="comments">
             <user-comment
+              @goToUserProfile="goToUserProfile"
               @searchHashtagImages="searchHashtagImages"
               v-for="(comment,idx) in imageComments"
               :comment="comment"
@@ -170,9 +171,10 @@ export default {
       });
     },
     goToImageOwnerProfile() {
-      var imageOwnerId = this.imageOwner._id;
-      this.$router.push(`/user/${imageOwnerId}`);
-      this.$router.go();
+      var userName = this.imageOwner.userName;
+      console.log('test',userName)
+      this.$router.push({name: 'user-profile', params: { userName }});
+      // this.$router.go();
     },
     goToLocationImages() {
       this.$router.push(
@@ -183,6 +185,18 @@ export default {
       word = word.slice(1);
       this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
       this.$router.go();
+    },
+    goToUserProfile(word) {
+      this.$store
+        .dispatch({ type: "getUserByUsername", userName: word })
+        .then(res => {
+          if (res !== null) {
+            this.$router.push({name: 'user-profile', params: { userName: res.userName }});
+            this.$router.go();
+          } else {
+            return;
+          }
+        });
     }
   },
   computed: {

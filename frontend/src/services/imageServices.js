@@ -83,10 +83,8 @@ function getImagesByLocation(location) {
         })
 }
 function getImagesByHashtag(hashtag) {
-    console.log('services', hashtag)
     return axios.get(`${BASE_URL}/${hashtag}/search`)
         .then(res => {
-            console.log("hastag", res.data)
             return res.data
         })
 }

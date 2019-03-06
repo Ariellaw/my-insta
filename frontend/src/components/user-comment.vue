@@ -1,16 +1,12 @@
 <template>
   <li class="comment" v-if="commentOwner && words">
     <span class="comment-owner bold-reg">{{commentOwner.userName+": "}}</span>
-    <!-- {{comment.comment}} -->
-        <span :class="{'hashtag':word[0]==='#'}" @click="findHashtagImages(word)"  v-for="(word, index) in words" :key="index">{{word}}
-</span>
-          
-
-    <!-- <p class="ff">fsdfsaf </p>
-    @fh </a>
-    <p  class="ff">fsfds </p>-->
-    <a href="javascript:void(0)" class="dropbtn"></a>
-    <!-- {{ comment.timeStamp | moment }} -->
+    <span
+      :class="{'hashtag':word[0]==='#'|| word[0]==='@'}"
+      @click="findHashtagImages(word)"
+      v-for="(word, index) in words"
+      :key="index"
+    >{{word}}</span>
   </li>
 </template>
 
@@ -37,26 +33,22 @@ export default {
     moment: function(date) {
       return moment(date).fromNow();
     },
-    isALink(word){
-      if(word[0]==="#"){
+    isALink(word) {
+      if (word[0] === "#") {
         return word.toUpperCase();
-      }
-      else return word
+      } else return word;
     }
   },
-  computed:{
-    
-    
-  },
-  methods:{
-    findHashtagImages(word){
-      if(word[0]!=='#'){
-       return;
-      }
-      else{
+  computed: {},
+  methods: {
+    findHashtagImages(word) {
+      if (word[0] === "#") {
         this.$emit("searchHashtagImages", word);
-      };
-      
+        return;
+      } else if (word[0] === "@") {
+         this.$emit("goToUserProfile", word);
+        return;
+      } else return;
     }
   }
 };

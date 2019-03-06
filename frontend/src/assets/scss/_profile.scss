@@ -4,7 +4,7 @@
   height: 100vh;
   margin: 0 auto;
   .profile-pic-container {
-    height: 25%;
+    height: 30%;
     margin-top: 2rem;
     padding: 1rem;
     display: flex;
@@ -208,7 +208,7 @@
 
   .posts-container {
     color: $darker-font-color;
-    height: 75%;
+    height: 70%;
     @media screen and (max-width: 700px) {
       height: 65%;
     }
@@ -219,17 +219,21 @@
       border-top: 1px solid $lighter-font-color;
       display: flex;
       justify-content: space-around;
-      padding:0 1rem;
       @media screen and (max-width: 700px) {
-        justify-content: space-around;
         border:0px
 
       }
       span {
         font-size: 1.5rem;
         padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         @media screen and (max-width: 700px) {
           font-size: 2rem;
+          .filter{
+            display: none;
+          }
         }
       }
     }

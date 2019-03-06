@@ -99,7 +99,6 @@ function getImagesByLocation(location) {
 
 function getImagesByHashtag(hashtag) {
     hashtag = "#" + hashtag;
-    console.log("backened", hashtag, typeof hashtag)
     return mongoService.connect()
         .then(db =>
             db.collection(imagesDb).find({ hashtags: hashtag  }).limit(100).sort({ timePosted: -1 }).toArray())

@@ -45,13 +45,11 @@ export default {
         }
     },
     actions: {
-        getVisitedUser(context, { userId }) {
-            console.log("userId", userId)
+        getVisitedUser(context, { userName }) {
 
-            return userServices.getUserById(userId)
+            return userServices.getUserByUsername(userName)
                 .then(user => {
                     context.commit({ type: 'setVisitedUser', user })
-                    console.log("user", user)
                     return user;
                 })
         },
@@ -64,6 +62,12 @@ export default {
         },
         getUserById(context, { userId }) {
             return userServices.getUserById(userId)
+                .then(user => {
+                    return user
+                })
+        },
+        getUserByUsername(context, { userName }) {
+            return userServices.getUserByUsername(userName)
                 .then(user => {
                     return user
                 })

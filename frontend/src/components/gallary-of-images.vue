@@ -2,7 +2,7 @@
   <div>
     <viewImage v-if="showModal" :image="viewedImage" @close="showModal = false"></viewImage>
 
-    <h1 v-if="setIsLoadingFavorites">Loading...</h1>
+    <h1 v-if="isLoadingUsersImages">Loading...</h1>
 
     <div class="user-posts">
       <img
@@ -33,14 +33,21 @@ export default {
       this.showModal = true;
       this.viewedImage = image;
       this.$store.dispatch({ type: "setViewedImage", image });
+      this.$router.push({ params: { imageId: image._id } });
     }
   },
   computed: {
-    setIsLoadingFavorites() {
-      return this.$store.getters.isLoadingImages;
+    isLoadingUsersImages() {
+      return this.$store.getters.isLoadingUsersImages;
     }
   },
-  created(){
+  created() {
+    const imageId = this.$route.params.imageId;
+    if (imageId) {
+      this.$store
+        .dispatch({ type: "getImageById", imageId })
+        .then(image => console.log("fsd", image));
+    }
   },
 
   components: {

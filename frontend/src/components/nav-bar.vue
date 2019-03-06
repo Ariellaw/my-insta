@@ -2,7 +2,8 @@
   <nav class="main-nav-bar">
     <div class="nav-buttons-container page-container">
       <div @click="goToFeed" class="instagram-logo btn">
-        <i class="fab fa-instagram btn"></i> <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
+        <i class="fab fa-instagram btn"></i>
+        <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
       </div>
       <ul>
         <li class="dropdown">
@@ -50,7 +51,6 @@
             >
           </div>
         </form>
-        <!-- <i class="fas fa-user-friends btn"></i> -->
         <i class="fas fa-comment btn"></i>
         <i class="far fa-heart btn"></i>
         <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i>
@@ -71,6 +71,7 @@ export default {
     return {
       showModal: false,
       keyword: null,
+      // params: null,
 
       image: {
         file: null
@@ -94,12 +95,11 @@ export default {
         });
     },
     goToLoggedInUserProfile() {
-      var loggedInUserId = this.loggedInUser._id;
-      this.$router.push(`/user/${loggedInUserId}`);
+      var username = this.loggedInUser.userName;
+      this.$router.push({name: 'user-profile', params: { userName }});
       this.$router.go();
     },
     findRelevantUsers() {
-
       if (this.keyword) {
         this.$store.dispatch({
           type: "findRelevantUsers",
@@ -111,12 +111,22 @@ export default {
       this.keyword = null;
     }
   },
+  created() {},
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
     searchedUsers() {
       return this.$store.getters.searchedUsers;
+    },
+    // params() {
+    //   console.log(this.params);
+    //   return this.$route;
+    // }
+  },
+  watch: {
+     $route() {
+      console.log(this.$route);
     }
   },
   components: {

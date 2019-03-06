@@ -1,5 +1,8 @@
 .modal-default-button {
   @include popup-button;
+  @media screen and (max-width: 700px) {
+    display: none;
+  }
 }
 
 .displayVertical {
@@ -14,6 +17,7 @@
     @media screen and (max-width: 700px) {
       width: 100vw;
       height: 95vh;
+      margin-top:6rem;
     }
 
     .currImage {
@@ -47,7 +51,6 @@
         height: 5.5rem;
         flex-direction: row;
         margin: 1rem;
-
       }
       .image-location {
         font-family: monst-light;
@@ -58,7 +61,7 @@
       height: 18%;
       border-bottom: 1px solid $lighter-font-color;
       flex-direction: column;
-      overflow-y: auto;
+      overflow-y: scroll;
       order: 4;
     }
     .likes-and-followers {
@@ -111,7 +114,7 @@
   }
   @media screen and (max-width: 700px) {
     width: 100vw;
-    height: 95vh;
+    height: 100vh;
   }
 
   flex-wrap: wrap;

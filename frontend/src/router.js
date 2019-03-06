@@ -16,7 +16,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/user/:userId',
+      path: '/user/:userName/:imageId?',
       name: 'user-profile',
       component: userProfile
     },
@@ -31,7 +31,8 @@ export default new Router({
      component:Authentication
     },
     {
-      path:'/search/:type/:keyword',
+      path:'/search/:type/:keyword/:imageId?',
+      name:'searh-results-page',
       component:SearchResults
     },
     {

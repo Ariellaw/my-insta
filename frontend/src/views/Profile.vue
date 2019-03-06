@@ -5,8 +5,8 @@
         <img :src="visitedUser.profilePic" class="profile-pic">
         <div class="column">
           <div class="numbers">
-            <p>
-              <span class="bold-reg" v-if="usersImages">{{usersImages.length+" "}}</span>posts
+            <p v-if="usersImages">
+              <span class="bold-reg">{{usersImages.length+" "}}</span>posts
             </p>
             <p>
               <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -23,8 +23,12 @@
               class="edit-profile-or-following-btn btn"
             >Edit Profile</button>
             <div v-else-if="followingVisitedUser">
-              <button class="mobile-following"><i class="far fa-envelope"></i></button> 
-              <button class="mobile-following"><i class="fas fa-user-check"></i></button>                    
+              <button class="mobile-following">
+                <i class="far fa-envelope"></i>
+              </button>
+              <button class="mobile-following">
+                <i class="fas fa-user-check"></i>
+              </button>
             </div>
             <button
               @click="addFollowers(visitedUser._id)"
@@ -36,7 +40,7 @@
           </div>
         </div>
       </div>
-          <div class="fullname bold-reg">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
+      <div class="fullname bold-reg">{{visitedUser.firstName+" "+visitedUser.lastName}}</div>
 
       <div class="bio">{{visitedUser.bio}}</div>
     </section>
@@ -88,6 +92,7 @@
           :class="{ 'chosen-filter': filter==='album'}"
         >
           <i class="far fa-images"></i>
+          <h4 class="filter">&nbsp;My Images</h4>
         </span>
         <span
           class="btn"
@@ -95,6 +100,7 @@
           :class="{ 'chosen-filter': filter==='favorites'}"
         >
           <i class="far fa-star"></i>
+          <h4 class="filter">&nbsp; Favorites</h4>
         </span>
         
         <span
@@ -103,6 +109,7 @@
           :class="{ 'chosen-filter': filter==='tagged'}"
         >
           <i class="fas fa-camera-retro"></i>
+          <h4 class="filter">&nbsp;Tagged</h4>
         </span>
       </div>
 
@@ -122,7 +129,8 @@ export default {
       filter: "album",
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       cellphoneDisplay: false,
-      windowWidth: null
+      windowWidth: null,
+      userId: null
     };
   },
   methods: {
@@ -161,13 +169,19 @@ export default {
     }
   },
   created() {
-    const userId = this.$route.params.userId;
-    this.$store.dispatch({ type: "getVisitedUser", userId });
-    this.$store.dispatch({
-      type: "getUserFavoriteImages",
-      userId
+    const userName = this.$route.params.userName;
+    // const userID = null;
+    this.$store.dispatch({ type: "getVisitedUser", userName }).then(user => {
+      this.userId = user._id;
+      if (user._id !== null) {
+        this.$store.dispatch({
+          type: "getUserFavoriteImages",
+          userId: user._id
+        });
+      }
+      this.getVisitedUserImages(user._id);
     });
-    this.getVisitedUserImages(userId);
+
     this.$store.dispatch({
       type: "getLoggedInUser",
       userId: this.loggedInUserId

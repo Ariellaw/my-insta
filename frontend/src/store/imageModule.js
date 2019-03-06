@@ -7,7 +7,7 @@ import userServices from '../services/userServices.js'
 export default {
 
     state: {
-        isLoadingImages: false,
+        isLoadingUsersImages: false,
         visitedUserImages: null,
         viewedImage: null,
         viewedImageOwner: null,
@@ -16,7 +16,7 @@ export default {
     },
     getters: {
         visitedUserImages: state => { return state.visitedUserImages },
-        isLoadingImages: state => { return state.isLoadingImages },
+        isLoadingUsersImages: state => { return state.isLoadingUsersImages },
         viewedImage: state => { return state.viewedImage },
         viewedImageOwner: state => { return state.viewedImageOwner },
         setIsLoadingFavorites: state => { return state.setIsLoadingFavorites },
@@ -27,8 +27,8 @@ export default {
 
     },
     mutations: {
-        setIsLoading(state, { isLoading }) {
-            state.isLoadingImages = isLoading;
+        setIsLoadingUserImages(state, { isLoading }) {
+            state.isLoadingUsersImages = isLoading;
         },
         setIsLoadingFavorites(state, { isLoading }) {
             state.setIsLoadingFavorites = isLoading;
@@ -99,11 +99,13 @@ export default {
         },
   
         getUserFavoriteImages(context, { userId }) {
-            context.commit({ type: 'setIsLoadingFavorites', isLoading: true })
+            context.commit({ type: 'setIsLoadingUserImages', isLoading: true })
             return userServices.getImagesByImageId(userId)
                 .then(images => {
                     context.commit({ type: 'setUserFavoriteImages', images })
-                    context.commit({ type: 'setIsLoadingFavorites', isLoading: false })
+                    context.commit({ type: 'setIsLoadingUserImages', isLoading: false })
+                    console.log('getUserFavoriteImages', images)
+
                     return images;
                 })
         },
@@ -153,11 +155,16 @@ export default {
                 })
         },
         getImagesByHashtag( contxt, {hashtag}){
-            console.log('hashtag actions', hashtag)
             return imageServices.getImagesByHashtag(hashtag)
             .then(images => {
                 return images;
             })
+        },
+        getImageById(context, {ImageId}){
+            return imageServices.getImageById(ImageId)
+                .then(image => {
+                    return image
+                })
         }
 
     }

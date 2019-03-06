@@ -13,6 +13,14 @@ function addUserRoutes(app) {
             })
     })
 
+    app.get(`${BASE}/:userName/nickname`, (req, res) => {
+        const userName = req.params.userName;
+
+        userService.getUserByUsername(userName)
+            .then(user => {
+                return res.json(user);
+            })
+    })
     app.put(`${BASE}/:followeeId/followers`, (req,res) =>{
         const followeeId = req.body.followeeId;
         const followerId = req.body.followerId;
