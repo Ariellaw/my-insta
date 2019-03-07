@@ -57,6 +57,12 @@ export default {
       if (this.showModal === false) {
         this.$router.push({ params: { imageId: null } });
       }
+    },
+    $route(){
+      console.log('routes', this.$router)
+      if(this.$route.params.imageId===null){
+        this.showModal = false;
+      }
     }
   },
   components: {

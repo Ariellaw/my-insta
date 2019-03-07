@@ -96,7 +96,7 @@ export default {
           this.navbarTitle = "Hashtags";
         }
       } else if (this.$route.name === "user-profile") {
-        this.navbarTitle = this.$store.getters.visitedUser.userName;
+        this.navbarTitle = this.$route.params.userName;
       } else {
         this.navbarTitle = null;
       }
@@ -153,8 +153,7 @@ export default {
     },
     searchedUsers() {
       return this.$store.getters.searchedUsers;
-    },
-
+    }
   },
   watch: {
     $route() {
@@ -221,6 +220,5 @@ ul {
   font-size: 2rem;
   font-family: cursive;
 }
-
 </style>
 
