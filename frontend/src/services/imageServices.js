@@ -1,6 +1,6 @@
 import axios from 'axios';
 import utilService from './utilServices'
-const BASE_URL = 'http://localhost:3003/image'
+const BASE_URL = 'http://192.168.1.105:3003/image'
 import userServices from "./userServices"
 
 

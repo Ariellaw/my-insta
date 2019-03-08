@@ -93,12 +93,12 @@ export default {
   //  @input="user.profilePic = $event.target.value"
 
   created() {
-    const userId = this.$route.params.userId;
-    this.$store.dispatch({ type: "getLoggedInUser", userId });
+    const userName = this.$route.params.userName;
+    // this.$store.dispatch({ type: "getLoggedInUser", userId });
   },
   computed: {
     loggedInUser() {
-      return this.$store.getters.loggedInUser;
+      return this.$store.getters.visitedUser;
     },
     currProfilePic() {
       if (!this.profilePicChanged) {

@@ -148,7 +148,7 @@ export default {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
     },
     editProfile() {
-      this.$router.push(`/edit/${this.loggedInUserId}`);
+      this.$router.push({ name: "edit-user-details", params: { userName } });
     }
   },
   computed: {
