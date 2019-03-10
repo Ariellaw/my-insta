@@ -86,7 +86,6 @@ export default {
   },
   methods: {
     getNavBarTitle() {
-      console.log(this.$route);
       if (this.$route.params.imageId) {
         this.navbarTitle = "Photo";
       } else if (this.$route.name === "searh-results-page") {

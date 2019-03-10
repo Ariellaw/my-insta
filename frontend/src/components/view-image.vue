@@ -7,8 +7,11 @@
         </button>
 
         <div class="modal-container" :class="{'displayVertical':displayVertically}">
-          <img :src="image.image" class="currImage" alt>
-
+          <div class="currImage" :style="{ backgroundImage: 'url(' + image.image + ')' }">
+          <!-- <img :src="image.image" class="currImage" alt> -->
+          <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
+          <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
+          </div>
           <div class="user-info bold-reg">
             <img
               @click="goToImageOwnerProfile"
@@ -83,7 +86,7 @@
 import moment from "moment";
 import userComment from "./user-comment.vue";
 import socialMedia from "./social-media.vue";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 export default {
   name: "view-image",
@@ -116,6 +119,7 @@ export default {
     }
   },
   methods: {
+
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId });
     },
@@ -174,8 +178,8 @@ export default {
     },
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
-      console.log('test',userName)
-      this.$router.push({name: 'user-profile', params: { userName }});
+      console.log("test", userName);
+      this.$router.push({ name: "user-profile", params: { userName } });
       // this.$router.go();
     },
     goToLocationImages() {
@@ -185,7 +189,7 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
-      console.log(word)
+      console.log(word);
       this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
       this.$router.go();
     },
@@ -194,7 +198,10 @@ export default {
         .dispatch({ type: "getUserByUsername", userName: word })
         .then(res => {
           if (res !== null) {
-            this.$router.push({name: 'user-profile', params: { userName: res.userName }});
+            this.$router.push({
+              name: "user-profile",
+              params: { userName: res.userName }
+            });
             this.$router.go();
           } else {
             return;
@@ -247,5 +254,6 @@ export default {
 .follow {
   color: blue;
 }
+
 </style>
 

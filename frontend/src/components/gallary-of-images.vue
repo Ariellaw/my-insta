@@ -1,6 +1,12 @@
 <template>
   <div>
-    <viewImage v-if="showModal" :image="viewedImage" @close="showModal = false"></viewImage>
+    <viewImage
+      @goBack1Image="goBack1Image"
+      @goForward1Img="goForward1Img"
+      v-if="showModal"
+      :image="viewedImage"
+      @close="showModal = false"
+    ></viewImage>
 
     <h1 v-if="isLoadingUsersImages">Loading...</h1>
 
@@ -29,6 +35,36 @@ export default {
     };
   },
   methods: {
+    goBack1Image() {
+      var idx = this.findIdxOfCurrImg();
+
+      if (idx === 0) {
+        idx = this.displayedImages.length - 1;
+      } else {
+        idx--;
+      }
+      this.displayNewImg(idx);
+    },
+    goForward1Img() {
+      var idx = this.findIdxOfCurrImg();
+
+      if (idx === this.displayedImages.length - 1) {
+        idx = 0;
+      } else {
+        idx++;
+      }
+      this.displayNewImg(idx);
+    },
+    displayNewImg(idx) {
+      this.viewedImage = this.displayedImages[idx];
+      this.$router.push({ params: { imageId: this.displayedImages[idx]._id } });
+    },
+    findIdxOfCurrImg() {
+      var idx = this.displayedImages.findIndex(image => {
+        return image._id === this.viewedImage._id;
+      });
+      return idx;
+    },
     displayViewedImage(image) {
       this.showModal = true;
       this.viewedImage = image;
@@ -44,9 +80,7 @@ export default {
   created() {
     const imageId = this.$route.params.imageId;
     if (imageId) {
-      console.log("cmp", imageId);
       this.$store.dispatch({ type: "getImageById", imageId }).then(image => {
-        console.log("cmp",image)
         this.viewedImage = image;
         this.showModal = true;
       });
@@ -58,9 +92,8 @@ export default {
         this.$router.push({ params: { imageId: null } });
       }
     },
-    $route(){
-      console.log('routes', this.$router)
-      if(this.$route.params.imageId===null){
+    $route() {
+      if (this.$route.params.imageId === null) {
         this.showModal = false;
       }
     }
