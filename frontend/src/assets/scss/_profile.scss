@@ -99,7 +99,7 @@
         flex-direction: row;
         margin-bottom: 1rem;
         height: 40%;
-        width:100%;
+        width: 100%;
 
         .profile-pic {
           @include profilePic;
@@ -114,10 +114,9 @@
         .column {
           display: flex;
           flex-direction: column;
-          width:50%;
+          width: 50%;
           @media only screen and (max-width: 500px) {
-            width:70%;
-
+            width: 70%;
           }
           .numbers {
             font-size: 1.5rem;
@@ -130,8 +129,8 @@
             // border-bottom: 1px solid $dark-border-color;
             // border-top: 1px solid $dark-border-color;
             // background-color: darken(#fafafa, 5%);
-            padding: .5rem;
-    
+            padding: 0.5rem;
+
             p {
               display: flex;
               flex-direction: column;
@@ -151,16 +150,17 @@
             @include general-button;
             height: 3rem;
             width: 9rem;
-            @media only screen and (max-width: 500px) {
-              height: 3rem;
-              width: 8rem;
+            @media only screen and (max-width: 700px) {
+              width: 100%;
             }
           }
-          .mobile-following{
+          .mobile-following {
             @include general-button;
-            margin-right:1rem;
             height: 3rem;
-            width: 30%;
+            width: 47%;
+          }
+          .message{
+            margin-right: 5%;
           }
           .follower-user-btn {
             @include submit-btn;
@@ -176,8 +176,8 @@
 
       .fullname {
         font-size: 1.9rem;
-        margin-bottom: .5rem;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
       }
       .bio {
         font-size: 1.8rem;
@@ -220,8 +220,7 @@
       display: flex;
       justify-content: space-around;
       @media screen and (max-width: 700px) {
-        border:0px
-
+        border: 0px;
       }
       span {
         font-size: 1.5rem;
@@ -231,7 +230,7 @@
         align-items: center;
         @media screen and (max-width: 700px) {
           font-size: 2rem;
-          .filter{
+          .filter {
             display: none;
           }
         }

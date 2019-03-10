@@ -83,6 +83,8 @@
 import moment from "moment";
 import userComment from "./user-comment.vue";
 import socialMedia from "./social-media.vue";
+import io from 'socket.io-client';
+
 export default {
   name: "view-image",
   props: ["image"],

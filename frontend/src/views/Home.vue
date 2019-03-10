@@ -66,9 +66,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-feed {
-  padding: 1rem;
+  // padding: 1rem;
   .image-in-feed {
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 }
 </style>

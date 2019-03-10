@@ -9,8 +9,9 @@
     display: table;
     transition: opacity 0.3s ease;
     @media screen and (max-width: 700px) {
-      background-color: rgba(0, 0, 0, 0);
+      background-color: rgba(0, 0, 0, .6);
       z-index: 1;
+      position: absolute;
       
     }
   }

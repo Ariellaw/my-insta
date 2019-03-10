@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const addAuthRoutes = require('./routes/auth-routes.js');
+const io = require('socket.io');
 
 // const addUserRoutes = require('./routes/user-route')
 

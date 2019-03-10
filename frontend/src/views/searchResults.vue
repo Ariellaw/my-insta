@@ -29,6 +29,7 @@ export default {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
 
 
+
   
 
 
@@ -79,7 +80,7 @@ export default {
       this.marker = new google.maps.Marker({
         position: myLatLng,
         map: this.map,
-        title: "Hello World!"
+        title: this.city
       });
     },
     getImageOfCity(lat, lng) {},

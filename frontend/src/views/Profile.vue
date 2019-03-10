@@ -23,7 +23,7 @@
               class="edit-profile-or-following-btn btn"
             >Edit Profile</button>
             <div v-else-if="followingVisitedUser">
-              <button class="mobile-following">
+              <button class="mobile-following message">
                 <i class="far fa-envelope"></i>
               </button>
               <button class="mobile-following">
@@ -148,7 +148,7 @@ export default {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
     },
     editProfile() {
-      this.$router.push({ name: "edit-user-details", params: { userName } });
+      this.$router.push({ name: "edit-user-details", params: { userName:this.visitedUser.userName } });
     }
   },
   computed: {

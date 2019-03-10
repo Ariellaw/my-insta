@@ -97,6 +97,8 @@ export default {
         }
       } else if (this.$route.name === "user-profile") {
         this.navbarTitle = this.$route.params.userName;
+      } else if (this.$route.name === "edit-user-details") {
+        this.navbarTitle = "Edit";
       } else {
         this.navbarTitle = null;
       }
@@ -105,7 +107,9 @@ export default {
       console.log("last window", this.lastWindow);
       if (this.$route.params.imageId) {
         this.$router.push({ params: { imageId: null } });
-      } else {
+      } else if(this.$route.name === "edit-user-details"){
+           this.$router.push({ name: "user-profile", params:{ userName:this.$route.params.userName } });
+      }else {
         this.$router.push({ name: "home" });
       }
     },
