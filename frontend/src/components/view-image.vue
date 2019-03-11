@@ -7,8 +7,8 @@
         </button>
 
         <div class="modal-container" :class="{'displayVertical':displayVertically}">
+          
           <div class="currImage" :style="{ backgroundImage: 'url(' + image.image + ')' }">
-          <!-- <img :src="image.image" class="currImage" alt> -->
           <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
           <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
           </div>

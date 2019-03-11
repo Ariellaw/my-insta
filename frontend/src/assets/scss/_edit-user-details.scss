@@ -5,13 +5,13 @@
 .edit-profile-container {
   
     font-size: 2rem;
-    width: 1000px;
+    width: 95%;
     height: 95vh;
     border: 1px solid $dark-border-color;
     background-color:$lighter-layout-color;
-    border-radius: 5px;
-    margin: 20px auto;
-    padding: 50px;
+    border-radius: .5rem;
+    margin: 2rem auto;
+    padding: 5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -26,14 +26,24 @@
         width: 24%;
         display: flex;
         justify-content: flex-end;
+        font-size: 2rem;
+        @media screen and (max-width:700px) {
+          width: 100%;
+          justify-content: flex-start;
+        }
       }
   
       .edit-user-input {
-        height: 41px;
-        border-radius: 10px;
-        padding: 10px;
+        height: 4rem;
+        border-radius: 1rem;
+        padding: 1rem;
         width: 72%;
+        max-width:70rem;
         justify-content: flex-end;
+        @media screen and (max-width:700px) {
+          width: 100%;
+          justify-content: flex-start;          
+        }
       }
     }
     .image-upload> input {

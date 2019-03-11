@@ -28,7 +28,7 @@
       background-color: black;
       background-position: center; /* Center the image */
       background-repeat: no-repeat;
-      // width: auto;
+      width: 100%;
       max-width: 100%;
       height: 56%;
       // object-fit: cover;
@@ -81,6 +81,7 @@
       margin-left: 0px;
       flex-direction: row;
       justify-content: flex-start;
+      align-items: center;
       .icons {
         width: auto;
         i {
@@ -130,10 +131,10 @@
 
   flex-wrap: wrap;
   .currImage {
-    // width: 65%;
+    width: 65%;
     height: 100%;
     // object-fit: cover;
-    // background-size: cover;
+    background-size: cover;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -143,6 +144,7 @@
     &:hover {
       .arrow {
         display: block;
+       
       }
     }
   }
@@ -150,6 +152,7 @@
     font-size: 7rem;
     color: white;
     display: none;
+    margin:3rem;
   }
   div {
     display: flex;

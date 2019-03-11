@@ -1,8 +1,8 @@
-<template class="page-container">
+<template >
   <form
     @keyup="userMadeChanges=true"
     v-if="loggedInUser"
-    class="edit-profile-container"
+    class="edit-profile-container page-container"
     ref="form"
     action
     enctype="multipart/form-data"
@@ -24,7 +24,7 @@
       </div>
     </div>
     <label class="edit-profile-label" for>
-      <h3>First Name</h3>
+      <h3>First Name:</h3>
       <input
         type="text"
         class="edit-user-input fName"
@@ -34,7 +34,7 @@
       >
     </label>
     <label for class="edit-profile-label">
-      <h3>Last Name</h3>
+      <h3>Last Name:</h3>
       <input
         type="text"
         class="edit-user-input lName"
@@ -44,7 +44,7 @@
       >
     </label>
     <label for class="edit-profile-label">
-      <h3>Username</h3>
+      <h3>Username:</h3>
       <input
         type="text"
         class="edit-user-input userName"
@@ -54,7 +54,7 @@
       >
     </label>
     <label for class="edit-profile-label">
-      <h3>Email</h3>
+      <h3>Email:</h3>
       <input
         type="text"
         class="edit-user-input email"
