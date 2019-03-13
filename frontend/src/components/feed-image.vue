@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-container displayVertical" v-if="image && imageOwner">
-    <img :src="image.image" class="currImage" alt>
+  <div class="modal-container feed-image displayVertical" v-if="image && imageOwner">
+    <img :src="image.image" class="currImage btn" alt>
 
     <div class="user-info bold-reg">
       <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
@@ -73,7 +73,7 @@ export default {
       imageComments: this.image.comments,
       displayVertically: false,
       likes: this.image.likes,
-      displaySocialMedia: false
+      displaySocialMedia: false,
     };
   },
   created() {
@@ -203,6 +203,7 @@ export default {
       }
     }
   },
+
   components: {
     userComment
   }

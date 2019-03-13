@@ -216,7 +216,8 @@ function findRelevantUsers(keyword) {
       .find({
         $or: [
           { bio: { $regex: `.*${keyword}.*`, $options: "i" } },
-          { userName: { $regex: `.*${keyword}.*`, $options: "i" } }
+          { userName: { $regex: `.*${keyword}.*`, $options: "i" } },
+          // { hashtags: { $regex: `.*${keyword}.*`, $options: "i" } }
         ]
       })
       .limit(100)

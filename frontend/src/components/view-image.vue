@@ -7,7 +7,6 @@
         </button>
 
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
-          
           <div class="currImage" :style="{ backgroundImage: 'url(' + image.image + ')' }">
           <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
           <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
@@ -247,7 +246,7 @@ export default {
   },
   components: {
     userComment,
-    socialMedia
+    socialMedia,
   }
 };
 </script>

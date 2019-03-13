@@ -1,12 +1,12 @@
 <template>
   <div>
-    <viewImage
+    <view-image
       @goBack1Image="goBack1Image"
       @goForward1Img="goForward1Img"
       v-if="showModal"
       :image="viewedImage"
       @close="showModal = false"
-    ></viewImage>
+    ></view-image>
 
     <h1 v-if="isLoadingUsersImages">Loading...</h1>
 
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     goBack1Image() {
-      var idx = this.findIdxOfCurrImg();
+      var idx = this.getIndexOfCurrImage();
 
       if (idx === 0) {
         idx = this.displayedImages.length - 1;
@@ -46,7 +46,7 @@ export default {
       this.displayNewImg(idx);
     },
     goForward1Img() {
-      var idx = this.findIdxOfCurrImg();
+      var idx = this.getIndexOfCurrImage();
 
       if (idx === this.displayedImages.length - 1) {
         idx = 0;
@@ -59,7 +59,7 @@ export default {
       this.viewedImage = this.displayedImages[idx];
       this.$router.push({ params: { imageId: this.displayedImages[idx]._id } });
     },
-    findIdxOfCurrImg() {
+    getIndexOfCurrImage() {
       var idx = this.displayedImages.findIndex(image => {
         return image._id === this.viewedImage._id;
       });
