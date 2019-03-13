@@ -26,12 +26,7 @@ export default {
       country: null,
       type: null,
       image: null,
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-
-
-
-  
-
+      loggedInUserName: "Ariella_wills1",
 
     };
   },
@@ -41,7 +36,7 @@ export default {
   created() {
     this.$store.dispatch({
       type: "getLoggedInUser",
-      userId: this.loggedInUserId
+      userName: this.loggedInUserName
     });
     const keyword = this.$route.params.keyword;
     this.type = this.$route.params.type;

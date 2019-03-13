@@ -79,6 +79,8 @@ export default {
       lastWindow: null,
       windowWidth: null,
       cellphoneDisplay: false,
+      loggedInUserName: "Ariella_wills1",
+
       image: {
         file: null
       }
@@ -103,12 +105,14 @@ export default {
       }
     },
     goBackToLastWindow() {
-      console.log("last window", this.lastWindow);
       if (this.$route.params.imageId) {
         this.$router.push({ params: { imageId: null } });
-      } else if(this.$route.name === "edit-user-details"){
-           this.$router.push({ name: "user-profile", params:{ userName:this.$route.params.userName } });
-      }else {
+      } else if (this.$route.name === "edit-user-details") {
+        this.$router.push({
+          name: "user-profile",
+          params: { userName: this.$route.params.userName }
+        });
+      } else {
         this.$router.push({ name: "home" });
       }
     },

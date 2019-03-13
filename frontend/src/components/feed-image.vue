@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      loggedInUserName:"Ariella_wills1",
       comment: null,
       imageComments: this.image.comments,
       displayVertically: false,

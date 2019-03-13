@@ -1,7 +1,7 @@
 const express = require('express')
 const userService = require('../services/userService.js')
 const BASE = '/user'
-const app = express()
+// const app = express()
 
 function addUserRoutes(app) {
     app.get(`${BASE}/:userId`, (req, res) => {

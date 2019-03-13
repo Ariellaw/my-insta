@@ -127,7 +127,8 @@ export default {
   data() {
     return {
       filter: "album",
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      loggedInUserName: "Ariella_wills1",
+      loggedInUserId:"5c5fecdbd16a8d56eaca3c96",
       cellphoneDisplay: false,
       windowWidth: null,
       userId: null
@@ -184,7 +185,7 @@ export default {
 
     this.$store.dispatch({
       type: "getLoggedInUser",
-      userId: this.loggedInUserId
+      userName: this.loggedInUserName
     });
     if (window.innerWidth <= 700) {
       this.cellphoneDisplay = true;

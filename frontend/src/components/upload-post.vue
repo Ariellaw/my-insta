@@ -41,7 +41,7 @@ export default {
   },
   methods: {
    submitImage(){
-     this.$store.dispatch({type:"createImgObj", imgDetails: this.imgDetails, image:this.image})
+     this.$store.dispatch({type:"addImage", imgDetails: this.imgDetails, image:this.image})
      .then(()=>this.$emit('close'))
    }
   }

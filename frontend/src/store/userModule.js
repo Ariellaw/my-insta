@@ -53,8 +53,8 @@ export default {
                     return user;
                 })
         },
-        getLoggedInUser(context, { userId }) {
-            return userServices.getUserById(userId)
+        getLoggedInUser(context, { userName }) {
+            return userServices.getUserByUsername(userName)
                 .then(user => {
                     context.commit({ type: 'setLoggedInUser', user })
                     return user;

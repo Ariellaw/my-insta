@@ -6,7 +6,7 @@
           <i class="fas fa-times"></i>
         </button>
 
-        <div class="modal-container" :class="{'displayVertical':displayVertically}">
+        <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           
           <div class="currImage" :style="{ backgroundImage: 'url(' + image.image + ')' }">
           <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
@@ -72,7 +72,7 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
-              v-on:keyup.enter="addUserComment(comment, image._id, loggedInUserId)"
+              @keyup.enter="addUserComment(comment, image._id, loggedInUserId)"
               v-model="comment"
             ></textarea>
           </div>
@@ -94,6 +94,7 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      loggedInUserName:"Ariella_wills1",
       comment: null,
       imageComments: this.image.comments,
       displayVertically: false,
@@ -106,7 +107,7 @@ export default {
     this.getViewedImageOwner(this.image.ownerId);
     this.$store.dispatch({
       type: "getLoggedInUser",
-      userId: this.loggedInUserId
+      userName: this.loggedInUserName
     });
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
@@ -152,6 +153,7 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
+      console.log("ff",window.event.keyCode, this.comment, typeof this.comment)
       this.$store
         .dispatch({
           type: "addUserComment",

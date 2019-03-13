@@ -17,12 +17,10 @@ function getUserByUsername(userName) {
   }
 
   return mongoService.connect().then(db => {
-    return db.collection(userDb).findOne({ userName });
-  });
-}
-function getByUserName(username) {
-  return mongoService.connect().then(db => {
-    return db.collection(userDb).findOne({ userName: username });
+        return db.collection(userDb).findOne({ userName: { $regex: `^${userName}$`, $options: "i" } })
+
+        // return db.collection(userDb).findOne({ userName });
+
   });
 }
 
@@ -240,7 +238,6 @@ module.exports = {
   addToUserFavorites,
   getImagesByImageId,
   updateUserDetails,
-  getByUserName,
   findRelevantUsers,
   getUserByUsername
 };

@@ -90,7 +90,7 @@ export default {
                 })
         },
         addUserComment(context, { comment, imageId, writerId }) {
-
+            console.log("mutatoins", comment, imageId, writerId )
             return imageServices.addUserComment(comment, imageId, writerId)
                 .then(res => {
                     context.commit({ type: 'setUserCommentsAndImage', res })
@@ -125,8 +125,8 @@ export default {
                     return res.value.likes;
                 })
         },
-        createImgObj(context, { imgDetails, image }) {
-            return imageServices.createImgObj(imgDetails, image);
+        addImage(context, { imgDetails, image }) {
+            return imageServices.addImage(imgDetails, image);
             //TODO: findout if displayedprofile is loggedinuserprofiel and update inthat case
         },
         getInitalImages(context) {

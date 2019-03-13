@@ -2,7 +2,7 @@
   <div id="user-feed page-container" v-if="imagesForFeed">
     <div class="user-feed" v-for="image in imagesForFeed" :key="image._id">
       <feedImage class="image-in-feed" :image="image"></feedImage>
-    </div>
+    </div> 
   </div>
 </template>
 
@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      loggedInUserName:"Ariella_wills1", 
       feedImages: []
     };
   },
@@ -31,7 +32,7 @@ export default {
       window.onscroll = () => {
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
-          document.documentElement.offsetHeight-10;
+          document.documentElement.offsetHeight-30;
         if (bottomOfWindow) {
           this.getAdditionalImages();
         }
@@ -41,7 +42,7 @@ export default {
   created() {
     this.$store.dispatch({
       type: "getLoggedInUser",
-      userId: this.loggedInUserId
+      userName: this.loggedInUserName
     });
   },
   beforeMount() {

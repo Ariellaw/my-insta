@@ -18,9 +18,8 @@
       width: 100vw;
       height: 120vh;
       margin-top: 6rem;
-      margin-bottom: 7rem;
+      margin-bottom: 8rem;
     }
-
     .currImage {
       display: flex;
       justify-content: space-between;
@@ -28,10 +27,10 @@
       background-color: black;
       background-position: center; /* Center the image */
       background-repeat: no-repeat;
+      // background-size: 100% auto;
       width: 100%;
       max-width: 100%;
       height: 56%;
-      // object-fit: cover;
       order: 2;
     }
     // .modal-body {
@@ -51,17 +50,18 @@
       flex-direction: row;
       align-items: center;
       border-bottom: 1px solid $lighter-font-color;
+      font-size:2rem;
 
       .profile-pic {
         @include profilePic;
-        width: 5.5rem;
-        height: 5.5rem;
+        width: 6rem;
+        height: 6rem;
         flex-direction: row;
         margin: 1rem;
-        @media screen and(max-height:800px) {
-          width: 5rem;
-          height: 5rem;
-        }
+        // @media screen and(max-height:800px) {
+        //   width: 5rem;
+        //   height: 5rem;
+        // }
       }
       .image-location {
         font-family: monst-light;
