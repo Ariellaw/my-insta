@@ -57,7 +57,11 @@
         </form>
         <i class="fas fa-comment btn"></i>
         <i class="far fa-heart btn"></i>
-        <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i>
+        <div v-if="loggedInUser" class="userName-container btn"  @click="goToLoggedInUserProfile">
+          <img :src="loggedInUser.profilePic" alt="" class="userImg">
+          <span class="userName">{{loggedInUser.userName}}</span>
+        </div>
+        <!-- <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i> -->
       </div>
       <uploadPost v-if="showModal" :image="image.file" @close="showModal = false"></uploadPost>
     </div>
@@ -131,9 +135,8 @@ export default {
         });
     },
     goToLoggedInUserProfile() {
-      var username = this.loggedInUser.userName;
+      var userName = this.loggedInUser.userName;
       this.$router.push({ name: "user-profile", params: { userName } });
-      this.$router.go();
     },
     findRelevantUsers() {
       if (this.keyword) {

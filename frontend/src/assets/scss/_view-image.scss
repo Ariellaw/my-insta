@@ -60,7 +60,7 @@
       flex-direction: row;
       align-items: center;
       border-bottom: 1px solid $lighter-font-color;
-      font-size:2rem;
+      font-size:1.6rem;
 
       .profile-pic {
         @include profilePic;
@@ -176,6 +176,7 @@
     justify-content: flex-start;
     align-items: center;
     border-bottom: 1px solid $lighter-font-color;
+    font-size:1.6rem;
 
     .profile-pic {
       @include profilePic;
