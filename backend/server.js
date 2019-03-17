@@ -11,8 +11,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const addAuthRoutes = require('./routes/auth-routes.js');
-// const io = require('socket.io');
-// const addUserRoutes = require('./routes/user-route')
+
 
 const app = express();
 app.use(cors({
@@ -32,7 +31,6 @@ mongoService.initDbConnection();
 app.set('view engine', 'ejs');
 
 //
-// app.use(express.static('public'));
 
 
 app.use(bodyParser.json())
@@ -59,7 +57,6 @@ addAuthRoutes(app);
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`))
 
-// var server = require('http').Server(app);
 var server = app.listen(8810)
 const io = require('socket.io')(server, {
   path: '/socket.io'

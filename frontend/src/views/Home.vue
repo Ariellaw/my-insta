@@ -35,6 +35,7 @@ export default {
     closeModal() {
       this.showModal = false;
       this.userImages = null;
+      this.$router.go();
     },
     goBack1Image() {
       var idx = this.getIndexOfCurrImage();
@@ -79,6 +80,7 @@ export default {
       this.chosenImage = image;
       this.$router.push({ params: { imageId: image._id } });
       this.getUserImages(image.ownerId);
+      this.$router.go();
     },
     getInitalImages() {
       this.$store.dispatch({ type: "getInitalImages" });

@@ -1,6 +1,7 @@
 <template>
   <div class="modal-container feed-image displayVertical" v-if="image && imageOwner">
-    <img :src="image.image" class="currImage btn" @click="$emit('displayFeedImage', image)" alt>
+    <div class="currImage btn" :style="{ backgroundImage: 'url(' + image.image + ')' }" @click="$emit('displayFeedImage', image)"></div>
+
 
     <div class="user-info bold-reg">
       <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
@@ -17,7 +18,7 @@
           class="follow"
           @click="addFollowers(image.ownerId)"
         >Follow</span>
-        <p @click="goToLocationImages"  class="image-location">{{image.location}}</p>
+        <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
       </span>
     </div>
     <div class="comments">
@@ -68,12 +69,12 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      loggedInUserName:"Ariella_wills1",
+      loggedInUserName: "Ariella_wills1",
       comment: null,
       imageComments: this.image.comments,
       displayVertically: false,
       likes: this.image.likes,
-      displaySocialMedia: false,
+      displaySocialMedia: false
     };
   },
   created() {
@@ -172,11 +173,11 @@ export default {
       this.$router.push({ name: "user-profile", params: { userName } });
       // this.$router.go();
     },
-     goToLocationImages() {
+    goToLocationImages() {
       this.$router.push(
         `/search/locations/${this.image.location.toLowerCase()}`
       );
-    },
+    }
   },
   computed: {
     loggedInUser() {

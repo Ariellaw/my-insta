@@ -27,6 +27,7 @@
       }
 
     }
+
     .currImage {
       display: flex;
       justify-content: space-between;
@@ -34,16 +35,12 @@
       background-color: black;
       background-position: center; /* Center the image */
       background-repeat: no-repeat;
-      // background-size: 100% auto;
       width: 100%;
       max-width: 100%;
       height: 56%;
       order: 2;
     }
-    // .modal-body {
-    //   height: 100%;
-    //   width: 35%;
-    //   padding: 1rem;
+
     div {
       display: flex;
       padding: 0.5rem;
