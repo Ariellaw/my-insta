@@ -21,10 +21,16 @@
     @media screen and (max-width: 700px) {
       width: 100vw;
       height: 120vh;
+
       &.pop-up-image{
         margin-top: 6rem;
         margin-bottom: 8rem;
+        position: absolute;
+        top:0;
       }
+      // &.feed-image{
+     
+      // }
 
     }
 
@@ -101,6 +107,7 @@
         flex-direction: column;
         display: flex;
         justify-content: center;
+        line-height: 1;
 
         .num-of-likes {
           margin-bottom: 0.5rem;
