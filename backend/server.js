@@ -69,10 +69,15 @@ const io = require('socket.io')(server, {
 io.on('connection', function(socket){
   socket.on('commentAdded', function(data){
     var comment = imageService.createCommentObj(data.writerId, data.comment)
-    console.log('commentAdded: ', comment);
     io.emit('commentAdded', {comment, imageId:data.imageId });
   });
-  socket.on('likesAdded', function(data){
-    io.emit('likesAdded', data)
+  socket.on('likeAdded', function(data){
+    io.emit('likeAdded', data)
+  })
+  socket.on('likeRemoved', function(data){
+    io.emit('likeRemoved', data)
+  })
+  socket.on("typing", function(data){
+    socket.broadcast.emit('typing',data)
   })
 });

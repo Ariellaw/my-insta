@@ -10,9 +10,13 @@ export default {
     viewedImageOwner: null,
     userFavoriteImages: null,
     imagesForFeed: [],
-    isConnected: false
+    isConnected: false,
+    isTyping: null
   },
   getters: {
+    isTyping: state => {
+      return state.isTyping;
+    },
     visitedUserImages: state => {
       return state.visitedUserImages;
     },
@@ -75,16 +79,44 @@ export default {
     },
 
     SOCKET_commentAdded(state, data) {
+      state.isTyping = null;
       var img = state.viewedImage;
 
       if (img._id === data.imageId) {
-       var comments =  img.comments;
-       comments.splice(comments.length,0,data.comment)
-       state.viewedImage.comments = comments;
+        var comments = img.comments;
+        comments.splice(comments.length, 0, data.comment);
+        state.viewedImage.comments = comments;
       }
     },
-    likesAdded(data) {
-      this.likes = data;
+    SOCKET_typing(state, data) {
+      var img = state.viewedImage;
+      if (img._id === data.imageId) {
+        state.isTyping = data.userName;
+      }
+    },
+    SOCKET_likeAdded(state, data) {
+      var img = state.viewedImage;
+      var likes = img.likes;
+      var userId = data.userId;
+      if (img._id === data.imageId) {
+        if (likes.findIndex(id => id === userId) === -1) {
+          likes.splice(likes.length, 0, userId);
+        }
+        state.viewedImage.likes = likes;
+      }
+    },
+    SOCKET_likeRemoved(state, data) {
+      var img = state.viewedImage;
+      var likes = img.likes;
+      var userId = data.userId;
+
+      if (img._id === data.imageId) {
+        var idx = likes.findIndex(id => id === userId);
+        if (idx !== -1) {
+          likes.splice(idx, 1);
+        }
+        state.viewedImage.likes = likes;
+      }
     }
   },
   actions: {
@@ -103,7 +135,6 @@ export default {
       });
     },
     setViewedImage(context, { image }) {
-        console.log('setviewedImage', image)
       context.commit({ type: "setViewedImage", image });
       return image;
     },
@@ -117,7 +148,6 @@ export default {
       return imageServices
         .addUserComment(comment, imageId, writerId)
         .then(res => {
-          console.log("mutations", res.value);
           return res.value.comments;
         });
     },
@@ -139,7 +169,6 @@ export default {
     },
     addUserLike(context, { imageId, userId }) {
       return imageServices.addUserLike(imageId, userId).then(res => {
-        // context.commit({type:'setViewedImage', res});
         return res.value.likes;
       });
     },

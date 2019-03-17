@@ -42,6 +42,7 @@
               :comment="comment"
               :key="idx"
             ></user-comment>
+            <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
           </div>
           <div class="likes-and-followers">
             <div v-if="loggedInUser" class="icons">
@@ -71,6 +72,7 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
+              @keydown="userIsTyping(loggedInUserName, image._id)"
               @keyup.enter="addUserComment(newComment, image._id, loggedInUserId)"
               v-model="newComment"
             ></textarea>
@@ -95,42 +97,16 @@ export default {
       loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
-      likes: this.image.likes,
       displaySocialMedia: false,
       windowWidth: null,
       socketMessage: "",
       isConnected: false
     };
   },
-  // sockets: {
-  //   connect() {
-  //     // Fired when the socket connects.
-  //     this.isConnected = true;
-  //     console.log("websockets connected");
-  //   },
-
-  //   disconnect() {
-  //     this.isConnected = false;
-  //     console.log("websockets disconnected");
-  //   },
-
-  //   commentAdded(data) {
-  //     var img = this.$store.getters.viewedImage;
-
-  //     if (this.image._id === data.imageId) {
-  //       this.imageComments = this.$store.getters.viewedImageComments;
-
-  //       console.log(this.image._id === data.imageId, idx, this.imageComments);
-  //     }
-  //   },
-  //   likesAdded(data) {
-  //     this.likes = data;
-  //   }
-  // },
 
   created() {
     this.getViewedImageOwner(this.image.ownerId);
-    this.$store.dispatch({ type: "setViewedImage", image:this.image });
+    this.$store.dispatch({ type: "setViewedImage", image: this.image });
 
     this.$store.dispatch({
       type: "getLoggedInUser",
@@ -147,6 +123,9 @@ export default {
     }
   },
   methods: {
+    userIsTyping(userName, imageId) {
+      this.$socket.emit("typing", { userName, imageId });
+    },
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId });
     },
@@ -154,25 +133,28 @@ export default {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
     },
     addUserLike() {
-      this.$store
-        .dispatch({
-          type: "addUserLike",
-          imageId: this.image._id,
-          userId: this.loggedInUser._id
-        })
-        .then(likes => {
-          this.likes = likes;
-          this.$socket.emit("likesAdded", likes);
-        });
+      this.$socket.emit("likeAdded", {
+        imageId: this.image._id,
+        userId: this.loggedInUser._id
+      });
+
+      this.$store.dispatch({
+        type: "addUserLike",
+        imageId: this.image._id,
+        userId: this.loggedInUser._id
+      });
     },
     removeUserLike() {
-      this.$store
-        .dispatch({
-          type: "removeUserLike",
-          imageId: this.image._id,
-          userId: this.loggedInUser._id
-        })
-        .then(likes => (this.likes = likes));
+      this.$socket.emit("likeRemoved", {
+        imageId: this.image._id,
+        userId: this.loggedInUser._id
+      });
+
+      this.$store.dispatch({
+        type: "removeUserLike",
+        imageId: this.image._id,
+        userId: this.loggedInUser._id
+      });
     },
     getViewedImageOwner(userId) {
       this.$store.dispatch({
@@ -182,7 +164,6 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
-      console.log("addUserComment", comment);
       this.$socket.emit("commentAdded", { comment, imageId, writerId });
 
       this.$store
@@ -193,7 +174,6 @@ export default {
           writerId
         })
         .then(comments => {
-          // this.imageComments = comments;
           this.newComment = null;
         });
     },
@@ -213,7 +193,6 @@ export default {
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
       this.$router.push({ name: "user-profile", params: { userName } });
-      // this.$router.go();
     },
     goToLocationImages() {
       this.$router.push(
@@ -242,8 +221,14 @@ export default {
     }
   },
   computed: {
+    typingUser() {
+      return this.$store.getters.isTyping;
+    },
     imageComments() {
       return this.$store.getters.viewedImage.comments;
+    },
+    likes() {
+      return this.$store.getters.viewedImage.likes;
     },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
@@ -285,9 +270,14 @@ export default {
 };
 </script>
 
-<style <style lang="scss" scoped>
+ <style lang="scss" scoped>
 .follow {
   color: blue;
+}
+.userTyping {
+  width: 100%;
+  color: darkgray;
+  font-weight: bold;
 }
 </style>
 

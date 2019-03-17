@@ -28,7 +28,6 @@ function addComments(imageId, newComment, writerId) {
     var commentObj = createCommentObj(writerId, newComment);
     comments.push(commentObj);
      
-    // server.emitWebSockets('commentAdded', {comments, imageId})
 
     var tags = _getTags(newComment, hashtags);
     return mongoService
@@ -191,12 +190,3 @@ function createCommentObj(writerId, comment) {
   return comment;
 }
 
-// function _webSockets(fucToEmit,data){
-//   console.log('in fucntion', data)
-//   io.on('connection', function(socket){
-//     socket.on(fucToEmit, function(){
-//       console.log("lalala",fucToEmit, data);
-//       io.emit(fucToEmit, data);
-//     });
-//   });
-// }

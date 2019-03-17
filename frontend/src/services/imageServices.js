@@ -78,22 +78,4 @@ export default {
 };
 
 
-// function _findHashtags(comment) {
-//   if (!comment) {
-//     return [];
-//   }
-//   var updatedHashtagList = [];
-//   comment = comment.split(" ");
-//  
- 
-//   hashtags.forEach(hashtag => {
-//     hashtag = hashtag.toLowerCase();
-//     if (updatedHashtagList.findIndex(word => word === hashtag) === -1) {
-//       updatedHashtagList.push(hashtag);
-//     }
-//   });
-//   console.log(updatedHashtagList)
-//   return updatedHashtagList;
-// }
-// var regex = "/^s+|s+$/g";
-// hashtag.replace(regex, "");
+
