@@ -1,6 +1,6 @@
 <template>
   <div id="user-feed page-container" v-if="imagesForFeed">
-    <div class="user-feed" v-for="image in imagesForFeed" :key="image._id">
+    <div class="user-feed" v-for="image in imagesForFeed" :key="image._id" :class="{'visibilityNone':showModal}">
       <feedImage class="image-in-feed" :image="image" @displayFeedImage="displayFeedImage(image)"></feedImage>
     </div>
     <view-image
@@ -81,6 +81,7 @@ export default {
       this.$router.push({ params: { imageId: image._id } });
       this.getUserImages(image.ownerId);
       this.$router.go();
+      window.scrollTop(0);
     },
     getInitalImages() {
       this.$store.dispatch({ type: "getInitalImages" });
@@ -90,6 +91,7 @@ export default {
     },
 
     scroll() {
+      
       window.onscroll = () => {
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
@@ -149,7 +151,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-feed {
-  // padding: 1rem;
+  @media screen and (max-width: 700px) {
+    overflow: hidden;
+  }
   .image-in-feed {
     margin-top: 1rem;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-container feed-image displayVertical" v-if="image && imageOwner">
+  <div class="modal-container feed-image displayVertical" v-if="image && imageOwner" >
     <div class="currImage btn" :style="{ backgroundImage: 'url(' + image.image + ')' }" @click="$emit('displayFeedImage', image)"></div>
 
 

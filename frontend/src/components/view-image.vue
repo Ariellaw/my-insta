@@ -105,6 +105,7 @@ export default {
   },
 
   created() {
+    window.scrollTo(0,0);
     this.getViewedImageOwner(this.image.ownerId);
     this.$store.dispatch({ type: "setViewedImage", image: this.image });
 
