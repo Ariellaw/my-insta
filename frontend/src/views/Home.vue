@@ -1,12 +1,7 @@
 <template>
   <div id="user-feed page-container" v-if="imagesForFeed">
-    <div
-      class="user-feed"
-      v-for="image in imagesForFeed"
-      :key="image._id"
-      @click="displayViewedImage(image)"
-    >
-      <feedImage class="image-in-feed" :image="image"></feedImage>
+    <div class="user-feed" v-for="image in imagesForFeed" :key="image._id">
+      <feedImage class="image-in-feed" :image="image" @displayFeedImage="displayFeedImage(image)"></feedImage>
     </div>
     <view-image
       @goBack1Image="goBack1Image"
@@ -79,10 +74,9 @@ export default {
       });
       return idx;
     },
-    displayViewedImage(image) {
+    displayFeedImage(image) {
       this.showModal = true;
       this.chosenImage = image;
-      this.$store.dispatch({ type: "setViewedImage", image });
       this.$router.push({ params: { imageId: image._id } });
       this.getUserImages(image.ownerId);
     },

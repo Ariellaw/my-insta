@@ -1,6 +1,6 @@
 <template>
   <div class="modal-container feed-image displayVertical" v-if="image && imageOwner">
-    <img :src="image.image" class="currImage btn" alt>
+    <img :src="image.image" class="currImage btn" @click="$emit('displayFeedImage', image)" alt>
 
     <div class="user-info bold-reg">
       <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
@@ -123,7 +123,6 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
-      console.log(word);
       this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
       this.$router.go();
     },

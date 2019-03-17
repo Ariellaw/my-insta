@@ -2,6 +2,8 @@ const mongoService = require("./mongo-services");
 const imagesDb = "post";
 const ObjectId = require("mongodb").ObjectId;
 
+
+
 function getImagesByUserId(userId) {
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db =>
@@ -23,8 +25,11 @@ function addComments(imageId, newComment, writerId) {
   return getImageById(imageId).then(image => {
     var comments = image.comments;
     var hashtags = image.hashtags;
-    var commentObj = _createCommentObj(writerId, newComment);
+    var commentObj = createCommentObj(writerId, newComment);
     comments.push(commentObj);
+     
+    // server.emitWebSockets('commentAdded', {comments, imageId})
+
     var tags = _getTags(newComment, hashtags);
     return mongoService
       .connect()
@@ -142,7 +147,8 @@ module.exports = {
   getInitalFeedImages,
   getAdditionalFeedImages,
   getImagesByLocation,
-  getImagesByHashtag
+  getImagesByHashtag,
+  createCommentObj
 };
 
 function _getTags(newComment, hashtags) {
@@ -179,10 +185,18 @@ function _createImgObj(imgDetails, image) {
   };
   return imgObj;
 }
-function _createCommentObj(writerId, comment) {
+function createCommentObj(writerId, comment) {
   var timeStamp = Date.now();
   var comment = { writerId, comment, timeStamp };
   return comment;
 }
 
-
+// function _webSockets(fucToEmit,data){
+//   console.log('in fucntion', data)
+//   io.on('connection', function(socket){
+//     socket.on(fucToEmit, function(){
+//       console.log("lalala",fucToEmit, data);
+//       io.emit(fucToEmit, data);
+//     });
+//   });
+// }

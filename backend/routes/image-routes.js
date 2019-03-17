@@ -18,7 +18,6 @@ function addImageRoutes(app) {
     const newComment = req.body.comment;
     const imageId = req.body.imageId;
     const writerId = req.body.writerId;
-    console.log("routes", newComment, imageId, writerId )
 
     imageService.addComments(imageId, newComment, writerId).then(image => {
       return res.json(image);
@@ -63,14 +62,12 @@ function addImageRoutes(app) {
   app.get(`${BASE}/:location/explore`, (req, res) => {
     const location = req.params.location;
     imageService.getImagesByLocation(location).then(images => {
-      console.log("locations", images);
       return res.json(images);
     });
   });
   app.get(`${BASE}/:hashtag/search`, (req, res) => {
     const hashtag = req.params.hashtag;
     imageService.getImagesByHashtag(hashtag).then(images => {
-      console.log("hasthags", images);
       return res.json(images);
     });
   });

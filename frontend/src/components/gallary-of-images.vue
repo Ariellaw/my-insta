@@ -68,7 +68,7 @@ export default {
     displayViewedImage(image) {
       this.showModal = true;
       this.viewedImage = image;
-      this.$store.dispatch({ type: "setViewedImage", image });
+      // this.$store.dispatch({ type: "setViewedImage", image });
       this.$router.push({ params: { imageId: image._id } });
     }
   },

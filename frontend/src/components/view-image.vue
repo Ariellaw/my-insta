@@ -8,8 +8,8 @@
 
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + image.image + ')' }">
-          <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
-          <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
+            <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
+            <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
           </div>
           <div class="user-info bold-reg">
             <img
@@ -34,7 +34,7 @@
               <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
             </span>
           </div>
-          <div class="comments">
+          <div class="comments" v-if="imageComments">
             <user-comment
               @goToUserProfile="goToUserProfile"
               @searchHashtagImages="searchHashtagImages"
@@ -71,8 +71,8 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
-              @keyup.enter="addUserComment(comment, image._id, loggedInUserId)"
-              v-model="comment"
+              @keyup.enter="addUserComment(newComment, image._id, loggedInUserId)"
+              v-model="newComment"
             ></textarea>
           </div>
         </div>
@@ -85,7 +85,6 @@
 import moment from "moment";
 import userComment from "./user-comment.vue";
 import socialMedia from "./social-media.vue";
-import io from "socket.io-client";
 
 export default {
   name: "view-image",
@@ -93,17 +92,46 @@ export default {
   data() {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      loggedInUserName:"Ariella_wills1",
-      comment: null,
-      imageComments: this.image.comments,
+      loggedInUserName: "Ariella_wills1",
+      newComment: null,
       displayVertically: false,
       likes: this.image.likes,
       displaySocialMedia: false,
-      windowWidth: null
+      windowWidth: null,
+      socketMessage: "",
+      isConnected: false
     };
   },
+  // sockets: {
+  //   connect() {
+  //     // Fired when the socket connects.
+  //     this.isConnected = true;
+  //     console.log("websockets connected");
+  //   },
+
+  //   disconnect() {
+  //     this.isConnected = false;
+  //     console.log("websockets disconnected");
+  //   },
+
+  //   commentAdded(data) {
+  //     var img = this.$store.getters.viewedImage;
+
+  //     if (this.image._id === data.imageId) {
+  //       this.imageComments = this.$store.getters.viewedImageComments;
+
+  //       console.log(this.image._id === data.imageId, idx, this.imageComments);
+  //     }
+  //   },
+  //   likesAdded(data) {
+  //     this.likes = data;
+  //   }
+  // },
+
   created() {
     this.getViewedImageOwner(this.image.ownerId);
+    this.$store.dispatch({ type: "setViewedImage", image:this.image });
+
     this.$store.dispatch({
       type: "getLoggedInUser",
       userName: this.loggedInUserName
@@ -119,7 +147,6 @@ export default {
     }
   },
   methods: {
-
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId });
     },
@@ -133,7 +160,10 @@ export default {
           imageId: this.image._id,
           userId: this.loggedInUser._id
         })
-        .then(likes => (this.likes = likes));
+        .then(likes => {
+          this.likes = likes;
+          this.$socket.emit("likesAdded", likes);
+        });
     },
     removeUserLike() {
       this.$store
@@ -152,19 +182,22 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
-      console.log("ff",window.event.keyCode, this.comment, typeof this.comment)
+      console.log("addUserComment", comment);
+      this.$socket.emit("commentAdded", { comment, imageId, writerId });
+
       this.$store
         .dispatch({
-          type: "addUserComment",
+          type: "addCommentToViewedImg",
           comment,
           imageId,
           writerId
         })
         .then(comments => {
-          this.imageComments = comments;
-          this.comment = null;
+          // this.imageComments = comments;
+          this.newComment = null;
         });
     },
+
     addToUserFavorites() {
       this.$store.dispatch({
         type: "addToUserFavorites",
@@ -179,7 +212,6 @@ export default {
     },
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
-      console.log("test", userName);
       this.$router.push({ name: "user-profile", params: { userName } });
       // this.$router.go();
     },
@@ -190,7 +222,6 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
-      console.log(word);
       this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
       this.$router.go();
     },
@@ -211,6 +242,9 @@ export default {
     }
   },
   computed: {
+    imageComments() {
+      return this.$store.getters.viewedImage.comments;
+    },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -246,7 +280,7 @@ export default {
   },
   components: {
     userComment,
-    socialMedia,
+    socialMedia
   }
 };
 </script>
@@ -255,6 +289,5 @@ export default {
 .follow {
   color: blue;
 }
-
 </style>
 

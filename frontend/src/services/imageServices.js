@@ -14,7 +14,6 @@ function getUserImages(userId) {
   });
 }
 function addUserComment(comment, imageId, writerId) {
-    console.log("servces", comment, imageId, writerId )
 
   return axios
     .put(`${BASE_URL}/${imageId}/comment`, { comment, imageId, writerId})
