@@ -52,13 +52,31 @@ function addImageRoutes(app) {
       return res.json(images);
     });
   });
-  app.get(`${BASE}/:startingPoint/additionalFeedImages`, (req, res) => {
-    const startingPoint = req.params.startingPoint;
+  app.post(
+    `${BASE}/:startingPoint/additionalFeedImages`,
+    (req, res) => {
+      const startingPoint = req.params.startingPoint;
+      const currFeedImages = req.body.currFeedImages;
+      imageService
+        .getAdditionalFeedImages(startingPoint, currFeedImages)
+        .then(images => {
+          return res.json(images);
+        });
+    }
+  );
+  app.get(
+    `${BASE}/:startingPoint/:userId/additionalUserImages`,
+    (req, res) => {
+      const startingPoint = req.params.startingPoint;
+      const userId = req.params.userId;
 
-    imageService.getAdditionalFeedImages(startingPoint).then(images => {
-      return res.json(images);
-    });
-  });
+    imageService
+        .additionalUserImages(startingPoint, userId)
+        .then(images => {
+          return res.json(images);
+        });
+    }
+  );
   app.get(`${BASE}/:location/explore`, (req, res) => {
     const location = req.params.location;
     imageService.getImagesByLocation(location).then(images => {

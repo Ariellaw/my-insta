@@ -1,8 +1,12 @@
 
   
   .new-image-modal-container {
-    width:1000px;
-    height: 700px;
+    width:100rem;
+    height: 70rem;
+    display: flex;
+    flex-direction: row;
+    background-color: $lighter-layout-color;
+    margin: 0px auto;
      .new-image{
        width:75%;
        max-width: 100%;
@@ -35,31 +39,6 @@
 
   .sumbit-image-btn{
     @include general-button;
+    height: 3rem;
   }
   
-//   .currImage {
-//     width: 70%;
-//     height: auto;
-//     object-fit: cover;
-//   }
-//   .modal-body {
-//     height: 100%;
-//     // margin: 20px 0;
-//     width: 30%;
-//     // .image-info {
- 
-//     .user-info {
-//       height: 10%;
-//     }
-//     .comments {
-//       height: 70%;
-//     }
-//     .likes-and-followers {
-//       height: 10%;
-//     }
-//     .add-a-comment {
-//       height: 10%;
-    // }
-    // }
-//   }
-

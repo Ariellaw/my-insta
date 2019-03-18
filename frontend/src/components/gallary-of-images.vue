@@ -34,7 +34,21 @@ export default {
       viewedImage: null
     };
   },
+
   methods: {
+    scroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight >=
+          document.documentElement.offsetHeight - 1;
+
+        if (bottomOfWindow) {
+          // console.log("bottomOfWindow", bottomOfWindow);
+          this.$emit('getAdditionalImages')
+        }
+      };
+    },
+
     goBack1Image() {
       var idx = this.getIndexOfCurrImage();
 
@@ -68,7 +82,6 @@ export default {
     displayViewedImage(image) {
       this.showModal = true;
       this.viewedImage = image;
-      // this.$store.dispatch({ type: "setViewedImage", image });
       this.$router.push({ params: { imageId: image._id } });
     }
   },
@@ -85,6 +98,9 @@ export default {
         this.showModal = true;
       });
     }
+  },
+  mounted() {
+    // this.scroll();
   },
   watch: {
     showModal() {

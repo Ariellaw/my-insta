@@ -49,9 +49,7 @@
               <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
               <i @click="addUserLike" v-else class="far fa-heart btn"></i>
               
-              <i @click="displaySocialMedia=true" class="fas fa-share-alt btn"></i>
-              <social-media @close="displaySocialMedia=false" v-if="displaySocialMedia"></social-media>
-
+              <i class="fas fa-share-alt btn"></i>
               <i
                 v-if="inUserFavorites"
                 @click="removeFromUserFavorites"
@@ -59,8 +57,8 @@
               ></i>
               <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
             </div>
-            <span class="column">
-              <span
+            <span class="column" v-if="likes">
+              <span 
                 :class="{'visibilityNone':likes.length===0}"
                 class="num-of-likes bold-reg"
               >{{likes.length}}&nbsp;Likes&nbsp;</span>
@@ -86,7 +84,6 @@
 <script>
 import moment from "moment";
 import userComment from "./user-comment.vue";
-import socialMedia from "./social-media.vue";
 
 export default {
   name: "view-image",
@@ -97,7 +94,6 @@ export default {
       loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
-      displaySocialMedia: false,
       windowWidth: null,
       socketMessage: "",
       isConnected: false
@@ -112,7 +108,7 @@ export default {
     this.$store.dispatch({
       type: "getLoggedInUser",
       userName: this.loggedInUserName
-    });
+    })
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
@@ -124,6 +120,9 @@ export default {
     }
   },
   methods: {
+    getNamesOfLikingFollowers(user){
+      
+    },
     userIsTyping(userName, imageId) {
       this.$socket.emit("typing", { userName, imageId });
     },
@@ -222,6 +221,7 @@ export default {
     }
   },
   computed: {
+
     typingUser() {
       return this.$store.getters.isTyping;
     },
@@ -266,7 +266,6 @@ export default {
   },
   components: {
     userComment,
-    socialMedia
   }
 };
 </script>

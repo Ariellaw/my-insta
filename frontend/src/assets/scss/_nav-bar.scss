@@ -50,6 +50,11 @@
           width:4rem;
           margin-right: 1rem;
         }
+        @media screen and (max-width:900px){
+          .userName{
+            display:none;
+          }
+        }
       }
 
     }

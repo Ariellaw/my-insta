@@ -1,6 +1,11 @@
 <template>
   <div id="user-feed page-container" v-if="imagesForFeed">
-    <div class="user-feed" v-for="image in imagesForFeed" :key="image._id" :class="{'visibilityNone':showModal}">
+    <div
+      class="user-feed"
+      v-for="image in imagesForFeed"
+      :key="image._id"
+      :class="{'visibilityNone':showModal}"
+    >
       <feedImage class="image-in-feed" :image="image" @displayFeedImage="displayFeedImage(image)"></feedImage>
     </div>
     <view-image
@@ -25,7 +30,6 @@ export default {
     return {
       loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       loggedInUserName: "Ariella_wills1",
-      feedImages: [],
       showModal: false,
       chosenImage: null,
       userImages: null
@@ -76,12 +80,14 @@ export default {
       return idx;
     },
     displayFeedImage(image) {
-      this.showModal = true;
-      this.chosenImage = image;
-      this.$router.push({ params: { imageId: image._id } });
-      this.getUserImages(image.ownerId);
-      this.$router.go();
-      window.scrollTop(0);
+      this.$store
+        .dispatch({ type: "getImageById", imageId: image._id })
+        .then(image => {
+          this.$router.push({ params: { imageId: image._id } });
+          this.getUserImages(image.ownerId);
+          this.chosenImage = image;
+          this.showModal = true;
+        });
     },
     getInitalImages() {
       this.$store.dispatch({ type: "getInitalImages" });
@@ -91,11 +97,10 @@ export default {
     },
 
     scroll() {
-      
       window.onscroll = () => {
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
-          document.documentElement.offsetHeight - 30;
+          document.documentElement.offsetHeight - 1;
         if (bottomOfWindow) {
           this.getAdditionalImages();
         }
@@ -103,6 +108,8 @@ export default {
     }
   },
   created() {
+    // window.scrollTo(0, 0);
+
     const imageId = this.$route.params.imageId;
     if (imageId) {
       this.$store.dispatch({ type: "getImageById", imageId }).then(image => {

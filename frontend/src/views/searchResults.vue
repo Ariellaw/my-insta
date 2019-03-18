@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div v-if="images">
     <div class="location-page">
       <div v-if="type==='locations'" id="myMap"></div>
     </div>
 
-    <div v-if="images" class="page-container">
+    <div class="page-container">
       <div class="location-info-container">
         <img :src="image" alt class="location-img">
         <h3 v-if="type==='locations'" class="location-name">{{this.city}}, {{this.country}}</h3>
@@ -50,12 +50,14 @@ export default {
         .then(images => (this.images = images));
     }
     if (this.type === "hashtag") {
-      this.image =
-        "https://www.st-christophers.co.uk/__data/assets/image/0004/454954/berlin_hero_updated.jpg";
+
       var hashtag = keyword;
       this.$store
         .dispatch({ type: "getImagesByHashtag", hashtag })
-        .then(images => (this.images = images));
+        .then(images => {
+          this.images = images;
+          this.image = images[0].image;
+        });
     }
   },
   mounted() {},
@@ -98,7 +100,7 @@ export default {
 
           // axios
           //   .get(
-          //     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDpSWIvjhFLJtTnjOd58CwmW81GEIBtSbA&location=${
+          //     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${this.googleAPI}&location=${
           //       searchResult.lat
           //     },${searchResult.lng}&radius=1000`
           //   )

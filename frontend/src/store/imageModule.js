@@ -11,7 +11,7 @@ export default {
     userFavoriteImages: null,
     imagesForFeed: [],
     isConnected: false,
-    isTyping: null
+    isTyping: null,
   },
   getters: {
     isTyping: state => {
@@ -20,6 +20,7 @@ export default {
     visitedUserImages: state => {
       return state.visitedUserImages;
     },
+
     isLoadingUsersImages: state => {
       return state.isLoadingUsersImages;
     },
@@ -54,6 +55,12 @@ export default {
     },
     setVisitedUserImages(state, { images }) {
       state.visitedUserImages = images;
+
+    },
+    setAdditionalUserImages(state, { res }) {
+      var length = state.visitedUserImages.length;
+      state.visitedUserImages.splice(length, 0, ...res);
+
     },
     setViewedImage(state, { image }) {
       state.viewedImage = image;
@@ -192,10 +199,20 @@ export default {
       if (feedImages.length !== 0) {
         startingPoint = feedImages[feedImages.length - 1]._id;
       }
-
-      return imageServices.getAdditionalImages(startingPoint).then(res => {
-        context.commit({ type: "setAddionalImages", res });
-      });
+      return imageServices
+        .getAdditionalImages(startingPoint, feedImages)
+        .then(res => {
+          context.commit({ type: "setAddionalImages", res });
+        });
+    },
+    getAdditionalUserImages(context, { userId, startingPoint }) {
+          console.log("startingPoint", startingPoint)
+          return imageServices
+          .getAdditionalImages(startingPoint, userId)
+          .then(res => {
+            context.commit({ type: "setAdditionalUserImages", res });
+            return res;
+          })
     },
     getImagesByLocation(context, { location }) {
       return imageServices.getImagesByLocation(location).then(images => {

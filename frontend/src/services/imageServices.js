@@ -14,9 +14,8 @@ function getUserImages(userId) {
   });
 }
 function addUserComment(comment, imageId, writerId) {
-
   return axios
-    .put(`${BASE_URL}/${imageId}/comment`, { comment, imageId, writerId})
+    .put(`${BASE_URL}/${imageId}/comment`, { comment, imageId, writerId })
     .then(res => {
       return res.data;
     });
@@ -35,20 +34,29 @@ function removeUserLike(imageId, userId) {
   });
 }
 
-
 function getInitalImages() {
   return axios.get(`${BASE_URL}/initalFeedImages`).then(res => {
     return res.data;
   });
 }
-function getAdditionalImages(startingPoint) {
+function getAdditionalImages(startingPoint, currFeedImages) {
   return axios
-    .get(`${BASE_URL}/${startingPoint}/additionalFeedImages`)
+    .post(`${BASE_URL}/${startingPoint}/additionalFeedImages`, {
+      currFeedImages
+    })
     .then(res => {
       return res.data;
     });
 }
-
+function additionalUserImages(startingPoint, userId) {
+  return axios
+    .get(`${BASE_URL}/${startingPoint}/${userId}/additionalUserImages`, {
+      currFeedImages
+    })
+    .then(res => {
+      return res.data;
+    });
+}
 function getImagesByLocation(location) {
   return axios.get(`${BASE_URL}/${location}/explore`).then(res => {
     return res.data;
@@ -59,10 +67,10 @@ function getImagesByHashtag(hashtag) {
     return res.data;
   });
 }
-function addImage(imgDetails, image){
-    return axios.post(`${BASE_URL}/newImage`, { imgDetails, image }).then(res => {
-        return res.data;
-      });
+function addImage(imgDetails, image) {
+  return axios.post(`${BASE_URL}/newImage`, { imgDetails, image }).then(res => {
+    return res.data;
+  });
 }
 export default {
   getUserImages,
@@ -74,8 +82,6 @@ export default {
   getInitalImages,
   getAdditionalImages,
   getImagesByLocation,
-  getImagesByHashtag
+  getImagesByHashtag,
+  additionalUserImages
 };
-
-
-

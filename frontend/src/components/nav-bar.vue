@@ -42,7 +42,7 @@
         >
           <div class="image-upload">
             <label for="file-input">
-              <i class="fas fa-upload btn" @click="showModal = true"></i>
+              <i class="fas fa-upload btn"></i>
             </label>
             
             <input
@@ -57,8 +57,8 @@
         </form>
         <i class="fas fa-comment btn"></i>
         <i class="far fa-heart btn"></i>
-        <div v-if="loggedInUser" class="userName-container btn"  @click="goToLoggedInUserProfile">
-          <img :src="loggedInUser.profilePic" alt="" class="userImg">
+        <div v-if="loggedInUser" class="userName-container btn" @click="goToLoggedInUserProfile">
+          <img :src="loggedInUser.profilePic" alt class="userImg">
           <span class="userName">{{loggedInUser.userName}}</span>
         </div>
         <!-- <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i> -->
@@ -91,6 +91,10 @@ export default {
     };
   },
   methods: {
+    uploadNewImage() {
+      this.showModal = true;
+      this.image.file = null;
+    },
     getNavBarTitle() {
       if (this.$route.params.imageId) {
         this.navbarTitle = "Photo";
@@ -124,19 +128,22 @@ export default {
       this.$router.push({ name: "home" });
     },
     getCloudinaryUrl() {
+      this.uploadNewImage();
       var elForm = this.$refs.form;
+
       return this.$store
         .dispatch({
           type: "getCloudinaryPicUrl",
           elForm
         })
-        .then(url => {
+        .then(url => {      
           this.image.file = url;
         });
     },
     goToLoggedInUserProfile() {
-      var userName = this.loggedInUser.userName;
+      var userName = this.loggedInUserName;
       this.$router.push({ name: "user-profile", params: { userName } });
+      this.$router.go();
     },
     findRelevantUsers() {
       if (this.keyword) {

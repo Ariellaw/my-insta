@@ -3,7 +3,6 @@ const imagesDb = "post";
 const ObjectId = require("mongodb").ObjectId;
 
 
-
 function getImagesByUserId(userId) {
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db =>
@@ -97,20 +96,43 @@ function getInitalFeedImages() {
     db
       .collection(imagesDb)
       .find()
-      .limit(2)
-      .sort({ timePosted: -1 })
+      .limit(5)
+      .sort({ _id: -1 })
       .toArray()
   );
 }
-function getAdditionalFeedImages(startingPoint) {
+function getAdditionalFeedImages(startingPoint, currFeedImages) {
   var last_id = new ObjectId(startingPoint);
+  // var ids = _getIds(currFeedImages);
+  return mongoService.connect().then(db =>
+    db
+      .collection(imagesDb)
+      .find({ _id: { $lt: last_id }} )
+      .limit(2)
+      .sort({ _id: -1 })
+      .toArray()
+  );
+}
+function additionalUserImages(startingPoint, userId) {
+  var last_id = new ObjectId(startingPoint);
+  var userId = new ObjectId(userId);
 
   return mongoService.connect().then(db =>
     db
       .collection(imagesDb)
-      .find({ _id: { $lt: last_id } })
-      .limit(2)
-      .sort({ timePosted: -1 })
+      .find({ _id: { $lt: last_id }, ownerId:userId} )
+      .limit(4)
+      .sort({ _id: -1 })
+      .toArray()
+  );
+}
+function getImagesByUserId(userId) {
+  const _id = new ObjectId(userId);
+  return mongoService.connect().then(db =>
+    db
+      .collection(imagesDb)
+      .find({ ownerId: _id }).limit(24)
+      .sort({ _id: -1 })
       .toArray()
   );
 }
@@ -147,7 +169,8 @@ module.exports = {
   getAdditionalFeedImages,
   getImagesByLocation,
   getImagesByHashtag,
-  createCommentObj
+  createCommentObj,
+  additionalUserImages
 };
 
 function _getTags(newComment, hashtags) {
@@ -190,3 +213,11 @@ function createCommentObj(writerId, comment) {
   return comment;
 }
 
+function _getIds(arr){
+  var ids = [];
+  arr.forEach(el =>{
+    ids.push(new ObjectId(el._id));
+  })
+  console.log('updated ids array', ids)
+  return ids;
+}

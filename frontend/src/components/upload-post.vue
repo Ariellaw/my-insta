@@ -35,6 +35,9 @@ export default {
     }
   },
   created() {
+    // if(!this.image){
+    //   this.$emit('close');
+    // }
   },
   computed: {
     
