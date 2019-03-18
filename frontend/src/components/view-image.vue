@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="image && imageOwner && loggedInUser">
+  <transition name="modal" v-if="image && imageOwner && loggedInUser && viewedImage">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -7,7 +7,7 @@
         </button>
 
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
-          <div class="currImage" :style="{ backgroundImage: 'url(' + image.image + ')' }">
+          <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
             <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
             <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
           </div>
@@ -23,15 +23,15 @@
               <span
                 v-if="isFollowing"
                 :class="followingStatusClass"
-                @click="removeFollowers(image.ownerId)"
+                @click="removeFollowers(viewedImage.ownerId)"
               >Following</span>
               <span
                 v-else
                 :class="followingStatusClass"
                 class="follow"
-                @click="addFollowers(image.ownerId)"
+                @click="addFollowers(viewedImage.ownerId)"
               >Follow</span>
-              <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
+              <p @click="goToLocationImages" class="image-location">{{viewedImage.location}}</p>
             </span>
           </div>
           <div class="comments" v-if="imageComments">
@@ -58,7 +58,7 @@
               <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
             </div>
             <span class="column" v-if="likes">
-              <span 
+              <span
                 :class="{'visibilityNone':likes.length===0}"
                 class="num-of-likes bold-reg"
               >{{likes.length}}&nbsp;Likes&nbsp;</span>
@@ -70,8 +70,8 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
-              @keydown="userIsTyping(loggedInUserName, image._id)"
-              @keyup.enter="addUserComment(newComment, image._id, loggedInUserId)"
+              @keydown="userIsTyping(loggedInUserName, viewedImage._id)"
+              @keyup.enter="addUserComment(newComment, viewedImage._id, loggedInUserId)"
               v-model="newComment"
             ></textarea>
           </div>
@@ -94,21 +94,19 @@ export default {
       loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
-      windowWidth: null,
-      socketMessage: "",
-      isConnected: false
+      windowWidth: null
     };
   },
 
   created() {
-    window.scrollTo(0,0);
-    this.getViewedImageOwner(this.image.ownerId);
-    this.$store.dispatch({ type: "setViewedImage", image: this.image });
+    window.scrollTo(0, 0);
+    console.log("yay");
+    this.loadImage();
 
     this.$store.dispatch({
       type: "getLoggedInUser",
       userName: this.loggedInUserName
-    })
+    });
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
@@ -120,9 +118,15 @@ export default {
     }
   },
   methods: {
-    getNamesOfLikingFollowers(user){
-      
+    loadImage() {
+      this.$store
+        .dispatch({ type: "getImageById", imageId: this.$route.params.imageId })
+        .then(image => {
+          this.getViewedImageOwner(image.ownerId);
+          this.$store.dispatch({ type: "setViewedImage", image });
+        });
     },
+    getNamesOfLikingFollowers(user) {},
     userIsTyping(userName, imageId) {
       this.$socket.emit("typing", { userName, imageId });
     },
@@ -221,7 +225,9 @@ export default {
     }
   },
   computed: {
-
+    viewedImage() {
+      return this.$store.getters.viewedImage;
+    },
     typingUser() {
       return this.$store.getters.isTyping;
     },
@@ -264,8 +270,13 @@ export default {
       });
     });
   },
+  watch: {
+    $route() {
+      this.loadImage();
+    }
+  },
   components: {
-    userComment,
+    userComment
   }
 };
 </script>

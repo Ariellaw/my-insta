@@ -35,8 +35,7 @@
         <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
         <i @click="addUserLike" v-else class="far fa-heart btn"></i>
         
-        <i @click="displaySocialMedia=true" class="fas fa-share-alt btn"></i>
-        <social-media @close="displaySocialMedia=false" v-if="displaySocialMedia"></social-media>
+        <i  class="fas fa-share-alt btn"></i>
 
         <i v-if="inUserFavorites" @click="removeFromUserFavorites" class="fas fa-bookmark btn"></i>
         <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
@@ -74,7 +73,6 @@ export default {
       imageComments: this.image.comments,
       displayVertically: false,
       likes: this.image.likes,
-      displaySocialMedia: false
     };
   },
   created() {

@@ -80,14 +80,10 @@ export default {
       return idx;
     },
     displayFeedImage(image) {
-      this.$store
-        .dispatch({ type: "getImageById", imageId: image._id })
-        .then(image => {
           this.$router.push({ params: { imageId: image._id } });
           this.getUserImages(image.ownerId);
           this.chosenImage = image;
           this.showModal = true;
-        });
     },
     getInitalImages() {
       this.$store.dispatch({ type: "getInitalImages" });
