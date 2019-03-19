@@ -58,15 +58,19 @@
               <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
             </div>
             <span class="column" v-if="followeesThatLiked && viewedImage.likes">
+              <span class="namesOfLikes" v-if="followeesThatLiked.length===1">
+                <i class="far fa-thumbs-up"></i>
+                {{followeesThatLiked[0].userName}} like this
+              </span>
+              <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
+                <i class="far fa-thumbs-up"></i>
+                {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} like this
+              </span>
+              <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
+                <i class="far fa-thumbs-up"></i>
+                {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} and {{followeesThatLiked.length-2}} others like this
+              </span>
               
-              <span class="namesOfLikes" v-if="followeesThatLiked.length===1"><i class="far fa-thumbs-up"></i> {{followeesThatLiked[0].userName}} like this </span>
-              <span class="namesOfLikes"
-                v-else-if="followeesThatLiked.length===2"
-              ><i class="far fa-thumbs-up"></i> {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} like this  </span>
-              <span class="namesOfLikes"
-                v-else-if="followeesThatLiked.length > 2"
-              ><i class="far fa-thumbs-up"></i> {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} and {{followeesThatLiked.length-2}} others like this </span>
-   
               <span
                 v-else
                 :class="{'visibilityNone':viewedImage.likes.length===0}"
@@ -131,10 +135,12 @@ export default {
     }
   },
   //TODO: make this page used the viewedImage and not other computed items - get rid of them
+  //social media popup =
+  //popup of all people that liked
+  // write you if the person liking is you
   methods: {
     namesOfLikes() {
-
-      var ids=[];
+      var ids = [];
       var followees = this.loggedInUser.followees;
       followees.forEach(followeeId => {
         if (this.likes.findIndex(likeId => likeId === followeeId) !== -1) {
@@ -294,6 +300,8 @@ export default {
         this.windowWidth = window.innerWidth;
         if (this.windowWidth <= 1100) {
           this.displayVertically = true;
+        } else {
+          this.displayVertically = false;
         }
       });
     });

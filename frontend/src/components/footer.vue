@@ -8,21 +8,21 @@
       enctype="multipart/form-data"
     >
       <div class="image-upload">
-        <label for="file-input">
-          <i class="fas fa-upload btn" @click="showModal = true"></i>
+        <label for="file-input-footer">
+          <i class="fas fa-upload btn"></i>
         </label>
-
+        
         <input
-              type="file"
-              name="pic"
-              id="file-input"
-              accept="image/*"
-              @change="getCloudinaryUrl()"
-              required
+          type="file"
+          name="pic"
+          id="file-input-footer"
+          accept="image/*"
+          @change="getCloudinaryUrl()"
+          required
         >
       </div>
     </form>
-    <upload-post v-if="showModal" :image="image.file" @close="showModal = false"></upload-post>
+      <upload-post v-if="showModal" :image="image.file" @close="close()"></upload-post>
 
     <i class="fas fa-comment btn"></i>
     <i class="far fa-heart btn"></i>
@@ -44,6 +44,17 @@ export default {
     };
   },
   methods: {
+    close() {
+      this.image.file = null;
+      this.showModal = false;
+      this.$router.push({ params: { newImage: null } });
+    },
+    uploadNewImage() {
+      console.log("uploadNewImage");
+      this.image.file = null;
+      this.showModal = true;
+      this.$router.push({ params: { newImage: "newImage", imageId: null } });
+    },
     goToLoggedInUserProfile() {
       var userName = this.loggedInUserName;
       this.$router.push({ name: "user-profile", params: { userName } });
@@ -51,6 +62,9 @@ export default {
     },
 
     getCloudinaryUrl() {
+      console.log("getCloudinaryUrl");
+      this.uploadNewImage();
+
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
@@ -58,12 +72,20 @@ export default {
           elForm
         })
         .then(url => {
+          console.log(url);
           this.image.file = url;
         });
     }
   },
   components: {
     uploadPost
+  },
+  watch: {
+    $route() {
+      if (this.$route.params.newImage === null) {
+        this.showModal = false;
+      }
+    }
   }
 };
 </script>

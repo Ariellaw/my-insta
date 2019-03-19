@@ -18,7 +18,16 @@ $dark-border-color:darken(#fafafa, 15%);
         font-size:4rem;
     }
 }
-
+@mixin mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 1);
+    display: table;
+    transition: opacity 0.3s ease;
+}
 @mixin textarea {
     width: 100%;
     border: none;

@@ -63,7 +63,7 @@
         </div>
         <!-- <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i> -->
       </div>
-      <uploadPost v-if="showModal" :image="image.file" @close="showModal = false"></uploadPost>
+      <upload-post v-if="showModal" :image="image.file" @close="close()"></upload-post>
     </div>
   </nav>
 </template>
@@ -91,12 +91,20 @@ export default {
     };
   },
   methods: {
+    close() {
+      this.image.file = null;
+      this.showModal = false;
+      this.$router.push({ params: { newImage: null } });
+    },
     uploadNewImage() {
       this.showModal = true;
       this.image.file = null;
+      this.$router.push({ params: { newImage: "newImage", imageId: null } });
     },
     getNavBarTitle() {
-      if (this.$route.params.imageId) {
+      if (this.$route.params.newImage === "newImage") {
+        this.navbarTitle = "New Image";
+      } else if (this.$route.params.imageId) {
         this.navbarTitle = "Photo";
       } else if (this.$route.name === "searh-results-page") {
         if (this.$route.params.type === "locations") {
@@ -113,7 +121,9 @@ export default {
       }
     },
     goBackToLastWindow() {
-      if (this.$route.params.imageId) {
+      if (this.$route.params.newImage === "newImage") {
+        this.$router.push({ params: { newImage: null } });
+      } else if (this.$route.params.imageId) {
         this.$router.push({ params: { imageId: null } });
       } else if (this.$route.name === "edit-user-details") {
         this.$router.push({
@@ -136,7 +146,7 @@ export default {
           type: "getCloudinaryPicUrl",
           elForm
         })
-        .then(url => {      
+        .then(url => {
           this.image.file = url;
         });
     },
@@ -175,6 +185,9 @@ export default {
   watch: {
     $route() {
       this.getNavBarTitle();
+      if (this.$route.params.newImage === null) {
+        this.showModal = false;
+      }
     },
     windowWidth() {
       if (this.windowWidth <= 700) {

@@ -164,7 +164,7 @@
           }
           .follower-user-btn {
             @include submit-btn;
-            width: 80%;
+            width: 100%;
             height: 3rem;
             @media only screen and (max-width: 500px) {
               height: 3rem;

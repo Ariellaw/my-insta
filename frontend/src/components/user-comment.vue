@@ -1,13 +1,19 @@
 <template>
-  <li class="comment" v-if="commentOwner && words">
-    <span class="comment-owner bold-reg">{{commentOwner.userName+": "}}</span>
-    <span
-      :class="{'hashtag':word[0]==='#'|| word[0]==='@'}"
-      @click="findHashtagImages(word)"
-      v-for="(word, index) in words"
-      :key="index"
-    >{{word+' '}}</span>
-  </li>
+  <div class="comment-container">
+    <span class="comment" v-if="commentOwner && words">
+      <span class="comment-owner bold-reg">{{commentOwner.userName+": "}}</span>
+      <span
+        :class="{'hashtag':word[0]==='#'|| word[0]==='@'}"
+        @click="findHashtagImages(word)"
+        v-for="(word, index) in words"
+        :key="index"
+      >{{word+' '}}</span>
+    </span>
+    <span class="icons">
+          <i class="far fa-edit btn"></i>
+    <i class="fas fa-times btn"></i>
+    </span>
+  </div>
 </template>
 
 <script>
@@ -46,7 +52,7 @@ export default {
         this.$emit("searchHashtagImages", word);
         return;
       } else if (word[0] === "@") {
-         this.$emit("goToUserProfile", word);
+        this.$emit("goToUserProfile", word);
         return;
       } else return;
     }
@@ -55,12 +61,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.comment {
-  padding: 3px;
-  list-style: none;
-  margin-bottom: 2px;
-  display: block;
-}
+
 
 .hashtag {
   text-decoration: none;
@@ -68,6 +69,27 @@ export default {
   color: blue;
   cursor: pointer;
 }
+.dots {
+  color: darkgray;
+}
+.comment-container {
+  align-items:center;
+  .comment {
+    background-color: rgb(236, 225, 225);
+    border-radius: 2rem;
+    padding: 1rem;
+    // list-style: none;
+    margin-bottom: 2px;
+    display: block;
+  }
+  .icons{
+    color:darkgray;
+    width:6rem;
+    i{
+      margin-left: .5rem;
+    }
+  }
+}
 </style>
->
+
 

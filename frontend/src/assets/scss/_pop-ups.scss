@@ -1,36 +1,36 @@
 .modal-mask {
-    position: fixed;
-    z-index: 10000004;
+  z-index: 10000004;
+  @include mask;
+  @media screen and (max-width: 700px) {
+    z-index: 1;
+    position: absolute;
     top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 1);
-    display: table;
-    transition: opacity 0.3s ease;
-    @media screen and (max-width: 700px) {
-      // background-color: rgba(0, 0, 0, 1);
-      z-index: 1;
-      position: absolute;
-      top:0;
-      height: 1000vh;
-
-      
-
-
-    }
+    height: 140vh;
+    margin-top: 6rem;
+    margin-bottom: 8rem;
   }
-  
-  .modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
-  }
-  .modal-container {
-   @include modelArea;
+}
 
-  }
+// .new-image-model-mask {
+//   @include mask;
+//   @media screen and (max-width: 700px) {
+//     margin-top: 6rem;
+//     margin-bottom: 8rem;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//   }
+// }
 
-  /*
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+.modal-container {
+  @include modelArea;
+}
+
+/*
    * The following styles are auto-applied to elements with
    * transition="modal" when their visibility is toggled
    * by Vue.js.
@@ -38,17 +38,17 @@
    * You can easily play with the modal transition by editing
    * these styles.
    */
-  
+
 .modal-enter {
-    opacity: 0;
-  }
-  
-  .modal-leave-active {
-    opacity: 0;
-  }
-  
-  .modal-enter .modal-container,
-  .modal-leave-active .modal-container {
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
-  }
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
