@@ -57,12 +57,22 @@
               ></i>
               <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
             </div>
-            <span class="column" v-if="likes">
+            <span class="column" v-if="followeesThatLiked && viewedImage.likes">
+              
+              <span class="namesOfLikes" v-if="followeesThatLiked.length===1"><i class="far fa-thumbs-up"></i> {{followeesThatLiked[0].userName}} like this </span>
+              <span class="namesOfLikes"
+                v-else-if="followeesThatLiked.length===2"
+              ><i class="far fa-thumbs-up"></i> {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} like this  </span>
+              <span class="namesOfLikes"
+                v-else-if="followeesThatLiked.length > 2"
+              ><i class="far fa-thumbs-up"></i> {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} and {{followeesThatLiked.length-2}} others like this </span>
+   
               <span
-                :class="{'visibilityNone':likes.length===0}"
+                v-else
+                :class="{'visibilityNone':viewedImage.likes.length===0}"
                 class="num-of-likes bold-reg"
-              >{{likes.length}}&nbsp;Likes&nbsp;</span>
-              <span class="time-posted">{{ image.timePosted | moment }}</span>
+              >{{viewedImage.likes.length}}&nbsp;Likes&nbsp;</span>
+              <span class="time-posted">{{ viewedImage.timePosted | moment }}</span>
             </span>
           </div>
           <div class="add-a-comment">
@@ -94,7 +104,8 @@ export default {
       loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
-      windowWidth: null
+      windowWidth: null,
+      followeesThatLiked: null
     };
   },
 
@@ -103,10 +114,12 @@ export default {
     console.log("yay");
     this.loadImage();
 
-    this.$store.dispatch({
-      type: "getLoggedInUser",
-      userName: this.loggedInUserName
-    });
+    this.$store
+      .dispatch({
+        type: "getLoggedInUser",
+        userName: this.loggedInUserName
+      })
+      .then(() => this.namesOfLikes());
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
@@ -117,7 +130,23 @@ export default {
       return moment(date).fromNow();
     }
   },
+  //TODO: make this page used the viewedImage and not other computed items - get rid of them
   methods: {
+    namesOfLikes() {
+
+      var ids=[];
+      var followees = this.loggedInUser.followees;
+      followees.forEach(followeeId => {
+        if (this.likes.findIndex(likeId => likeId === followeeId) !== -1) {
+          ids.push(followeeId);
+        }
+      });
+      this.$store
+        .dispatch({ type: "getUserNamesById", ids })
+        .then(userNames => {
+          this.followeesThatLiked = userNames;
+        });
+    },
     loadImage() {
       this.$store
         .dispatch({ type: "getImageById", imageId: this.$route.params.imageId })
@@ -126,7 +155,6 @@ export default {
           this.$store.dispatch({ type: "setViewedImage", image });
         });
     },
-    getNamesOfLikingFollowers(user) {},
     userIsTyping(userName, imageId) {
       this.$socket.emit("typing", { userName, imageId });
     },
@@ -273,6 +301,11 @@ export default {
   watch: {
     $route() {
       this.loadImage();
+    },
+    viewedImage() {
+      if (this.viewedImage.likes) {
+        this.namesOfLikes();
+      }
     }
   },
   components: {

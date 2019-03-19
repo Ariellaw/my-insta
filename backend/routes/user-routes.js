@@ -4,6 +4,14 @@ const BASE = '/user'
 // const app = express()
 
 function addUserRoutes(app) {
+    app.post(`${BASE}/userNameById`, (req,res) =>{
+        const ids = req.body.ids;
+
+        userService.getUserNamesById(ids)
+            .then(users =>{
+                return res.json(users);
+            })
+    })
     app.get(`${BASE}/:userId`, (req, res) => {
         const userId = req.params.userId;
 

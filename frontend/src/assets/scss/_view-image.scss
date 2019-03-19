@@ -116,6 +116,12 @@
         display: flex;
         justify-content: center;
         line-height: 1;
+        .namesOfLikes{
+          color:$darker-font-color;
+          display: inline;
+          font-size:1.4rem;
+          font-weight: bold;
+        }
 
         .num-of-likes {
           margin-bottom: 0.5rem;
@@ -214,9 +220,10 @@
     display: flex;
     flex-direction: column;
     margin-left: 0.5rem;
+    justify-content: space-between;
     .icons {
       width: 100%;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0rem;
 
       i {
         font-size: 2.5rem;
@@ -230,6 +237,12 @@
     .column {
       display: flex;
       flex-direction: column;
+      .namesOfLikes{
+        color:$darker-font-color;
+        display: inline;
+        font-size:1.4rem;
+        font-weight: bold;
+      }
       .num-of-likes {
         margin-bottom: 0.5rem;
       }

@@ -4,6 +4,18 @@ const imagesDb = "post";
 const ObjectId = require("mongodb").ObjectId;
 const ImageService = require("./imageService");
 
+function getUserNamesById(ids){
+  for (var i = 0; i < ids.length; i++) {
+    ids[i] = new ObjectId(ids[i]);
+  }
+  return mongoService.connect().then(db =>
+    db
+      .collection(userDb)
+      .find({ _id: { $in: ids } })
+      .toArray()
+  );
+}
+
 function getById(userId) {
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db => {
@@ -240,5 +252,6 @@ module.exports = {
   getImagesByImageId,
   updateUserDetails,
   findRelevantUsers,
-  getUserByUsername
+  getUserByUsername,
+  getUserNamesById
 };

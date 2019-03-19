@@ -127,6 +127,7 @@ export default {
     }
   },
   actions: {
+
     getVisitedUserImages(context, { userId }) {
       context.commit({ type: "setIsLoading", isLoading: true });
 

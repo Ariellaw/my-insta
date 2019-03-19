@@ -45,6 +45,12 @@ export default {
         }
     },
     actions: {
+        getUserNamesById(context, {ids}){
+            return userServices.getUserNamesById(ids)
+                .then(users => {
+                    return users
+                })
+          }, 
         getVisitedUser(context, { userName }) {
 
             return userServices.getUserByUsername(userName)
