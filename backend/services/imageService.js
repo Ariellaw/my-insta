@@ -2,7 +2,6 @@ const mongoService = require("./mongo-services");
 const imagesDb = "post";
 const ObjectId = require("mongodb").ObjectId;
 
-
 function getImagesByUserId(userId) {
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db =>
@@ -26,7 +25,6 @@ function addComments(imageId, newComment, writerId) {
     var hashtags = image.hashtags;
     var commentObj = createCommentObj(writerId, newComment);
     comments.push(commentObj);
-     
 
     var tags = _getTags(newComment, hashtags);
     return mongoService
@@ -107,7 +105,7 @@ function getAdditionalFeedImages(startingPoint, currFeedImages) {
   return mongoService.connect().then(db =>
     db
       .collection(imagesDb)
-      .find({ _id: { $lt: last_id }} )
+      .find({ _id: { $lt: last_id } })
       .limit(2)
       .sort({ _id: -1 })
       .toArray()
@@ -120,7 +118,7 @@ function additionalUserImages(startingPoint, userId) {
   return mongoService.connect().then(db =>
     db
       .collection(imagesDb)
-      .find({ _id: { $lt: last_id }, ownerId:userId} )
+      .find({ _id: { $lt: last_id }, ownerId: userId })
       .limit(4)
       .sort({ _id: -1 })
       .toArray()
@@ -131,7 +129,8 @@ function getImagesByUserId(userId) {
   return mongoService.connect().then(db =>
     db
       .collection(imagesDb)
-      .find({ ownerId: _id }).limit(24)
+      .find({ ownerId: _id })
+      .limit(24)
       .sort({ _id: -1 })
       .toArray()
   );
@@ -158,6 +157,28 @@ function getImagesByHashtag(hashtag) {
       .toArray()
   );
 }
+function deleteComment(imageId, commentId) {
+  var _id = new ObjectId(imageId);
+  return getImageById(imageId).then(image => {
+    var comments = image.comments;
+    var idx = comments.findIndex(comment => comment.id === commentId);
+    if (idx > -1) {
+      comments.splice(idx, 1);
+    }
+
+    return mongoService
+      .connect()
+      .then(db =>
+        db
+          .collection(imagesDb)
+          .findOneAndUpdate(
+            { _id: _id },
+            { $set: { comments: comments } },
+            { returnOriginal: false }
+          )
+      );
+  });
+}
 module.exports = {
   getImagesByUserId,
   getImageById,
@@ -170,11 +191,12 @@ module.exports = {
   getImagesByLocation,
   getImagesByHashtag,
   createCommentObj,
-  additionalUserImages
+  additionalUserImages,
+  deleteComment
 };
 
 function _getTags(newComment, hashtags) {
-  var regex = /\r?\n|\r/  
+  var regex = /\r?\n|\r/;
   if (!newComment) {
     return hashtags;
   }
@@ -185,7 +207,7 @@ function _getTags(newComment, hashtags) {
     hashtag = hashtag.toLowerCase();
     hashtag = hashtag.replace(regex, "");
     if (hashtags.findIndex(fhashtag => fhashtag === hashtag) === -1) {
-        hashtags.push(hashtag);
+      hashtags.push(hashtag);
     }
   });
   return hashtags;
@@ -208,16 +230,19 @@ function _createImgObj(imgDetails, image) {
   return imgObj;
 }
 function createCommentObj(writerId, comment) {
+  var id = _makeId((length = 10));
   var timeStamp = Date.now();
-  var comment = { writerId, comment, timeStamp };
+  var comment = { writerId, comment, timeStamp, id };
   return comment;
 }
 
-function _getIds(arr){
-  var ids = [];
-  arr.forEach(el =>{
-    ids.push(new ObjectId(el._id));
-  })
-  console.log('updated ids array', ids)
-  return ids;
+function _makeId(length = 10) {
+  var id = "";
+  var possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < length; i++)
+    id += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return id;
 }

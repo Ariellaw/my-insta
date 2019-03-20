@@ -23,6 +23,15 @@ function addImageRoutes(app) {
       return res.json(image);
     });
   });
+  app.put(`${BASE}/:imageId/:commentId/deleteComment`, (req, res)=>{
+    imageId = req.params.imageId;
+    commentId = req.params.commentId;
+    imageService.deleteComment(imageId, commentId).then(image => {
+      return res.json(image);
+    });
+  });
+
+
   app.put(`${BASE}/:imageId/likes`, (req, res) => {
     const imageId = req.body.imageId;
     const userId = req.body.userId;

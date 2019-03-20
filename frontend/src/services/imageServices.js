@@ -20,6 +20,14 @@ function addUserComment(comment, imageId, writerId) {
       return res.data;
     });
 }
+function deleteComment(commentId, imageId) {
+
+  return axios
+    .put(`${BASE_URL}/${imageId}/${commentId}/deleteComment`)
+    .then(res => {
+      return res.data;
+    });
+}
 function addUserLike(imageId, userId) {
   return axios
     .put(`${BASE_URL}/${imageId}/likes`, { imageId, userId })
@@ -83,5 +91,6 @@ export default {
   getAdditionalImages,
   getImagesByLocation,
   getImagesByHashtag,
-  additionalUserImages
+  additionalUserImages,
+  deleteComment
 };

@@ -11,7 +11,7 @@ export default {
     userFavoriteImages: null,
     imagesForFeed: [],
     isConnected: false,
-    isTyping: null,
+    isTyping: null
   },
   getters: {
     isTyping: state => {
@@ -55,15 +55,18 @@ export default {
     },
     setVisitedUserImages(state, { images }) {
       state.visitedUserImages = images;
-
     },
     setAdditionalUserImages(state, { res }) {
       var length = state.visitedUserImages.length;
       state.visitedUserImages.splice(length, 0, ...res);
-
     },
     setViewedImage(state, { image }) {
       state.viewedImage = image;
+    },
+    updateViewedImage(state, { image }) {
+      if (state.viewedImage._id === image._id) {
+        state.viewedImage = image;
+      }
     },
     setVisitedImageOwner(state, { user }) {
       state.viewedImageOwner = user;
@@ -89,12 +92,28 @@ export default {
       state.isTyping = null;
       var img = state.viewedImage;
 
-      if (img._id === data.imageId) {
-        var comments = img.comments;
-        comments.splice(comments.length, 0, data.comment);
+      if (img._id === data.image._id) {
+        var comments = data.image.comments;
+        var idx = comments.findIndex(comment => comment.id === data.comment.id);
+        if(idx===-1){
+          comments.splice(comments.length, 0, data.comment);
+
+        }
         state.viewedImage.comments = comments;
       }
     },
+    SOCKET_commentDeleted(state, data) {
+      var img = state.viewedImage;
+      var comments = data.image.comments;
+      if (img._id === data.image._id) {
+        var idx = comments.findIndex(comment => comment.id === data.commentId);
+        if (idx > -1) {
+          comments.splice(idx, 1);
+          state.viewedImage.comments = comments;
+        }
+      }
+    },
+
     SOCKET_typing(state, data) {
       var img = state.viewedImage;
       if (img._id === data.imageId) {
@@ -127,7 +146,6 @@ export default {
     }
   },
   actions: {
-
     getVisitedUserImages(context, { userId }) {
       context.commit({ type: "setIsLoading", isLoading: true });
 
@@ -152,17 +170,18 @@ export default {
         return res.url;
       });
     },
-    addCommentToViewedImg(context, { comment, imageId, writerId }) {
-      return imageServices
-        .addUserComment(comment, imageId, writerId)
-        .then(res => {
-          return res.value.comments;
-        });
+    deleteComment(context, { commentId, imageId }) {
+      return imageServices.deleteComment(commentId, imageId).then(res => {
+        context.commit({ type: "updateViewedImage", image: res.value });
+        // console.log(res.value.comments)
+        return res.value.comments;
+      });
     },
     addUserComment(context, { comment, imageId, writerId }) {
       return imageServices
         .addUserComment(comment, imageId, writerId)
         .then(res => {
+          context.commit({ type: "updateViewedImage", image: res.value });
           return res.value.comments;
         });
     },
@@ -177,11 +196,13 @@ export default {
     },
     addUserLike(context, { imageId, userId }) {
       return imageServices.addUserLike(imageId, userId).then(res => {
+        context.commit({ type: "updateViewedImage", image: res.value });
         return res.value.likes;
       });
     },
     removeUserLike(context, { imageId, userId }) {
       return imageServices.removeUserLike(imageId, userId).then(res => {
+        context.commit({ type: "updateViewedImage", image: res.value });
         return res.value.likes;
       });
     },
@@ -207,13 +228,12 @@ export default {
         });
     },
     getAdditionalUserImages(context, { userId, startingPoint }) {
-          console.log("startingPoint", startingPoint)
-          return imageServices
-          .getAdditionalImages(startingPoint, userId)
-          .then(res => {
-            context.commit({ type: "setAdditionalUserImages", res });
-            return res;
-          })
+      return imageServices
+        .getAdditionalImages(startingPoint, userId)
+        .then(res => {
+          context.commit({ type: "setAdditionalUserImages", res });
+          return res;
+        });
     },
     getImagesByLocation(context, { location }) {
       return imageServices.getImagesByLocation(location).then(images => {

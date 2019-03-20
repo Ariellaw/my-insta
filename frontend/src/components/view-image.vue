@@ -34,13 +34,15 @@
               <p @click="goToLocationImages" class="image-location">{{viewedImage.location}}</p>
             </span>
           </div>
-          <div class="comments" v-if="imageComments">
+          <div class="comments" v-if="viewedImage.comments">
             <user-comment
               @goToUserProfile="goToUserProfile"
               @searchHashtagImages="searchHashtagImages"
-              v-for="(comment,idx) in imageComments"
+              v-for="comment in viewedImage.comments"
               :comment="comment"
-              :key="idx"
+              :key="comment.id"
+              @editComment="editComment"
+              @deleteComment="deleteComment"
             ></user-comment>
             <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
           </div>
@@ -115,7 +117,6 @@ export default {
 
   created() {
     window.scrollTo(0, 0);
-    console.log("yay");
     this.loadImage();
 
     this.$store
@@ -139,11 +140,31 @@ export default {
   //popup of all people that liked
   // write you if the person liking is you
   methods: {
+    editComment(commentId) {
+      console.log("edit", commentId, this.image._id);
+    },
+    deleteComment(commentId) {
+
+      this.$socket.emit("commentDeleted", {
+        commentId,
+        image: this.viewedImage
+      });
+
+      this.$store.dispatch({
+        type: "deleteComment",
+        commentId,
+        imageId: this.image._id
+      });
+    },
+
     namesOfLikes() {
       var ids = [];
       var followees = this.loggedInUser.followees;
       followees.forEach(followeeId => {
-        if (this.likes.findIndex(likeId => likeId === followeeId) !== -1) {
+        if (
+          this.viewedImage.likes.findIndex(likeId => likeId === followeeId) !==
+          -1
+        ) {
           ids.push(followeeId);
         }
       });
@@ -202,11 +223,11 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
-      this.$socket.emit("commentAdded", { comment, imageId, writerId });
+      this.$socket.emit("commentAdded", { comment, image:this.viewedImage, writerId });
 
       this.$store
         .dispatch({
-          type: "addCommentToViewedImg",
+          type: "addUserComment",
           comment,
           imageId,
           writerId
@@ -265,12 +286,12 @@ export default {
     typingUser() {
       return this.$store.getters.isTyping;
     },
-    imageComments() {
-      return this.$store.getters.viewedImage.comments;
-    },
-    likes() {
-      return this.$store.getters.viewedImage.likes;
-    },
+    // imageComments() {
+    //   return this.$store.getters.viewedImage.comments;
+    // },
+    // likes() {
+    //   return this.$store.getters.viewedImage.likes;
+    // },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -289,8 +310,8 @@ export default {
       return this.loggedInUser.favorites.includes(this.image._id);
     },
     isLiked() {
-      if (this.likes) {
-        return this.likes.includes(this.loggedInUser._id);
+      if (this.viewedImage.likes) {
+        return this.viewedImage.likes.includes(this.loggedInUser._id);
       }
     }
   },

@@ -10,8 +10,8 @@
       >{{word+' '}}</span>
     </span>
     <span class="icons">
-          <i class="far fa-edit btn"></i>
-    <i class="fas fa-times btn"></i>
+          <i class="far fa-edit btn" @click="$emit('editComment', comment.id)"></i>
+    <i class="fas fa-times btn"  @click="$emit('deleteComment', comment.id)"></i>
     </span>
   </div>
 </template>
@@ -75,9 +75,9 @@ export default {
 .comment-container {
   align-items:center;
   .comment {
-    background-color: rgb(236, 225, 225);
+    background-color: #f2f3f5;
     border-radius: 2rem;
-    padding: 1rem;
+    padding: .7rem;
     // list-style: none;
     margin-bottom: 2px;
     display: block;
