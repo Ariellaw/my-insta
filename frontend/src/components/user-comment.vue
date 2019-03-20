@@ -9,9 +9,9 @@
         :key="index"
       >{{word+' '}}</span>
     </span>
-    <span class="icons">
-          <i class="far fa-edit btn" @click="$emit('editComment', comment.id)"></i>
-    <i class="fas fa-times btn"  @click="$emit('deleteComment', comment.id)"></i>
+    <span class="icons" :class="{'canEdit':commentOwner._id===loggedInUserId}">
+      <i class="far fa-edit btn" @click="$emit('editComment', comment.id)"></i>
+      <i class="fas fa-times btn" @click="$emit('deleteComment', comment.id)"></i>
     </span>
   </div>
 </template>
@@ -23,6 +23,8 @@ export default {
   props: ["comment"],
   data() {
     return {
+      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
+      loggedInUserName: "Ariella_wills1",
       commentOwner: null,
       words: null
     };
@@ -34,6 +36,10 @@ export default {
         this.commentOwner = res;
       });
     this.words = this.comment.comment.split(" ");
+    this.$store.dispatch({
+      type: "getLoggedInUser",
+      userName: this.loggedInUserName
+    });
   },
   filters: {
     moment: function(date) {
@@ -45,7 +51,11 @@ export default {
       } else return word;
     }
   },
-  computed: {},
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
+  },
   methods: {
     findHashtagImages(word) {
       if (word[0] === "#") {
@@ -61,8 +71,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
 .hashtag {
   text-decoration: none;
   font-weight: 600;
@@ -73,21 +81,31 @@ export default {
   color: darkgray;
 }
 .comment-container {
-  align-items:center;
+  // align-items:center;
+  display: block;
+  margin-top: 1rem;
+  &:hover {
+    .canEdit {
+      display: inline;
+    }
+  }
+
   .comment {
     background-color: #f2f3f5;
     border-radius: 2rem;
-    padding: .7rem;
-    // list-style: none;
-    margin-bottom: 2px;
-    display: block;
+    padding: 0.7rem;
+    width: fit-content;
   }
-  .icons{
-    color:darkgray;
-    width:6rem;
-    i{
-      margin-left: .5rem;
+  .icons {
+    color: darkgray;
+    width: 6rem;
+    display: none;
+    i {
+      margin-left: 0.5rem;
     }
+  }
+  .canEdit {
+    display: none;
   }
 }
 </style>
