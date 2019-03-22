@@ -3,28 +3,6 @@
     <div class="dd" v-if="cellphoneDisplay && navbarTitle" @click="goBackToLastWindow()">
       <i class="fas fa-arrow-left btn"></i>
       {{navbarTitle}}
-      <!-- <form
-        class="update-user-cover-pic"
-        ref="form"
-        action
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        <div class="image-upload">
-          <label for="file-input">
-            <i class="fas fa-upload btn"></i>
-          </label>
-          
-          <input
-            type="file"
-            name="pic"
-            id="file-input"
-            accept="image/*"
-            @change="getCloudinaryUrl()"
-            required
-          >
-        </div>
-      </form>-->
     </div>
     <div v-else class="nav-buttons-container page-container">
       <div @click="goToFeed" class="instagram-logo btn">
@@ -98,7 +76,6 @@ export default {
   name: "nav-bar",
   data() {
     return {
-      newImage: true,
       keyword: null,
       navbarTitle: "Locations",
       lastWindow: null,
@@ -170,6 +147,7 @@ export default {
         })
         .then(url => {
           this.image.file = url;
+          this.$emit('addNewImage')
         });
     },
     goToLoggedInUserProfile() {
