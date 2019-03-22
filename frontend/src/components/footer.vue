@@ -22,7 +22,7 @@
         >
       </div>
     </form>
-      <upload-post v-if="showModal" :image="image.file" @close="close()"></upload-post>
+    <upload-post v-if="newImage" :image="image.file" @close="close()"></upload-post>
 
     <i class="fas fa-comment btn"></i>
     <i class="far fa-heart btn"></i>
@@ -36,24 +36,25 @@ import uploadPost from "./upload-post.vue";
 export default {
   data() {
     return {
-      showModal: false,
       loggedInUserName: "Ariella_wills1",
+      newImage: true,
       image: {
-        file: null
+        file:
+          "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg"
       }
     };
   },
   methods: {
     close() {
       this.image.file = null;
-      this.showModal = false;
-      this.$router.push({ params: { newImage: null } });
+      this.newImage = false;
+      this.$router.push({ params: { image: null } });
     },
     uploadNewImage() {
       console.log("uploadNewImage");
-      this.image.file = null;
-      this.showModal = true;
-      this.$router.push({ params: { newImage: "newImage", imageId: null } });
+      this.newImage = true;
+      // this.image.file = null;
+      this.$router.push({ params: { image: "new-image" } });
     },
     goToLoggedInUserProfile() {
       var userName = this.loggedInUserName;
@@ -82,8 +83,13 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.params.newImage === null) {
-        this.showModal = false;
+      if (this.$route.params.image === null) {
+        this.newImage = false;
+      } else if (this.$route.params.image === "new-image") {
+        this.newImage = true;
+       this.image.file=
+          "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg"
+      
       }
     }
   }

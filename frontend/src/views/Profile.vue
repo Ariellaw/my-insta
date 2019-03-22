@@ -136,8 +136,7 @@ export default {
       cellphoneDisplay: false,
       windowWidth: null,
       userId: null,
-      osp: null,
-      nsp: null
+
     };
   },
   methods: {
@@ -147,7 +146,6 @@ export default {
     getVisitedUserImages(userId) {
       this.$store
         .dispatch({ type: "getVisitedUserImages", userId })
-        .then(images => (this.nsp = images[images.length - 1]._id));
     },
 
     addFollowers(followeeId) {
@@ -164,23 +162,9 @@ export default {
     },
 
     getAdditionalUserImages(startingPoint) {
-      console.log("additional images", this.osp, this.nsp, this.osp ===this.nsp);
-
-      if (this.osp !== this.nsp) {
-        this.$store
-          .dispatch({
-            type: "getAdditionalUserImages",
-            userId: this.userId,
-            startingPoint: this.nsp
-          })
-          .then(images => {
-            this.osp = this.nsp;
-            this.nsp = images[images.length - 1]._id;
-            console.log("after function", this.osp, this.nsp, this.osp === this.nsp);
-          });
-      } else {
-        return;
-      }
+      console.log(
+        "additional images",
+      );
     }
   },
   mounted() {},
@@ -202,9 +186,11 @@ export default {
     }
   },
   created() {
+
     const userName = this.$route.params.userName;
     this.$store.dispatch({ type: "getVisitedUser", userName }).then(user => {
       this.userId = user._id;
+
       if (user._id !== null) {
         this.$store.dispatch({
           type: "getUserFavoriteImages",

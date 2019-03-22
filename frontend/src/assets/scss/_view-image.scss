@@ -84,6 +84,7 @@
       border-bottom: 1px solid $lighter-font-color;
       flex-direction: column;
       overflow-y: scroll;
+      overflow-x: hidden;
       order: 4;
       @media screen and (max-width: 700px) {
         height: 16%;
@@ -233,6 +234,8 @@
     border-bottom: 1px solid $lighter-font-color;
     flex-direction: column;
     overflow-y: auto;
+    overflow-x: hidden;
+
   }
   .likes-and-followers {
     height: 15%;

@@ -67,8 +67,10 @@ io.on("connection", function(socket) {
     io.emit("likeRemoved", data);
   });
   socket.on("commentDeleted", function(data) {
-    // console.log("deleted", data)
     io.emit("commentDeleted", data);
+  });
+  socket.on("commentEdited", function(data) {
+    io.emit("commentEdited", data);
   });
   socket.on("typing", function(data) {
     socket.broadcast.emit("typing", data);

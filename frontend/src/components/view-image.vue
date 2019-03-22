@@ -41,7 +41,7 @@
               v-for="comment in viewedImage.comments"
               :comment="comment"
               :key="comment.id"
-              @editComment="editComment"
+              @updateComment="updateComment"
               @deleteComment="deleteComment"
             ></user-comment>
             <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
@@ -140,11 +140,21 @@ export default {
   //popup of all people that liked
   // write you if the person liking is you
   methods: {
-    editComment(commentId) {
-      console.log("edit", commentId, this.image._id);
+    updateComment(data) {
+      this.$socket.emit("commentEdited", {
+        commentId: data.commentId,
+        image: this.viewedImage,
+        newComment:data.editedComment
+      });
+
+      this.$store.dispatch({
+        type: "editComment",
+        commentId:data.commentId,
+        imageId: this.image._id,
+        newComment:data.editedComment
+      }).then(()=> this.$router.go())
     },
     deleteComment(commentId) {
-
       this.$socket.emit("commentDeleted", {
         commentId,
         image: this.viewedImage
@@ -176,7 +186,7 @@ export default {
     },
     loadImage() {
       this.$store
-        .dispatch({ type: "getImageById", imageId: this.$route.params.imageId })
+        .dispatch({ type: "getImageById", imageId: this.$route.params.image })
         .then(image => {
           this.getViewedImageOwner(image.ownerId);
           this.$store.dispatch({ type: "setViewedImage", image });
@@ -223,7 +233,11 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
-      this.$socket.emit("commentAdded", { comment, image:this.viewedImage, writerId });
+      this.$socket.emit("commentAdded", {
+        comment,
+        image: this.viewedImage,
+        writerId
+      });
 
       this.$store
         .dispatch({

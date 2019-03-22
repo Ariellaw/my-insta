@@ -20,6 +20,13 @@ function addUserComment(comment, imageId, writerId) {
       return res.data;
     });
 }
+function editComment(commentId, imageId, newComment){
+  return axios
+    .put(`${BASE_URL}/${imageId}/${commentId}/edit`, {newComment})
+      .then(res =>{
+        return res.data;
+      })
+}
 function deleteComment(commentId, imageId) {
 
   return axios
@@ -92,5 +99,6 @@ export default {
   getImagesByLocation,
   getImagesByHashtag,
   additionalUserImages,
-  deleteComment
+  deleteComment,
+  editComment
 };

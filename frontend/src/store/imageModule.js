@@ -102,6 +102,21 @@ export default {
         state.viewedImage.comments = comments;
       }
     },
+    SOCKET_commentEdited(state, data) {
+      var img = state.viewedImage;
+
+      if (img._id === data.image._id) {
+        var comments = data.image.comments;
+        var idx = comments.findIndex(comment => comment.id === data.commentId);
+        if(idx!==-1){
+          var commentToUpdate = comments[idx];
+          commentToUpdate.comment = data.newComment;
+          commentToUpdate.timeStamp = Date.now();
+          comments.splice(idx,1,commentToUpdate);
+        }
+        state.viewedImage.comments = comments;
+      }
+    },
     SOCKET_commentDeleted(state, data) {
       var img = state.viewedImage;
       var comments = data.image.comments;
@@ -180,6 +195,14 @@ export default {
     addUserComment(context, { comment, imageId, writerId }) {
       return imageServices
         .addUserComment(comment, imageId, writerId)
+        .then(res => {
+          context.commit({ type: "updateViewedImage", image: res.value });
+          return res.value.comments;
+        });
+    },
+    editComment(context, { commentId, imageId, newComment }) {
+      return imageServices
+        .editComment(commentId, imageId, newComment)
         .then(res => {
           context.commit({ type: "updateViewedImage", image: res.value });
           return res.value.comments;

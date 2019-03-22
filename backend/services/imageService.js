@@ -40,6 +40,31 @@ function addComments(imageId, newComment, writerId) {
       );
   });
 }
+
+function editComment(imageId, commentId, newComment) {
+  const _id = new ObjectId(imageId);
+  return getImageById(imageId).then(image => {
+    var comments = image.comments;
+    var idx = comments.findIndex(comment => comment.id === commentId);
+    if (idx > -1) {
+      var commentToUpdate = comments[idx];
+      commentToUpdate.comment = newComment;
+      commentToUpdate.timeStamp = Date.now();
+      comments.splice(idx, 1, commentToUpdate);
+    }
+    return mongoService
+      .connect()
+      .then(db =>
+        db
+          .collection(imagesDb)
+          .findOneAndUpdate(
+            { _id: _id },
+            { $set: { comments: comments} },
+            { returnOriginal: false }
+          )
+      );
+  });
+}
 function addUserLike(imageId, userId) {
   const _id = new ObjectId(imageId);
   return getImageById(imageId).then(image => {
@@ -192,7 +217,8 @@ module.exports = {
   getImagesByHashtag,
   createCommentObj,
   additionalUserImages,
-  deleteComment
+  deleteComment,
+  editComment
 };
 
 function _getTags(newComment, hashtags) {

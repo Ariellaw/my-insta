@@ -7,7 +7,7 @@
     grid-gap: .5rem;
   }
 
-  @media screen and (max-width: 560px) {
+  @media screen and (max-width: 700px) {
     grid-template-columns: 33% 33% 33%;
   }
 
@@ -28,11 +28,11 @@
     @media only screen and (max-width: 1000px) {
       height: 20rem;
     }
-    @media only screen and (max-width: 800px) {
-      height: 16rem;
-    }
+    // @media only screen and (max-width: 800px) {
+    //   height: 16rem;
+    // }
     @media only screen and (max-width: 500px) {
-      height: 12rem;
+      height: 17rem;
     }
   }
 }

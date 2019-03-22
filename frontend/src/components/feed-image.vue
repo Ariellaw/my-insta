@@ -31,8 +31,6 @@
         v-for="comment in imageComments"
         :comment="comment"
         :key="comment.id"
-        @editComment="editComment"
-        @deleteComment="deleteComment"
       ></user-comment>
     </div>
     <div class="likes-and-followers">
@@ -90,12 +88,7 @@ export default {
     }
   },
   methods: {
-    editComment(commentId) {
-      console.log("edit", commentId, this.image._id);
-    },
-    deleteComment(commentId) {
-      console.log("delete", commentId, this.image._id);
-    },
+
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId });
     },

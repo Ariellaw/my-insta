@@ -6,7 +6,7 @@
           <i class="fas fa-times"></i>
         </button>
 
-        <div class="modal-container displayVertical feed">
+        <div class="modal-container displayVertical newImage">
           <img class="new-image" :src="image" alt>
           <div class="new-post-comments">
             <input

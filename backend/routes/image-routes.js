@@ -14,6 +14,14 @@ function addImageRoutes(app) {
       return res.json(image);
     });
   });
+  app.put(`${BASE}/:imageId/:commentId/edit`, (req, res) => {
+    const imageId = req.params.imageId;
+    const commentId = req.params.commentId;
+    const newComment = req.body.newComment;
+    imageService.editComment(imageId, commentId, newComment).then(image => {
+      return res.json(image);
+    });
+  });
   app.put(`${BASE}/:imageId/comment`, (req, res) => {
     const newComment = req.body.comment;
     const imageId = req.body.imageId;
@@ -23,14 +31,13 @@ function addImageRoutes(app) {
       return res.json(image);
     });
   });
-  app.put(`${BASE}/:imageId/:commentId/deleteComment`, (req, res)=>{
+  app.put(`${BASE}/:imageId/:commentId/deleteComment`, (req, res) => {
     imageId = req.params.imageId;
     commentId = req.params.commentId;
     imageService.deleteComment(imageId, commentId).then(image => {
       return res.json(image);
     });
   });
-
 
   app.put(`${BASE}/:imageId/likes`, (req, res) => {
     const imageId = req.body.imageId;
@@ -61,31 +68,23 @@ function addImageRoutes(app) {
       return res.json(images);
     });
   });
-  app.post(
-    `${BASE}/:startingPoint/additionalFeedImages`,
-    (req, res) => {
-      const startingPoint = req.params.startingPoint;
-      const currFeedImages = req.body.currFeedImages;
-      imageService
-        .getAdditionalFeedImages(startingPoint, currFeedImages)
-        .then(images => {
-          return res.json(images);
-        });
-    }
-  );
-  app.get(
-    `${BASE}/:startingPoint/:userId/additionalUserImages`,
-    (req, res) => {
-      const startingPoint = req.params.startingPoint;
-      const userId = req.params.userId;
-
+  app.post(`${BASE}/:startingPoint/additionalFeedImages`, (req, res) => {
+    const startingPoint = req.params.startingPoint;
+    const currFeedImages = req.body.currFeedImages;
     imageService
-        .additionalUserImages(startingPoint, userId)
-        .then(images => {
-          return res.json(images);
-        });
-    }
-  );
+      .getAdditionalFeedImages(startingPoint, currFeedImages)
+      .then(images => {
+        return res.json(images);
+      });
+  });
+  app.get(`${BASE}/:startingPoint/:userId/additionalUserImages`, (req, res) => {
+    const startingPoint = req.params.startingPoint;
+    const userId = req.params.userId;
+
+    imageService.additionalUserImages(startingPoint, userId).then(images => {
+      return res.json(images);
+    });
+  });
   app.get(`${BASE}/:location/explore`, (req, res) => {
     const location = req.params.location;
     imageService.getImagesByLocation(location).then(images => {

@@ -3,6 +3,28 @@
     <div class="dd" v-if="cellphoneDisplay && navbarTitle" @click="goBackToLastWindow()">
       <i class="fas fa-arrow-left btn"></i>
       {{navbarTitle}}
+      <!-- <form
+        class="update-user-cover-pic"
+        ref="form"
+        action
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="image-upload">
+          <label for="file-input">
+            <i class="fas fa-upload btn"></i>
+          </label>
+          
+          <input
+            type="file"
+            name="pic"
+            id="file-input"
+            accept="image/*"
+            @change="getCloudinaryUrl()"
+            required
+          >
+        </div>
+      </form>-->
     </div>
     <div v-else class="nav-buttons-container page-container">
       <div @click="goToFeed" class="instagram-logo btn">
@@ -63,7 +85,6 @@
         </div>
         <!-- <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i> -->
       </div>
-      <upload-post v-if="showModal" :image="image.file" @close="close()"></upload-post>
     </div>
   </nav>
 </template>
@@ -77,7 +98,7 @@ export default {
   name: "nav-bar",
   data() {
     return {
-      showModal: false,
+      newImage: true,
       keyword: null,
       navbarTitle: "Locations",
       lastWindow: null,
@@ -86,25 +107,25 @@ export default {
       loggedInUserName: "Ariella_wills1",
 
       image: {
-        file: null
+        file: "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg"
+
       }
     };
   },
   methods: {
     close() {
       this.image.file = null;
-      this.showModal = false;
-      this.$router.push({ params: { newImage: null } });
+      this.newImage = false;
+      this.$router.push({ params: { image: null } });
     },
     uploadNewImage() {
-      this.showModal = true;
-      this.image.file = null;
-      this.$router.push({ params: { newImage: "newImage", imageId: null } });
+      this.$router.push({ params: { image: "new-image" } });
+      this.newImage = true;
     },
     getNavBarTitle() {
-      if (this.$route.params.newImage === "newImage") {
+      if (this.$route.params.image === "new-image") {
         this.navbarTitle = "New Image";
-      } else if (this.$route.params.imageId) {
+      } else if (this.$route.params.image) {
         this.navbarTitle = "Photo";
       } else if (this.$route.name === "searh-results-page") {
         if (this.$route.params.type === "locations") {
@@ -121,17 +142,18 @@ export default {
       }
     },
     goBackToLastWindow() {
-      if (this.$route.params.newImage === "newImage") {
-        this.$router.push({ params: { newImage: null } });
-      } else if (this.$route.params.imageId) {
-        this.$router.push({ params: { imageId: null } });
+      if (this.$route.params.image) {
+        this.$router.push({ params: { image: null } });
       } else if (this.$route.name === "edit-user-details") {
         this.$router.push({
           name: "user-profile",
-          params: { userName: this.$route.params.userName }
+          params: { userName: this.$route.params.userName, image: null }
         });
       } else {
-        this.$router.push({ name: "home" });
+        this.$router.push({
+          name: "home",
+          params: { image: null }
+        });
       }
     },
     goToFeed() {
@@ -151,9 +173,11 @@ export default {
         });
     },
     goToLoggedInUserProfile() {
+      // var userName = this.loggedInUserName;
+      // this.$router.push({ name: "user-profile", params: { userName } });
+      // this.$router.go();
       var userName = this.loggedInUserName;
       this.$router.push({ name: "user-profile", params: { userName } });
-      this.$router.go();
     },
     findRelevantUsers() {
       if (this.keyword) {
@@ -185,12 +209,18 @@ export default {
   watch: {
     $route() {
       this.getNavBarTitle();
-      if (this.$route.params.newImage === null) {
-        this.showModal = false;
+      if (this.$route.params.image === null) {
+        this.newImage = false;
+      } else if(this.$route.params.image === "new-image"){
+        this.newImage = true;
+        this.image.file =
+          "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg";
       }
     },
     windowWidth() {
       if (this.windowWidth <= 700) {
+        // this.newImage = false;
+
         this.cellphoneDisplay = true;
       } else {
         this.cellphoneDisplay = false;

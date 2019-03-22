@@ -11,17 +11,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/:imageId?/:newImage?',
+      path: '/home/:image?',
       name: 'home',
       component: Home
     },
     {
-      path: '/user/:userName/:imageId?/:newImage?',
+      path: '/user/:userName/:image?',
       name: 'user-profile',
       component: userProfile
     },
     {
-      path: '/edit/:userName/:newImage?',
+      path: '/edit/:userName',
       name: 'edit-user-details',
       component: editUserDetails
     },
@@ -31,7 +31,7 @@ export default new Router({
      component:Authentication
     },
     {
-      path:'/search/:type/:keyword/:imageId?/:newImage?',
+      path:'/search/:type/:keyword/:image?',
       name:'searh-results-page',
       component:SearchResults
     },

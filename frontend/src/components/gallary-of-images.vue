@@ -71,7 +71,7 @@ export default {
     },
     displayNewImg(idx) {
       this.viewedImage = this.displayedImages[idx];
-      this.$router.push({ params: { imageId: this.displayedImages[idx]._id } });
+      this.$router.push({ params: { image: this.displayedImages[idx]._id } });
     },
     getIndexOfCurrImage() {
       var idx = this.displayedImages.findIndex(image => {
@@ -82,7 +82,7 @@ export default {
     displayViewedImage(image) {
       this.showModal = true;
       this.viewedImage = image;
-      this.$router.push({ params: { imageId: image._id } });
+      this.$router.push({ params: { image: image._id } });
     }
   },
   computed: {
@@ -91,8 +91,8 @@ export default {
     }
   },
   created() {
-    const imageId = this.$route.params.imageId;
-    if (imageId) {
+    const imageId = this.$route.params.image;
+    if (imageId  && imageId !== "new-image") {
       this.$store.dispatch({ type: "getImageById", imageId }).then(image => {
         this.viewedImage = image;
         this.showModal = true;
@@ -105,11 +105,11 @@ export default {
   watch: {
     showModal() {
       if (this.showModal === false) {
-        this.$router.push({ params: { imageId: null } });
+        this.$router.push({ params: { image: null } });
       }
     },
     $route() {
-      if (this.$route.params.imageId === null) {
+      if (this.$route.params.image === null) {
         this.showModal = false;
       }
     }
