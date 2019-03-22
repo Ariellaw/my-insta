@@ -1,6 +1,6 @@
 import axios from 'axios';
 import utilService from './utilServices'
-const BASE_URL = ' http://192.168.1.105:3003/user'
+const BASE_URL = 'http://192.168.1.105:3003/user'
 
 function getUserNamesById(ids){
     return axios.post(`${BASE_URL}/userNameById`, {ids})
@@ -17,8 +17,10 @@ function getUserById(userId) {
 function getUserByUsername(userName){
     return axios.get(`${BASE_URL}/${userName}/nickname`)
     .then(res =>{
-        return res.data
-        
+        return res.data       
+    }).catch(error=>{
+        console.log("getUserByUsername error catchy thingy", error);
+        this.$router.push({name:'authentication'})
     })
 }
 function updateFollowers(followeeId, followerId){
@@ -69,8 +71,10 @@ function updateUserDetails(userDetails){
             return res.data
         })
 }
-function authenticateUser(user){
-    return axios.post(`login`, {user})
+//TODO move to authentication services :-)
+function authenticateUser(credentials){
+    console.log('services', credentials)
+    return axios.post('http://192.168.1.105:3003/login', {credentials})
         .then(res =>{
             return res.data
         })

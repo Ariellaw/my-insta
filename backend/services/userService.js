@@ -17,6 +17,7 @@ function getUserNamesById(ids){
 }
 
 function getById(userId) {
+  console.log("why is this stupid userID failing?",userId)
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db => {
     return db.collection(userDb).findOne({ _id: _id });
@@ -24,6 +25,7 @@ function getById(userId) {
 }
 
 function getUserByUsername(userName) {
+  console.log("getUserByUsername", userName)
   if (userName[0] === "@") {
     userName = userName.slice(1);
   }

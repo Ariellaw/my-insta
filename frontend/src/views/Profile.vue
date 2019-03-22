@@ -198,7 +198,10 @@ export default {
         });
       }
       this.getVisitedUserImages(user._id);
-    });
+    }).catch(err => {
+      console.log('try catch function for get visited user', err);
+      this.$router.push({name:'authentication'})
+    })
 
     this.$store.dispatch({
       type: "getLoggedInUser",

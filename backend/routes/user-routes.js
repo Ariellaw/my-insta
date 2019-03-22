@@ -1,9 +1,16 @@
 const express = require('express')
 const userService = require('../services/userService.js')
 const BASE = '/user'
+const BASE_REDIRECT_URL = 'http://192.168.1.105:8080'
+
 // const app = express()
 
-function addUserRoutes(app) {
+function addUserRoutes(app, passport) {
+    // app.post(`${BASE}/login`, (req, res) => {
+    //     var credentials = req.body.credentials;
+    //     console.log("testing login", credentials);
+    //     return res.json(credentials);
+    // })
     app.post(`${BASE}/userNameById`, (req,res) =>{
         const ids = req.body.ids;
 
@@ -21,14 +28,16 @@ function addUserRoutes(app) {
             })
     })
 
-    app.get(`${BASE}/:userName/nickname`, (req, res) => {
-        const userName = req.params.userName;
+    app.get(`${BASE}/:userName/nickname`,
+        passport.authenticate('local'),
+        (req, res) => {
+            const userName = req.params.userName;
 
-        userService.getUserByUsername(userName)
-            .then(user => {
-                return res.json(user);
-            })
-    })
+            userService.getUserByUsername(userName)
+                .then(user => {
+                    return res.json(user);
+                })
+        })
     app.put(`${BASE}/:followeeId/followers`, (req,res) =>{
         const followeeId = req.body.followeeId;
         const followerId = req.body.followerId;

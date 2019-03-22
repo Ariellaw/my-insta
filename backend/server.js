@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoService = require("./services/mongo-services");
 const imageService = require("./services/imageService");
+const userService = require("./services/userService.js")
 
 const addUserRoutes = require("./routes/user-routes");
 const addImageRoutes = require("./routes/image-routes");
@@ -10,6 +11,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const addAuthRoutes = require("./routes/auth-routes.js");
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+
+
+
+
 
 const app = express();
 app.use(
@@ -31,18 +39,73 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use(express.static("public"));
+// app.use(session({ secret: "cats" }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.use(
   session({
-    secret: "puki muki",
+    secret: "cats",
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
   })
 );
 
-addUserRoutes(app);
-addImageRoutes(app);
-addAuthRoutes(app);
+
+
+
+
+passport.serializeUser(function(user, done) {
+
+  console.log("is this runnng serializeUser?", user);
+
+  done(null, user._id);
+});
+
+passport.deserializeUser(function (id, done) {
+  console.log("is this runnng? deserializeUser", id);
+  userService.getById(id)
+    .then(user => {
+      done(null, user);
+    }).catch(err => {
+      done(err);
+    })
+});
+
+
+passport.use(
+  new LocalStrategy(function(username, password, done) {
+    console.log("localstrategy first printout")
+    userService
+      .getUserByUsername(username)
+      .then(user => {
+        console.log("SERVER print the user", user);
+        if (!user) {
+          return done(null, false, { message: "Incorrect username." });
+        }
+        if (user.password !== password) {
+          return done(null, false, { message: "Incorrect password." });
+        }
+        return done(null, user);
+      })
+      .catch(err => {
+        console.log("SERVER print the error", err);
+
+        return done(err);
+      });
+  })
+);
+       
+    
+
+
+addUserRoutes(app, passport);
+addImageRoutes(app, passport);
+addAuthRoutes(app,passport);
 // app.get('/', (req, res) => {
 //     res.send('Hello World! YAY')
 // })
@@ -76,3 +139,5 @@ io.on("connection", function(socket) {
     socket.broadcast.emit("typing", data);
   });
 });
+
+

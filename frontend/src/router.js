@@ -26,7 +26,7 @@ export default new Router({
       component: editUserDetails
     },
     {
-     path:'/authentication',
+     path:'/login',
      name: 'authentication',
      component:Authentication
     },

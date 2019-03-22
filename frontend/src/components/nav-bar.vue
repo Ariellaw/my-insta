@@ -76,6 +76,7 @@ export default {
   name: "nav-bar",
   data() {
     return {
+      newImage:false,
       keyword: null,
       navbarTitle: "Locations",
       lastWindow: null,
@@ -186,14 +187,14 @@ export default {
   },
   watch: {
     $route() {
-      this.getNavBarTitle();
-      if (this.$route.params.image === null) {
-        this.newImage = false;
-      } else if(this.$route.params.image === "new-image"){
-        this.newImage = true;
-        this.image.file =
-          "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg";
-      }
+    //   this.getNavBarTitle();
+    //   if (this.$route.params.image === null) {
+    //     this.newImage = false;
+    //   } else if(this.$route.params.image === "new-image"){
+    //     this.newImage = true;
+    //     this.image.file =
+    //       "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg";
+    //   }
     },
     windowWidth() {
       if (this.windowWidth <= 700) {

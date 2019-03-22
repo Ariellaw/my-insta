@@ -1,21 +1,23 @@
 <template>
   <div>
     <div class="loginpanel">
+      
+      <form action="http://192.168.1.105:3003/login" method="post">
       <div class="txt">
-        <input id="user" type="text" placeholder="Username" v-model="user.name" required>
-        <label for="user" class="entypo-user"></label>
+        <input id="username" type="text" name="username" placeholder="Username" v-model="credentials.username" required>
+        <label for="username" class="entypo-user"></label>
       </div>
       <div class="txt">
-        <input id="pwd" type="password" placeholder="Password" v-model="user.password" required>
-        <label for="pwd" class="entypo-lock"></label>
+        <input id="password" type="password" name="password" placeholder="Password" v-model="credentials.password" required>
+        <label for="password" class="entypo-lock"></label>
       </div>
       <div class="buttons">
-        <input type="button" value="Login" @click="loginOrSignUp">
+        <input type="submit" value="Login" >
         <span>
           <a href="javascript:void(0)" class="entypo-user-add register">Register</a>
         </span>
       </div>
-
+      </form>
       <div class="hr">
         <div></div>
         <div>OR</div>
@@ -34,19 +36,22 @@
 </template>
 
 <script>
+import userServices from "../services/userServices.js"
 export default {
     name:'authentication',
     data(){
       return{
-        user:{
-          name:null,
+        credentials:{
+          username:null,
           password:null
         }
       }
     },
     methods:{
       loginOrSignUp(){
-       this.$store.dispatch({type:'authenticateUser', user})
+        console.log(this.credentials)
+        userServices.authenticateUser(this.credentials)
+          .then(res=> console.log(res))
       }
     }
 };
