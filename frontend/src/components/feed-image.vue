@@ -80,7 +80,12 @@ export default {
   },
   created() {
     this.getViewedImageOwner(this.image.ownerId);
+    this.$store.dispatch({
+      type: "getLoggedInUser",
+      userName: this.loggedInUserName
+    });
   },
+
 
   filters: {
     moment: function(date) {

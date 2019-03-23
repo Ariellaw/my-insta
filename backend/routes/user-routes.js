@@ -29,7 +29,7 @@ function addUserRoutes(app, passport) {
     })
 
     app.get(`${BASE}/:userName/nickname`,
-        passport.authenticate('local'),
+        // passport.authenticate('local'),
         (req, res) => {
             const userName = req.params.userName;
 

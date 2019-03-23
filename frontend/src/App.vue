@@ -2,7 +2,7 @@
   <div>
     <nav-bar></nav-bar>
     <!-- <upload-post v-if="newImage" :image="image.file" @close="close()" @addNewImage="addNewImage"></upload-post> -->
-    upload-post
+    <!-- upload-post -->
     <router-view/>
     <footer-nav></footer-nav>
   </div>
