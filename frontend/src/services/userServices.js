@@ -1,6 +1,9 @@
 import axios from 'axios';
-import utilService from './utilServices'
-const BASE_URL = 'http://192.168.1.105:3003/user'
+const BASE_URL = (process.env.NODE_ENV !== 'development')
+ ? '/user'
+ : "//192.168.1.105:3003/user";
+
+
 
 function getUserNamesById(ids){
     return axios.post(`${BASE_URL}/userNameById`, {ids})

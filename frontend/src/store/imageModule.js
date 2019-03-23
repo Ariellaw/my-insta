@@ -64,9 +64,10 @@ export default {
       state.viewedImage = image;
     },
     updateViewedImage(state, { image }) {
-      if (state.viewedImage._id === image._id) {
-        state.viewedImage = image;
-      }
+      console.log(state.viewedImage,image)
+      // if (state.viewedImage._id === image._id) {
+      //   state.viewedImage = image;
+      // }
     },
     setVisitedImageOwner(state, { user }) {
       state.viewedImageOwner = user;
@@ -95,9 +96,8 @@ export default {
       if (img._id === data.image._id) {
         var comments = data.image.comments;
         var idx = comments.findIndex(comment => comment.id === data.comment.id);
-        if(idx===-1){
+        if (idx === -1) {
           comments.splice(comments.length, 0, data.comment);
-
         }
         state.viewedImage.comments = comments;
       }
@@ -108,11 +108,11 @@ export default {
       if (img._id === data.image._id) {
         var comments = data.image.comments;
         var idx = comments.findIndex(comment => comment.id === data.commentId);
-        if(idx!==-1){
+        if (idx !== -1) {
           var commentToUpdate = comments[idx];
           commentToUpdate.comment = data.newComment;
           commentToUpdate.timeStamp = Date.now();
-          comments.splice(idx,1,commentToUpdate);
+          comments.splice(idx, 1, commentToUpdate);
         }
         state.viewedImage.comments = comments;
       }
@@ -187,7 +187,9 @@ export default {
     },
     deleteComment(context, { commentId, imageId }) {
       return imageServices.deleteComment(commentId, imageId).then(res => {
-        context.commit({ type: "updateViewedImage", image: res.value });
+        if (context.state.viewedImage) {
+          context.commit({ type: "updateViewedImage", image: res.value });
+        }
         // console.log(res.value.comments)
         return res.value.comments;
       });
@@ -196,7 +198,9 @@ export default {
       return imageServices
         .addUserComment(comment, imageId, writerId)
         .then(res => {
-          context.commit({ type: "updateViewedImage", image: res.value });
+          if (context.state.viewedImage) {
+            context.commit({ type: "updateViewedImage", image: res.value });
+          }
           return res.value.comments;
         });
     },
@@ -204,7 +208,9 @@ export default {
       return imageServices
         .editComment(commentId, imageId, newComment)
         .then(res => {
-          context.commit({ type: "updateViewedImage", image: res.value });
+          if (context.state.viewedImage) {
+            context.commit({ type: "updateViewedImage", image: res.value });
+          }
           return res.value.comments;
         });
     },
@@ -218,14 +224,19 @@ export default {
       });
     },
     addUserLike(context, { imageId, userId }) {
+      console.log(context.state.viewedImage, imageId)
       return imageServices.addUserLike(imageId, userId).then(res => {
-        context.commit({ type: "updateViewedImage", image: res.value });
+        if (context.state.viewedImage) {
+          context.commit({ type: "updateViewedImage", image: res.value });
+        }
         return res.value.likes;
       });
     },
     removeUserLike(context, { imageId, userId }) {
       return imageServices.removeUserLike(imageId, userId).then(res => {
-        context.commit({ type: "updateViewedImage", image: res.value });
+        if (context.state.viewedImage) {
+          context.commit({ type: "updateViewedImage", image: res.value });
+        }
         return res.value.likes;
       });
     },

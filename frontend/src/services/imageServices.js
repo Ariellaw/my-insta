@@ -1,7 +1,10 @@
 import axios from "axios";
-import utilService from "./utilServices";
-const BASE_URL = " http://192.168.1.105:3003/image";
-import userServices from "./userServices";
+const BASE_URL = (process.env.NODE_ENV !== 'development')
+ ? '/image'
+ : "//192.168.1.105:3003/image";
+
+
+
 
 function getImageById(imageId) {
   return axios.get(`${BASE_URL}/image/${imageId}`).then(res => {
