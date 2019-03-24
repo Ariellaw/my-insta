@@ -69,37 +69,30 @@
 
 
 <script>
-import uploadPost from "./upload-post.vue";
 import searchResult from "./search-result.vue";
 
 export default {
   name: "nav-bar",
   data() {
     return {
-      newImage:false,
       keyword: null,
       navbarTitle: "Locations",
       lastWindow: null,
       windowWidth: null,
       cellphoneDisplay: false,
-      loggedInUserName: "Ariella_wills1",
-
-      image: {
-        file: "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg"
-
-      }
+      loggedInUserName: "Ariella_wills1"
     };
   },
   methods: {
-    close() {
-      this.image.file = null;
-      this.newImage = false;
-      this.$router.push({ params: { image: null } });
-    },
-    uploadNewImage() {
-      this.$router.push({ params: { image: "new-image" } });
-      this.newImage = true;
-    },
+    // close() {
+    //   this.image.file = null;
+    //   this.newImage = false;
+    //   this.$router.push({ params: { image: null } });
+    // },
+    // uploadNewImage() {
+    //   this.$router.push({ params: { image: "new-image" } });
+    //   this.newImage = true;
+    // },
     getNavBarTitle() {
       if (this.$route.params.image === "new-image") {
         this.navbarTitle = "New Image";
@@ -120,8 +113,14 @@ export default {
       }
     },
     goBackToLastWindow() {
+      console.log(this.$route);
+
       if (this.$route.params.image) {
-        this.$router.push({ params: { image: null } });
+        if (this.$route.params.image === "new-image") {
+          this.$emit("close");
+        } else {
+          this.$router.push({ params: { image: null } });
+        }
       } else if (this.$route.name === "edit-user-details") {
         this.$router.push({
           name: "user-profile",
@@ -138,7 +137,6 @@ export default {
       this.$router.push({ name: "home" });
     },
     getCloudinaryUrl() {
-      this.uploadNewImage();
       var elForm = this.$refs.form;
 
       return this.$store
@@ -147,8 +145,10 @@ export default {
           elForm
         })
         .then(url => {
-          this.image.file = url;
-          this.$emit('addNewImage')
+          // this.image.file = url;
+          if (url) {
+            this.$emit("addnewimage", url);
+          }
         });
     },
     goToLoggedInUserProfile() {
@@ -187,7 +187,7 @@ export default {
   },
   watch: {
     $route() {
-      this.getNavBarTitle()
+      this.getNavBarTitle();
     },
     windowWidth() {
       if (this.windowWidth <= 700) {
@@ -207,7 +207,7 @@ export default {
     });
   },
   components: {
-    uploadPost,
+    // uploadPost,
     searchResult
   }
 };

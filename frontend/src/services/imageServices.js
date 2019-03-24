@@ -81,6 +81,8 @@ function getImagesByLocation(location) {
   });
 }
 function getImagesByHashtag(hashtag) {
+  console.log('hashtag', hashtag)
+
   return axios.get(`${BASE_URL}/${hashtag}/search`).then(res => {
     return res.data;
   });

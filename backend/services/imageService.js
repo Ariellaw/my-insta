@@ -109,7 +109,8 @@ function removeUserLike(imageId, userId) {
 }
 
 function addNewImage(imgDetails, image) {
-  var imgObj = _createImgObj(imgDetails, image);
+  var tags = _getTags(imageDetails.text, []);
+  var imgObj = _createImgObj(imgDetails, image, tags);
   return mongoService
     .connect()
     .then(db => db.collection(imagesDb).insert(imgObj));
@@ -172,6 +173,8 @@ function getImagesByLocation(location) {
 }
 
 function getImagesByHashtag(hashtag) {
+  console.log('services hashtag', hashtag)
+
   hashtag = "#" + hashtag.toLowerCase();
   return mongoService.connect().then(db =>
     db
@@ -223,6 +226,7 @@ module.exports = {
 
 function _getTags(newComment, hashtags) {
   var regex = /\r?\n|\r/;
+
   if (!newComment) {
     return hashtags;
   }
@@ -238,8 +242,8 @@ function _getTags(newComment, hashtags) {
   });
   return hashtags;
 }
-function _createImgObj(imgDetails, image) {
-  var comment = _createCommentObj("5c5fecdbd16a8d56eaca3c98", imgDetails.text);
+function _createImgObj(imgDetails, image, tags) {
+  var comment = createCommentObj("5c5fecdbd16a8d56eaca3c98", imgDetails.text);
   //TODO - change word text to comment
   var comments = [];
   var timeStamp = Date.now();
@@ -249,6 +253,7 @@ function _createImgObj(imgDetails, image) {
     image: image,
     ownerId: new ObjectId("5c5fecdbd16a8d56eaca3c98"),
     comments: comments,
+    hashtags:tags,
     likes: [],
     timePosted: timeStamp,
     location: imgDetails.location

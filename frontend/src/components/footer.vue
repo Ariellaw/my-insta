@@ -22,7 +22,6 @@
         >
       </div>
     </form>
-    <upload-post v-if="newImage" :image="image.file" @close="close()"></upload-post>
 
     <i class="fas fa-comment btn"></i>
     <i class="far fa-heart btn"></i>
@@ -31,31 +30,13 @@
 </template>
 
 <script>
-import uploadPost from "./upload-post.vue";
-
 export default {
   data() {
     return {
-      loggedInUserName: "Ariella_wills1",
-      newImage: false,
-      image: {
-        file:
-          "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg"
-      }
+      loggedInUserName: "Ariella_wills1"
     };
   },
   methods: {
-    close() {
-      this.image.file = null;
-      this.newImage = false;
-      this.$router.push({ params: { image: null } });
-    },
-    uploadNewImage() {
-      console.log("uploadNewImage");
-      this.newImage = true;
-      // this.image.file = null;
-      this.$router.push({ params: { image: "new-image" } });
-    },
     goToLoggedInUserProfile() {
       var userName = this.loggedInUserName;
       this.$router.push({ name: "user-profile", params: { userName } });
@@ -63,8 +44,6 @@ export default {
     },
 
     getCloudinaryUrl() {
-      console.log("getCloudinaryUrl");
-      this.uploadNewImage();
 
       var elForm = this.$refs.form;
       return this.$store
@@ -73,26 +52,14 @@ export default {
           elForm
         })
         .then(url => {
-          console.log(url);
-          this.image.file = url;
+          if (url) {
+            this.$emit("addnewimage", url);
+          }
         });
     }
   },
-  components: {
-    uploadPost
-  },
-  watch: {
-    // $route() {
-    //   if (this.$route.params.image === null) {
-    //     this.newImage = false;
-    //   } else if (this.$route.params.image === "new-image") {
-    //     this.newImage = true;
-    //    this.image.file=
-    //       "https://static.boredpanda.com/blog/wp-content/uuuploads/cute-baby-animals/cute-baby-animals-13.jpg"
-      
-    //   }
-    // }
-  }
+  components: {},
+  watch: {}
 };
 </script>
 

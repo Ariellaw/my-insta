@@ -22,7 +22,9 @@ const userService = require('../services/userService.js')
 
 function addAuthRoutes(app, passport) {
     app.post('/login',
-        passport.authenticate('local'),
+        passport.authenticate('local', { 
+                                   failureRedirect: '/#/login?faliure=falure'
+                                  }),
 
         function (req, res) {
             // var credentials = req.body.credentials;
@@ -30,9 +32,9 @@ function addAuthRoutes(app, passport) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
             // res.redirect('/users/' + req.user.username);
-            res.redirect('http://192.168.1.105:8080/#/user/' + req.user.userName);
+            res.redirect('/#/user/' + req.user.userName);
 
-        });
+        })
 }
 
 

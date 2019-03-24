@@ -93,7 +93,10 @@ function addImageRoutes(app) {
   });
   app.get(`${BASE}/:hashtag/search`, (req, res) => {
     const hashtag = req.params.hashtag;
+    console.log('routes hashtag', hashtag)
+
     imageService.getImagesByHashtag(hashtag).then(images => {
+      console.log(images)
       return res.json(images);
     });
   });
