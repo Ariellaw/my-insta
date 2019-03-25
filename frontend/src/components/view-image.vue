@@ -62,7 +62,7 @@
             <span class="column" v-if="followeesThatLiked && viewedImage.likes">
               <span class="namesOfLikes" v-if="followeesThatLiked.length===1">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0].userName}} like this
+                {{followeesThatLiked[0].userName}} likes this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
                 <i class="far fa-thumbs-up"></i>
@@ -74,7 +74,7 @@
               </span>
               
               <span
-                v-else
+                v-else-if="followeesThatLiked.length===0"
                 :class="{'visibilityNone':viewedImage.likes.length===0}"
                 class="num-of-likes bold-reg"
               >{{viewedImage.likes.length}}&nbsp;Likes&nbsp;</span>
@@ -110,21 +110,20 @@ export default {
       loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
-      windowWidth: null,
-      followeesThatLiked: null
+      windowWidth: null
     };
   },
 
   created() {
     window.scrollTo(0, 0);
-    this.loadImage();
 
     this.$store
       .dispatch({
         type: "getLoggedInUser",
         userName: this.loggedInUserName
       })
-      .then(() => this.namesOfLikes());
+      .then(user => this.loadImage(user));
+
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
@@ -144,15 +143,17 @@ export default {
       this.$socket.emit("commentEdited", {
         commentId: data.commentId,
         image: this.viewedImage,
-        newComment:data.editedComment
+        newComment: data.editedComment
       });
 
-      this.$store.dispatch({
-        type: "editComment",
-        commentId:data.commentId,
-        imageId: this.image._id,
-        newComment:data.editedComment
-      }).then(()=> this.$router.go())
+      this.$store
+        .dispatch({
+          type: "editComment",
+          commentId: data.commentId,
+          imageId: this.image._id,
+          newComment: data.editedComment
+        })
+        .then(() => this.$router.go());
     },
     deleteComment(commentId) {
       this.$socket.emit("commentDeleted", {
@@ -166,30 +167,15 @@ export default {
         imageId: this.image._id
       });
     },
-
-    namesOfLikes() {
-      var ids = [];
-      var followees = this.loggedInUser.followees;
-      followees.forEach(followeeId => {
-        if (
-          this.viewedImage.likes.findIndex(likeId => likeId === followeeId) !==
-          -1
-        ) {
-          ids.push(followeeId);
-        }
-      });
-      this.$store
-        .dispatch({ type: "getUserNamesById", ids })
-        .then(userNames => {
-          this.followeesThatLiked = userNames;
-        });
-    },
-    loadImage() {
+    loadImage(user) {
       this.$store
         .dispatch({ type: "getImageById", imageId: this.$route.params.image })
         .then(image => {
           this.getViewedImageOwner(image.ownerId);
           this.$store.dispatch({ type: "setViewedImage", image });
+          this.$store
+            .dispatch({ type: "getViewedImageFollowers", image, user })
+            .then(users => console.log("names of likes", users));
         });
     },
     userIsTyping(userName, imageId) {
@@ -203,8 +189,9 @@ export default {
     },
     addUserLike() {
       this.$socket.emit("likeAdded", {
-        imageId: this.image._id,
-        userId: this.loggedInUser._id
+        image: this.image,
+        user: this.loggedInUser
+        // followees: this.followeesThatLiked
       });
 
       this.$store.dispatch({
@@ -215,14 +202,15 @@ export default {
     },
     removeUserLike() {
       this.$socket.emit("likeRemoved", {
-        imageId: this.image._id,
-        userId: this.loggedInUser._id
+        image: this.image,
+        user: this.loggedInUser
       });
 
       this.$store.dispatch({
         type: "removeUserLike",
         imageId: this.image._id,
-        userId: this.loggedInUser._id
+        userId: this.loggedInUser._id,
+        userName: this.loggedInUserName
       });
     },
     getViewedImageOwner(userId) {
@@ -294,18 +282,15 @@ export default {
     }
   },
   computed: {
+    followeesThatLiked() {
+      return this.$store.getters.followeesThatLiked;
+    },
     viewedImage() {
       return this.$store.getters.viewedImage;
     },
     typingUser() {
       return this.$store.getters.isTyping;
     },
-    // imageComments() {
-    //   return this.$store.getters.viewedImage.comments;
-    // },
-    // likes() {
-    //   return this.$store.getters.viewedImage.likes;
-    // },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -343,12 +328,7 @@ export default {
   },
   watch: {
     $route() {
-      this.loadImage();
-    },
-    viewedImage() {
-      if (this.viewedImage.likes) {
-        this.namesOfLikes();
-      }
+      this.loadImage(this.loggedInUser);
     }
   },
   components: {

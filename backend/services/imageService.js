@@ -173,7 +173,6 @@ function getImagesByLocation(location) {
 }
 
 function getImagesByHashtag(hashtag) {
-  console.log('services hashtag', hashtag)
 
   hashtag = "#" + hashtag.toLowerCase();
   return mongoService.connect().then(db =>

@@ -1,7 +1,7 @@
 const express = require('express')
 const userService = require('../services/userService.js')
 const BASE = '/user'
-const BASE_REDIRECT_URL = 'http://192.168.1.105:8080'
+const BASE_REDIRECT_URL = 'http://192.168.43.54:8080'
 
 // const app = express()
 
@@ -16,6 +16,7 @@ function addUserRoutes(app, passport) {
 
         userService.getUserNamesById(ids)
             .then(users =>{
+                // console.log("reslt of get by Id", users)
                 return res.json(users);
             })
     })

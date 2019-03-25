@@ -1,7 +1,8 @@
 import axios from "axios";
+import userServices from "./userServices";
 const BASE_URL = (process.env.NODE_ENV !== 'development')
  ? '/image'
- : "//192.168.1.105:3003/image";
+ : "//192.168.43.54:3003/image";
 
 
 
@@ -81,7 +82,6 @@ function getImagesByLocation(location) {
   });
 }
 function getImagesByHashtag(hashtag) {
-  console.log('hashtag', hashtag)
 
   return axios.get(`${BASE_URL}/${hashtag}/search`).then(res => {
     return res.data;
@@ -92,6 +92,7 @@ function addImage(imgDetails, image) {
     return res.data;
   });
 }
+
 export default {
   getUserImages,
   getImageById,
@@ -105,5 +106,5 @@ export default {
   getImagesByHashtag,
   additionalUserImages,
   deleteComment,
-  editComment
+  editComment,
 };

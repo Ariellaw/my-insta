@@ -162,9 +162,7 @@ export default {
     },
 
     getAdditionalUserImages(startingPoint) {
-      console.log(
-        "additional images",
-      );
+
     }
   },
   mounted() {},
@@ -199,7 +197,6 @@ export default {
       }
       this.getVisitedUserImages(user._id);
     }).catch(err => {
-      console.log('try catch function for get visited user', err);
       this.$router.push({name:'authentication'})
     })
 

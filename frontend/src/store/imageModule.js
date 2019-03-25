@@ -1,6 +1,8 @@
 import imageServices from "../services/imageServices.js";
 import cloudinaryService from "../services/cloudinaryService.js";
 import userServices from "../services/userServices.js";
+import { stat } from "fs";
+import { resolve } from "url";
 
 export default {
   state: {
@@ -11,9 +13,13 @@ export default {
     userFavoriteImages: null,
     imagesForFeed: [],
     isConnected: false,
-    isTyping: null
+    isTyping: null,
+    followeesThatLiked: []
   },
   getters: {
+    followeesThatLiked: state => {
+      return state.followeesThatLiked;
+    },
     isTyping: state => {
       return state.isTyping;
     },
@@ -47,6 +53,15 @@ export default {
     }
   },
   mutations: {
+    setFolloweesThatLiked(state, { users }) {
+      state.followeesThatLiked = users;
+      console.log(
+        "state.followeesThatLiked",
+        state.followeesThatLiked,
+        Array.isArray(state.followeesThatLiked),
+        state.followeesThatLiked.length
+      );
+    },
     setIsLoadingUserImages(state, { isLoading }) {
       state.isLoadingUsersImages = isLoading;
     },
@@ -64,10 +79,9 @@ export default {
       state.viewedImage = image;
     },
     updateViewedImage(state, { image }) {
-      console.log(state.viewedImage,image)
-      // if (state.viewedImage._id === image._id) {
-      //   state.viewedImage = image;
-      // }
+      if (state.viewedImage._id === image._id) {
+        state.viewedImage = image;
+      }
     },
     setVisitedImageOwner(state, { user }) {
       state.viewedImageOwner = user;
@@ -81,6 +95,7 @@ export default {
     setAddionalImages(state, { res }) {
       state.imagesForFeed = state.imagesForFeed.concat(res);
     },
+
     SOCKET_CONNECT(state) {
       state.isConnected = true;
     },
@@ -93,13 +108,17 @@ export default {
       state.isTyping = null;
       var img = state.viewedImage;
 
-      if (img._id === data.image._id) {
-        var comments = data.image.comments;
-        var idx = comments.findIndex(comment => comment.id === data.comment.id);
-        if (idx === -1) {
-          comments.splice(comments.length, 0, data.comment);
+      if (img) {
+        if (img._id === data.image._id) {
+          var comments = data.image.comments;
+          var idx = comments.findIndex(
+            comment => comment.id === data.comment.id
+          );
+          if (idx === -1) {
+            comments.splice(comments.length, 0, data.comment);
+          }
+          state.viewedImage.comments = comments;
         }
-        state.viewedImage.comments = comments;
       }
     },
     SOCKET_commentEdited(state, data) {
@@ -137,30 +156,74 @@ export default {
     },
     SOCKET_likeAdded(state, data) {
       var img = state.viewedImage;
-      var likes = img.likes;
-      var userId = data.userId;
-      if (img._id === data.imageId) {
-        if (likes.findIndex(id => id === userId) === -1) {
-          likes.splice(likes.length, 0, userId);
+      var likes = data.image.likes;
+      var user = data.user;
+      var followees = state.followeesThatLiked;
+
+      if (img) {
+        if (img._id === data.image._id) {
+          if (
+            followees.findIndex(followee => followee._id === data.user._id) ===
+            -1
+          ) {
+            state.followeesThatLiked.splice(0, 0, data.user);
+          }
+          if (likes.findIndex(id => id === user._id) === -1) {
+            likes.splice(0, 0, user._id);
+          }
+          state.viewedImage.likes = likes;
         }
-        state.viewedImage.likes = likes;
       }
     },
     SOCKET_likeRemoved(state, data) {
       var img = state.viewedImage;
-      var likes = img.likes;
-      var userId = data.userId;
+      var likes = data.image.likes;
+      var user = data.user;
+      var followees = state.followeesThatLiked;
 
-      if (img._id === data.imageId) {
-        var idx = likes.findIndex(id => id === userId);
-        if (idx !== -1) {
-          likes.splice(idx, 1);
+      if (img) {
+        if (img._id === data.image._id) {
+          var idx = followees.findIndex(followee => followee._id === user._id);
+          if (idx > -1) {
+            state.followeesThatLiked.splice(idx, 1);
+          }
+          var idx = likes.findIndex(id => id === user._id);
+          if (idx !== -1) {
+            likes.splice(idx, 1);
+          }
+          state.viewedImage.likes = likes;
         }
-        state.viewedImage.likes = likes;
       }
     }
   },
   actions: {
+    getViewedImageFollowers(context, { image, user }) {
+      var followees = user.followees;
+
+      var ids = [];
+      followees.forEach(followeeId => {
+        if (image.likes.findIndex(likeId => likeId === followeeId) !== -1) {
+          ids.push(followeeId);
+        }
+      });
+      if (
+        image.likes.findIndex(id => id === user._id) > -1 &&
+        ids.findIndex(id => id === user._id) === -1
+      ) {
+        ids.splice(0, 0, user._id);
+      }
+
+      if (ids.length === 0) {
+        context.commit({ type: "setFolloweesThatLiked", users: [] });
+        return [];
+      } else {
+        return userServices.getUserNamesById(ids).then(res => {
+          context.commit({ type: "setFolloweesThatLiked", users: res });
+          console.log("names of the users", res);
+          return res;
+        });
+      }
+    },
     getVisitedUserImages(context, { userId }) {
       context.commit({ type: "setIsLoading", isLoading: true });
 
@@ -176,6 +239,7 @@ export default {
       });
     },
     setViewedImage(context, { image }) {
+      imageServices.getNamesOfLikes;
       context.commit({ type: "setViewedImage", image });
       return image;
     },
@@ -190,7 +254,6 @@ export default {
         if (context.state.viewedImage) {
           context.commit({ type: "updateViewedImage", image: res.value });
         }
-        // console.log(res.value.comments)
         return res.value.comments;
       });
     },
@@ -224,7 +287,6 @@ export default {
       });
     },
     addUserLike(context, { imageId, userId }) {
-      console.log(context.state.viewedImage, imageId)
       return imageServices.addUserLike(imageId, userId).then(res => {
         if (context.state.viewedImage) {
           context.commit({ type: "updateViewedImage", image: res.value });

@@ -48,11 +48,7 @@ export default {
       }
     },
     methods:{
-      // loginOrSignUp(){
-      //   console.log(this.credentials)
-      //   userServices.authenticateUser(this.credentials)
-      //     .then(res=> console.log("result of login", res))
-      // }
+
     }
 };
 </script>

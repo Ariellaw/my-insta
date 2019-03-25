@@ -99,14 +99,14 @@
       justify-content: flex-start;
       align-items: center;
       @media screen and (max-width: 700px) {
-        height: 4%;
+        height:5rem;
       }
-      @media screen and (max-width: 450px) {
-        height: 5%;
-      }
-      @media screen and (max-width: 350px) {
-        height: 8%;
-      }
+      // @media screen and (max-width: 450px) {
+      //   height: 5%;
+      // }
+      // @media screen and (max-width: 350px) {
+      //   height: 8%;
+      // }
       @media screen and (max-height:300px){
         display: none;
       }
@@ -131,10 +131,11 @@
         }
         .namesOfLikes {
           color: $darker-font-color;
-          display: inline;
+          // display: inline;
           font-size: 1.4rem;
           font-weight: bold;
-          // margin-top: 0.5rem;
+          margin-bottom: 0;
+          margin-top: .5rem;
         }
 
         .num-of-likes {
@@ -162,6 +163,7 @@
       .viewed-image-text-area {
         @include textarea;
         height: 95%;
+        width:100%;
       }
     }
   }
@@ -278,6 +280,7 @@
     height: 12%;
     textarea {
       @include textarea;
+      width:100%;
     }
   }
 }

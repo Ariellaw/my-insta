@@ -1,13 +1,15 @@
 import axios from 'axios';
 const BASE_URL = (process.env.NODE_ENV !== 'development')
  ? '/user'
- : "//192.168.1.105:3003/user";
+ : "//192.168.43.54:3003/user";
 
 
 
 function getUserNamesById(ids){
     return axios.post(`${BASE_URL}/userNameById`, {ids})
-        .then(res => res.data)
+        .then(res => {
+            console.log("services", res.data)
+            return res.data})
 }
 function getUserById(userId) {
 
@@ -76,8 +78,8 @@ function updateUserDetails(userDetails){
 }
 //TODO move to authentication services :-)
 function authenticateUser(credentials){
-    console.log('services', credentials)
-    return axios.post('http://192.168.1.105:3003/login', {credentials})
+    // console.log('services', credentials)
+    return axios.post('http://192.168.43.54:3003/login', {credentials})
         .then(res =>{
             return res.data
         })

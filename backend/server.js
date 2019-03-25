@@ -24,7 +24,7 @@ app.use(
   cors({
     // origin: ['http://localhost:8080'],
     // origin: "*",
-    origin: ["http://192.168.1.105:8080"],
+    origin: ["http://192.168.43.54:8080"],
     credentials: true // enable set cookie
     // Access-Control-Allow-Origin: https://maps.googleapis.com
   })
@@ -67,7 +67,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  console.log("is this runnng? deserializeUser", id);
+  // console.log("is this runnng? deserializeUser", id);
   userService.getById(id)
     .then(user => {
       done(null, user);
@@ -79,11 +79,11 @@ passport.deserializeUser(function (id, done) {
 
 passport.use(
   new LocalStrategy(function(username, password, done) {
-    console.log("localstrategy first printout")
+    // console.log("localstrategy first printout")
     userService
       .getUserByUsername(username)
       .then(user => {
-        console.log("SERVER print the user", user);
+        // console.log("SERVER print the user", user);
         if (!user) {
           return done(null, false, { message: "Incorrect username." });
         }
@@ -93,7 +93,7 @@ passport.use(
         return done(null, user);
       })
       .catch(err => {
-        console.log("SERVER print the error", err);
+        // console.log("SERVER print the error", err);
 
         return done(err);
       });

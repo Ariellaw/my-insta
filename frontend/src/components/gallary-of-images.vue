@@ -43,7 +43,6 @@ export default {
           document.documentElement.offsetHeight - 1;
 
         if (bottomOfWindow) {
-          // console.log("bottomOfWindow", bottomOfWindow);
           this.$emit('getAdditionalImages')
         }
       };

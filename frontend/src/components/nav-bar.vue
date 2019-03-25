@@ -113,8 +113,6 @@ export default {
       }
     },
     goBackToLastWindow() {
-      console.log(this.$route);
-
       if (this.$route.params.image) {
         if (this.$route.params.image === "new-image") {
           this.$emit("close");
@@ -187,6 +185,8 @@ export default {
   },
   watch: {
     $route() {
+      console.log(this.$route);
+
       this.getNavBarTitle();
     },
     windowWidth() {
@@ -231,13 +231,7 @@ ul {
   margin: 0px 50px;
   overflow-y: auto;
 
-  // a {
-  //   color: black;
-  //   padding: 12px 16px;
-  //   text-decoration: none;
-  //   display: block;
-  //   text-align: left;
-  // }
+
 }
 
 .display-content {

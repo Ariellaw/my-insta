@@ -86,14 +86,12 @@ export default {
     });
   },
 
-
   filters: {
     moment: function(date) {
       return moment(date).fromNow();
     }
   },
   methods: {
-
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId });
     },
@@ -101,6 +99,12 @@ export default {
       this.$store.dispatch({ type: "removeFollowers", followeeId });
     },
     addUserLike() {
+      this.$socket.emit("likeAdded", {
+        image: this.image,
+        userId: this.loggedInUser._id,
+        userName: this.loggedInUserName,
+        // followees: this.followeesThatLiked
+      });
       this.$store
         .dispatch({
           type: "addUserLike",
@@ -110,6 +114,12 @@ export default {
         .then(likes => (this.likes = likes));
     },
     removeUserLike() {
+      this.$socket.emit("likeRemoved", {
+        image: this.image,
+        userId: this.loggedInUser._id,
+        userName: this.loggedInUserName,
+        // followees: this.followeesThatLiked
+      });
       this.$store
         .dispatch({
           type: "removeUserLike",
@@ -136,6 +146,11 @@ export default {
     },
 
     addUserComment(comment, imageId, writerId) {
+      this.$socket.emit("commentAdded", {
+        comment,
+        image: this.viewedImage,
+        writerId
+      });
       this.$store
         .dispatch({
           type: "addUserComment",

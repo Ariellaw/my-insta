@@ -55,7 +55,6 @@ export default {
       this.$store
         .dispatch({ type: "getImagesByHashtag", hashtag })
         .then(images => {
-          console.log(images)
           this.images = images;
           this.image = images[0].image;
         });
