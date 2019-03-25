@@ -62,15 +62,15 @@
             <span class="column" v-if="followeesThatLiked && viewedImage.likes">
               <span class="namesOfLikes" v-if="followeesThatLiked.length===1">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0].userName}} likes this
+                {{followeesThatLiked[0]}} like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} like this
+                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0].userName+" and "+followeesThatLiked[1].userName}} and {{followeesThatLiked.length-2}} others like this
+                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} and {{followeesThatLiked.length-2}} others like this
               </span>
               
               <span
@@ -283,7 +283,16 @@ export default {
   },
   computed: {
     followeesThatLiked() {
-      return this.$store.getters.followeesThatLiked;
+      var followees = this.$store.getters.followeesThatLiked;
+      var users = []; 
+      followees.forEach(followee => {
+        if(followee.userName === this.loggedInUserName){
+          users.push("You");
+        } else{
+          users.push(followee.userName);
+        }
+      })
+      return users;
     },
     viewedImage() {
       return this.$store.getters.viewedImage;
