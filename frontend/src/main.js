@@ -11,7 +11,7 @@ import socketio from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io';
 
 // const SocketInstance = io('192.168.1.105:3003');
-const SocketInstance = socketio('http://192.168.43.54:8810');
+const SocketInstance = socketio('http://192.168.1.105:8810');
 
 // const SocketInstance = io('192.168.1.105:3003',  {
 //   path: "/",

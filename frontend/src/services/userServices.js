@@ -1,14 +1,13 @@
 import axios from 'axios';
 const BASE_URL = (process.env.NODE_ENV !== 'development')
  ? '/user'
- : "//192.168.43.54:3003/user";
+ : "//192.168.1.105:3003/user";
 
 
 
 function getUserNamesById(ids){
     return axios.post(`${BASE_URL}/userNameById`, {ids})
         .then(res => {
-            console.log("services", res.data)
             return res.data})
 }
 function getUserById(userId) {
@@ -24,8 +23,7 @@ function getUserByUsername(userName){
     .then(res =>{
         return res.data       
     }).catch(error=>{
-        console.log("getUserByUsername error catchy thingy", error);
-        this.$router.push({name:'authentication'})
+        // this.$router.push({name:'authentication'})
     })
 }
 function updateFollowers(followeeId, followerId){
@@ -79,7 +77,7 @@ function updateUserDetails(userDetails){
 //TODO move to authentication services :-)
 function authenticateUser(credentials){
     // console.log('services', credentials)
-    return axios.post('http://192.168.43.54:3003/login', {credentials})
+    return axios.post('http://192.168.1.105:3003/login', {credentials})
         .then(res =>{
             return res.data
         })

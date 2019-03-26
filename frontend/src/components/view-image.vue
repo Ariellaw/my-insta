@@ -175,7 +175,6 @@ export default {
           this.$store.dispatch({ type: "setViewedImage", image });
           this.$store
             .dispatch({ type: "getViewedImageFollowers", image, user })
-            .then(users => console.log("names of likes", users));
         });
     },
     userIsTyping(userName, imageId) {

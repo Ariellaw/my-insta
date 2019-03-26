@@ -369,7 +369,7 @@ div.loginpanel {
 }
 
 .resp-info:before {
-  content: "full";
+  content: "fuck!!!";
   position: fixed;
   bottom: 10px;
   left: 10px;

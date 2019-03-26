@@ -13,7 +13,7 @@ const session = require("express-session");
 const addAuthRoutes = require("./routes/auth-routes.js");
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
+const flash = require('connect-flash');
 
 
 
@@ -22,9 +22,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 app.use(
   cors({
-    // origin: ['http://localhost:8080'],
+    // origin: ['http://192.168.1.105:8080'],
     // origin: "*",
-    origin: ["http://192.168.43.54:8080"],
+    origin: ["http://192.168.1.105:8080"],
     credentials: true // enable set cookie
     // Access-Control-Allow-Origin: https://maps.googleapis.com
   })
@@ -41,11 +41,6 @@ app.use(cookieParser());
 
 app.use(express.static("public"));
 // app.use(session({ secret: "cats" }));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-
 app.use(
   session({
     secret: "cats",
@@ -54,24 +49,35 @@ app.use(
     cookie: { secure: false }
   })
 );
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
+
+// app.configure(function() {
+//   app.use(express.static('public'));
+//   app.use(express.cookieParser());
+//   app.use(express.bodyParser());
+//   app.use(express.session({ secret: 'keyboard cat' }));
+//   app.use(passport.initialize());
+//   app.use(passport.session());
+//   app.use(app.router);
+// });
 
 
 
 passport.serializeUser(function(user, done) {
-
-  console.log("is this runnng serializeUser?", user);
-
+  console.log("serializeUser()", user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {
-  // console.log("is this runnng? deserializeUser", id);
+  console.log("deserializeUser()", id);
   userService.getById(id)
     .then(user => {
+      console.log("deserializeUser() success", user);
       done(null, user);
     }).catch(err => {
+      console.log("deserializeUser() err", err);
       done(err);
     })
 });
@@ -100,7 +106,10 @@ passport.use(
   })
 );
        
-    
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 
 
 addUserRoutes(app, passport);

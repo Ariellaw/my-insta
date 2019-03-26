@@ -8,7 +8,7 @@
       @close="showModal = false"
     ></view-image>
 
-    <h1 v-if="isLoadingUsersImages">Loading...</h1>
+    <h1 v-if="isLoading">Loading...</h1>
 
     <div class="user-posts">
       <img
@@ -85,8 +85,8 @@ export default {
     }
   },
   computed: {
-    isLoadingUsersImages() {
-      return this.$store.getters.isLoadingUsersImages;
+    isLoading() {
+      return this.$store.getters.isLoading;
     }
   },
   created() {

@@ -27,7 +27,7 @@ export default {
       type: null,
       image: null,
       loggedInUserName: "Ariella_wills1",
-
+  
     };
   },
   components: {
@@ -50,7 +50,6 @@ export default {
         .then(images => (this.images = images));
     }
     if (this.type === "hashtag") {
-
       var hashtag = keyword;
       this.$store
         .dispatch({ type: "getImagesByHashtag", hashtag })

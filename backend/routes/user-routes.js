@@ -1,7 +1,9 @@
 const express = require('express')
 const userService = require('../services/userService.js')
+const connectEnsureLogin = require('connect-ensure-login');
 const BASE = '/user'
 const BASE_REDIRECT_URL = 'http://192.168.43.54:8080'
+
 
 // const app = express()
 
@@ -11,7 +13,9 @@ function addUserRoutes(app, passport) {
     //     console.log("testing login", credentials);
     //     return res.json(credentials);
     // })
-    app.post(`${BASE}/userNameById`, (req,res) =>{
+    app.post(`${BASE}/userNameById`,
+    connectEnsureLogin.ensureLoggedIn(),
+    (req,res) =>{
         const ids = req.body.ids;
 
         userService.getUserNamesById(ids)
@@ -20,7 +24,8 @@ function addUserRoutes(app, passport) {
                 return res.json(users);
             })
     })
-    app.get(`${BASE}/:userId`, (req, res) => {
+    app.get(`${BASE}/:userId`,
+    (req, res) => {
         const userId = req.params.userId;
 
         userService.getById(userId)
@@ -30,8 +35,13 @@ function addUserRoutes(app, passport) {
     })
 
     app.get(`${BASE}/:userName/nickname`,
+        // require('connect-ensure-login').ensureLoggedIn(),
+        connectEnsureLogin.ensureLoggedIn(),
         // passport.authenticate('local'),
         (req, res) => {
+            console.log("req.isAuthenticated() in nickname:", req.isAuthenticated());
+            console.log("req.user in nickname:", req.user);
+            
             const userName = req.params.userName;
 
             userService.getUserByUsername(userName)
@@ -39,7 +49,8 @@ function addUserRoutes(app, passport) {
                     return res.json(user);
                 })
         })
-    app.put(`${BASE}/:followeeId/followers`, (req,res) =>{
+    app.put(`${BASE}/:followeeId/followers`, 
+    (req,res) =>{
         const followeeId = req.body.followeeId;
         const followerId = req.body.followerId;
             userService.addFollowers(followeeId, followerId)
@@ -47,7 +58,8 @@ function addUserRoutes(app, passport) {
                     return res.json(users);
                 })
     })
-    app.delete(`${BASE}/:followeeId/:followerId/followers`, (req,res) =>{
+    app.delete(`${BASE}/:followeeId/:followerId/followers`, 
+    (req,res) =>{
         const followeeId = req.params.followeeId;
         const followerId = req.params.followerId;
 
@@ -56,7 +68,8 @@ function addUserRoutes(app, passport) {
                     return res.json(users);
                 })
     })
-    app.delete(`${BASE}/:imageId/:loggedInUserId/favorites`, (req, res) =>{
+    app.delete(`${BASE}/:imageId/:loggedInUserId/favorites`, 
+    (req, res) =>{
         const imageId = req.params.imageId;
         const loggedInUserId = req.params.loggedInUserId;
 
@@ -65,7 +78,9 @@ function addUserRoutes(app, passport) {
                 return res.json(user);
             })
     })
-    app.put(`${BASE}/:imageId/favorites`, (req, res) =>{
+    app.put(`${BASE}/:imageId/favorites`, 
+    connectEnsureLogin.ensureLoggedIn(),
+    (req, res) =>{
         const imageId = req.body.imageId;
         const loggedInUserId = req.body.loggedInUserId;
 
@@ -74,7 +89,8 @@ function addUserRoutes(app, passport) {
                 return res.json(user);
             })
     })
-    app.get(`${BASE}/:userId/images`, (req,res)=>{
+    app.get(`${BASE}/:userId/images`, 
+    (req,res)=>{
         const userId = req.params.userId;
 
         userService.getImagesByImageId(userId)
@@ -84,7 +100,8 @@ function addUserRoutes(app, passport) {
 
     })
 
-    app.put(`${BASE}/:userId/userDetails`, (req,res)=>{
+    app.put(`${BASE}/:userId/userDetails`, 
+    (req,res)=>{
         const userDetails = req.body.userDetails;
         userService.updateUserDetails(userDetails)
             .then(user =>{
@@ -92,7 +109,8 @@ function addUserRoutes(app, passport) {
             })
     })
 
-    app.get(`${BASE}/searchResults/users/:keyword`, (req, res) =>{
+    app.get(`${BASE}/searchResults/users/:keyword`,
+    (req, res) =>{
         const keyword = req.params.keyword;
         userService.findRelevantUsers(keyword)
             .then(users => {

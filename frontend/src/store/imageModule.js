@@ -6,7 +6,7 @@ import { resolve } from "url";
 
 export default {
   state: {
-    isLoadingUsersImages: false,
+    isLoading: false,
     visitedUserImages: null,
     viewedImage: null,
     viewedImageOwner: null,
@@ -27,17 +27,14 @@ export default {
       return state.visitedUserImages;
     },
 
-    isLoadingUsersImages: state => {
-      return state.isLoadingUsersImages;
+    isLoading: state => {
+      return state.isLoading;
     },
     viewedImage: state => {
       return state.viewedImage;
     },
     viewedImageOwner: state => {
       return state.viewedImageOwner;
-    },
-    setIsLoadingFavorites: state => {
-      return state.setIsLoadingFavorites;
     },
     userFavoriteImages: state => {
       return state.userFavoriteImages;
@@ -55,19 +52,8 @@ export default {
   mutations: {
     setFolloweesThatLiked(state, { users }) {
       state.followeesThatLiked = users;
-      console.log(
-        "state.followeesThatLiked",
-        state.followeesThatLiked,
-        Array.isArray(state.followeesThatLiked),
-        state.followeesThatLiked.length
-      );
     },
-    setIsLoadingUserImages(state, { isLoading }) {
-      state.isLoadingUsersImages = isLoading;
-    },
-    setIsLoadingFavorites(state, { isLoading }) {
-      state.setIsLoadingFavorites = isLoading;
-    },
+
     setVisitedUserImages(state, { images }) {
       state.visitedUserImages = images;
     },
@@ -219,7 +205,6 @@ export default {
       } else {
         return userServices.getUserNamesById(ids).then(res => {
           context.commit({ type: "setFolloweesThatLiked", users: res });
-          console.log("names of the users", res);
           return res;
         });
       }
@@ -278,10 +263,10 @@ export default {
         });
     },
     getUserFavoriteImages(context, { userId }) {
-      context.commit({ type: "setIsLoadingUserImages", isLoading: true });
+      context.commit({ type: "setIsLoading", isLoading: true });
       return userServices.getImagesByImageId(userId).then(images => {
         context.commit({ type: "setUserFavoriteImages", images });
-        context.commit({ type: "setIsLoadingUserImages", isLoading: false });
+        context.commit({ type: "setIsLoading", isLoading: false });
 
         return images;
       });
@@ -332,12 +317,16 @@ export default {
         });
     },
     getImagesByLocation(context, { location }) {
+      context.commit({ type: "setIsLoading", isLoading: true });
       return imageServices.getImagesByLocation(location).then(images => {
+        context.commit({ type: "setIsLoading", isLoading: false });
         return images;
       });
     },
     getImagesByHashtag(context, { hashtag }) {
+      context.commit({ type: "setIsLoading", isLoading: true });
       return imageServices.getImagesByHashtag(hashtag).then(images => {
+        context.commit({ type: "setIsLoading", isLoading: false });
         return images;
       });
     },

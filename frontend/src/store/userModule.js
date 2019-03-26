@@ -20,9 +20,7 @@ export default {
 
   },
   mutations: {
-    setIsLoading(state, { isLoading }) {
-      state.isLoadingImages = isLoading;
-    },
+  
     updateUsers(state, { users }) {
       state.loggedInUser = users[1].value;
       state.visitedUser = users[0].value;

@@ -3,6 +3,7 @@
     <div class="dd" v-if="cellphoneDisplay && navbarTitle" @click="goBackToLastWindow()">
       <i class="fas fa-arrow-left btn"></i>
       {{navbarTitle}}
+      <!-- <i class="fas fa-cog btn" @click="displayOptions()"></i> -->
     </div>
     <div v-else class="nav-buttons-container page-container">
       <div @click="goToFeed" class="instagram-logo btn">
@@ -44,7 +45,7 @@
             <label for="file-input">
               <i class="fas fa-upload btn"></i>
             </label>
-            
+
             <input
               type="file"
               name="pic"
@@ -185,8 +186,6 @@ export default {
   },
   watch: {
     $route() {
-      console.log(this.$route);
-
       this.getNavBarTitle();
     },
     windowWidth() {
@@ -230,8 +229,6 @@ ul {
   z-index: 10000003;
   margin: 0px 50px;
   overflow-y: auto;
-
-
 }
 
 .display-content {

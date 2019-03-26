@@ -2,7 +2,7 @@ import axios from "axios";
 import userServices from "./userServices";
 const BASE_URL = (process.env.NODE_ENV !== 'development')
  ? '/image'
- : "//192.168.43.54:3003/image";
+ : "//192.168.1.105:3003/image";
 
 
 

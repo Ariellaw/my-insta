@@ -1,5 +1,6 @@
 <template>
   <div class="profile page-container" v-if="visitedUser">
+    <user-options v-if="optionsModual" @close="optionsModual=false"></user-options>
     <section class="profile-pic-container" v-if="cellphoneDisplay">
       <div class="upperpart-of-profile">
         <img :src="visitedUser.profilePic" class="profile-pic">
@@ -17,11 +18,9 @@
           </div>
 
           <div v-if="loggedInUser" class="right">
-            <button
-              @click="editProfile"
-              v-if="loggedInUser._id === visitedUser._id"
-              class="edit-profile-or-following-btn btn"
-            >Edit Profile</button>
+            <section v-if="loggedInUser._id === visitedUser._id">
+              <button @click="editProfile" class="edit-profile-or-following-btn btn">Edit Profile</button>
+            </section>
             <div v-else-if="followingVisitedUser">
               <button class="mobile-following message">
                 <i class="far fa-envelope"></i>
@@ -50,11 +49,15 @@
         <div class="username">
           {{visitedUser.userName}}
           <div v-if="loggedInUser" class="right">
-            <button
+            <section v-if="loggedInUser._id === visitedUser._id">
+              <button @click="editProfile" class="edit-profile-or-following-btn btn">Edit Profile</button>
+              <i class="fas fa-cog settings"  @click="displayOptions()"></i>
+            </section>
+            <!-- <button
               @click="editProfile"
               v-if="loggedInUser._id === visitedUser._id"
               class="edit-profile-or-following-btn btn"
-            >Edit Profile</button>
+            >Edit Profile</button>-->
             <button
               @click="removeFollowers(visitedUser._id)"
               v-else-if="followingVisitedUser"
@@ -125,7 +128,7 @@
 
 <script>
 import galleryOfImages from "../components/gallary-of-images.vue";
-
+import userOptions from "../components/options"
 export default {
   name: "user-profile",
   data() {
@@ -136,16 +139,20 @@ export default {
       cellphoneDisplay: false,
       windowWidth: null,
       userId: null,
-
+      optionsModual:false,
     };
   },
   methods: {
+     displayOptions(){
+       console.log("display options");
+       this.optionsModual = true;
+       
+     },
     changeFilter(filter) {
       this.filter = filter;
     },
     getVisitedUserImages(userId) {
-      this.$store
-        .dispatch({ type: "getVisitedUserImages", userId })
+      this.$store.dispatch({ type: "getVisitedUserImages", userId });
     },
 
     addFollowers(followeeId) {
@@ -161,9 +168,7 @@ export default {
       });
     },
 
-    getAdditionalUserImages(startingPoint) {
-
-    }
+    getAdditionalUserImages(startingPoint) {}
   },
   mounted() {},
   computed: {
@@ -184,21 +189,23 @@ export default {
     }
   },
   created() {
-
     const userName = this.$route.params.userName;
-    this.$store.dispatch({ type: "getVisitedUser", userName }).then(user => {
-      this.userId = user._id;
+    this.$store
+      .dispatch({ type: "getVisitedUser", userName })
+      .then(user => {
+        this.userId = user._id;
 
-      if (user._id !== null) {
-        this.$store.dispatch({
-          type: "getUserFavoriteImages",
-          userId: user._id
-        });
-      }
-      this.getVisitedUserImages(user._id);
-    }).catch(err => {
-      this.$router.push({name:'authentication'})
-    })
+        if (user._id !== null) {
+          this.$store.dispatch({
+            type: "getUserFavoriteImages",
+            userId: user._id
+          });
+        }
+        this.getVisitedUserImages(user._id);
+      })
+      .catch(err => {
+        this.$router.push({ name: "authentication" });
+      });
 
     this.$store.dispatch({
       type: "getLoggedInUser",
@@ -209,7 +216,8 @@ export default {
     }
   },
   components: {
-    galleryOfImages
+    galleryOfImages,
+    userOptions
   },
   mounted() {
     this.$nextTick(() => {
@@ -231,4 +239,9 @@ export default {
 </script>
 
 <style lang="scss" >
+
+.settings{
+  cursor: pointer;
+  font-size:2rem
+}
 </style>
