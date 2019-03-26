@@ -5,6 +5,7 @@ import userProfile from './views/Profile.vue'
 import editUserDetails from './views/EditUserDetails.vue'
 import Authentication from './views/Authentication.vue'
 import SearchResults from './views/searchResults.vue'
+import Register from './views/Register.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,12 @@ export default new Router({
       name:'searh-results-page',
       component:SearchResults
     },
+    {
+      path:'/register',
+      name:'register',
+      component:Register
+    },
+    
     {
       path: '/about',
       name: 'about',
