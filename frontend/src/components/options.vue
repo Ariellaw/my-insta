@@ -13,7 +13,7 @@ export default {};
 
 <style lang="scss" scoped>
 .options-container {
-  z-index: 100000000000000000;
+  z-index: 10;
   background-color: #fff;
   height: 30rem;
   width: 22rem;
@@ -29,7 +29,7 @@ export default {};
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-content: c;
+  align-content: center;
   align-items: center;
   .option {
     height: 20%;

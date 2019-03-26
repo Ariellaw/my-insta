@@ -46,6 +46,7 @@
             ></user-comment>
             <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
           </div>
+          <social-media v-if="socialMediaModule"></social-media>
           <div class="likes-and-followers">
             <div v-if="loggedInUser" class="icons">
               <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
@@ -100,6 +101,7 @@
 <script>
 import moment from "moment";
 import userComment from "./user-comment.vue";
+import socialMedia from "./social-media.vue"
 
 export default {
   name: "view-image",
@@ -110,7 +112,8 @@ export default {
       loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
-      windowWidth: null
+      windowWidth: null,
+      socialMediaModule:true,
     };
   },
 
@@ -340,7 +343,8 @@ export default {
     }
   },
   components: {
-    userComment
+    userComment,
+    socialMedia
   }
 };
 </script>
