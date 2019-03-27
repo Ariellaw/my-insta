@@ -6,10 +6,11 @@ const connectEnsureLogin = require('connect-ensure-login');
 function addImageRoutes(app) {
   app.get(
     `${BASE}/images/:userId`,
+    connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const userId = req.params.userId;
       imageService.getImagesByUserId(userId).then(images => {
-        return res.json(images);
+        return res.json({images, loggedInUser: req.user});
       });
     }
   );
@@ -58,6 +59,7 @@ function addImageRoutes(app) {
 
   app.put(
     `${BASE}/:imageId/likes`,
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const imageId = req.body.imageId;
       const userId = req.body.userId;
@@ -68,6 +70,7 @@ function addImageRoutes(app) {
   );
   app.delete(
     `${BASE}/:imageId/:userId/likes`,
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const imageId = req.params.imageId;
       const userId = req.params.userId;

@@ -51,7 +51,7 @@
           <div v-if="loggedInUser" class="right">
             <section v-if="loggedInUser._id === visitedUser._id">
               <button @click="editProfile" class="edit-profile-or-following-btn btn">Edit Profile</button>
-              <i class="fas fa-cog settings"  @click="displayOptions()"></i>
+              <i class="fas fa-cog settings" @click="displayOptions()"></i>
             </section>
             <!-- <button
               @click="editProfile"
@@ -105,7 +105,7 @@
           <i class="far fa-star"></i>
           <h4 class="filter">&nbsp; Favorites</h4>
         </span>
-        
+
         <span
           class="btn"
           @click="changeFilter('tagged')"
@@ -128,7 +128,7 @@
 
 <script>
 import galleryOfImages from "../components/gallary-of-images.vue";
-import userOptions from "../components/options"
+import userOptions from "../components/options";
 export default {
   name: "user-profile",
   data() {
@@ -139,27 +139,42 @@ export default {
       cellphoneDisplay: false,
       windowWidth: null,
       userId: null,
-      optionsModual:false,
+      optionsModual: false
     };
   },
   methods: {
-     displayOptions(){
-       console.log("display options");
-       this.optionsModual = true;
-       
-     },
+    displayOptions() {
+      console.log("display options");
+      this.optionsModual = true;
+    },
     changeFilter(filter) {
       this.filter = filter;
     },
     getVisitedUserImages(userId) {
-      this.$store.dispatch({ type: "getVisitedUserImages", userId });
+      this.$store
+        .dispatch({ type: "getVisitedUserImages", userId })
+        .then()
+        .catch(err => {
+          console.log("getVisitedUserImages ERR", err);
+          this.$router.push({ name: "login" });
+        });
     },
 
     addFollowers(followeeId) {
-      this.$store.dispatch({ type: "addFollowers", followeeId });
+      this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
+        console.log("addFollowers ERR", err);
+
+        this.$router.push({ name: "register" });
+      });
     },
     removeFollowers(followeeId) {
-      this.$store.dispatch({ type: "removeFollowers", followeeId });
+      this.$store
+        .dispatch({ type: "removeFollowers", followeeId })
+        .catch(err => {
+          console.log("removeFollowers ERR", err);
+
+          this.$router.push({ name: "home" });
+        });
     },
     editProfile() {
       this.$router.push({
@@ -204,13 +219,13 @@ export default {
         this.getVisitedUserImages(user._id);
       })
       .catch(err => {
-        this.$router.push({ name: "authentication" });
+        this.$router.push({ name: "login" });
       });
 
-    this.$store.dispatch({
-      type: "getLoggedInUser",
-      userName: this.loggedInUserName
-    });
+    // this.$store.dispatch({
+    //   type: "getLoggedInUser",
+    //   userName: this.loggedInUserName
+    // });
     if (window.innerWidth <= 700) {
       this.cellphoneDisplay = true;
     }
@@ -239,9 +254,8 @@ export default {
 </script>
 
 <style lang="scss" >
-
-.settings{
+.settings {
   cursor: pointer;
-  font-size:2rem
+  font-size: 2rem;
 }
 </style>

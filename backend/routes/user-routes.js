@@ -1,18 +1,10 @@
-const express = require('express')
 const userService = require('../services/userService.js')
 const connectEnsureLogin = require('connect-ensure-login');
 const BASE = '/user'
-const BASE_REDIRECT_URL = 'http://192.168.43.54:8080'
 
 
-// const app = express()
 
 function addUserRoutes(app, passport) {
-    // app.post(`${BASE}/login`, (req, res) => {
-    //     var credentials = req.body.credentials;
-    //     console.log("testing login", credentials);
-    //     return res.json(credentials);
-    // })
     app.post(`${BASE}/userNameById`,
     connectEnsureLogin.ensureLoggedIn(),
     (req,res) =>{
@@ -20,7 +12,6 @@ function addUserRoutes(app, passport) {
 
         userService.getUserNamesById(ids)
             .then(users =>{
-                // console.log("reslt of get by Id", users)
                 return res.json(users);
             })
     })
@@ -35,11 +26,8 @@ function addUserRoutes(app, passport) {
     })
 
     app.get(`${BASE}/:userName/nickname`,
-        // require('connect-ensure-login').ensureLoggedIn(),
         connectEnsureLogin.ensureLoggedIn(),
-        // passport.authenticate('local'),
         (req, res) => {
-            console.log("req.isAuthenticated() in nickname:", req.isAuthenticated());
             console.log("req.user in nickname:", req.user);
             
             const userName = req.params.userName;
@@ -49,23 +37,25 @@ function addUserRoutes(app, passport) {
                     return res.json(user);
                 })
         })
-    app.put(`${BASE}/:followeeId/followers`, 
+    app.put(`${BASE}/:followeeId/followers`,
+    connectEnsureLogin.ensureLoggedIn(),
     (req,res) =>{
         const followeeId = req.body.followeeId;
         const followerId = req.body.followerId;
             userService.addFollowers(followeeId, followerId)
                 .then(users => {
-                    return res.json(users);
+                    return res.json({users, loggedInUser: req.user});
                 })
     })
-    app.delete(`${BASE}/:followeeId/:followerId/followers`, 
+    app.delete(`${BASE}/:followeeId/:followerId/followers`,
+    connectEnsureLogin.ensureLoggedIn(),
     (req,res) =>{
         const followeeId = req.params.followeeId;
         const followerId = req.params.followerId;
 
             userService.removeFollowers(followeeId, followerId)
                 .then(users => {
-                    return res.json(users);
+                    return res.json({users, loggedInUser: req.user});
                 })
     })
     app.delete(`${BASE}/:imageId/:loggedInUserId/favorites`, 

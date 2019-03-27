@@ -46,13 +46,13 @@
             ></user-comment>
             <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
           </div>
-          <social-media v-if="socialMediaModule"></social-media>
+          <social-media v-if="socialMediaModule" :image="viewedImage"></social-media>
           <div class="likes-and-followers">
             <div v-if="loggedInUser" class="icons">
               <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
               <i @click="addUserLike" v-else class="far fa-heart btn"></i>
               
-              <i class="fas fa-share-alt btn"></i>
+              <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i>
               <i
                 v-if="inUserFavorites"
                 @click="removeFromUserFavorites"
@@ -113,7 +113,7 @@ export default {
       newComment: null,
       displayVertically: false,
       windowWidth: null,
-      socialMediaModule:true,
+      socialMediaModule:false,
     };
   },
 

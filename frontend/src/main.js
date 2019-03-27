@@ -7,22 +7,14 @@ import moment from 'moment'
 import '@/assets/scss/main.scss';
 
 import socketio from 'socket.io-client';
-// import SocketIO from 'socket.io';
 import VueSocketIO from 'vue-socket.io';
+var SocialSharing = require('vue-social-sharing');
 
-// const SocketInstance = io('192.168.1.105:3003');
+
 const SocketInstance = socketio('http://192.168.1.105:8810');
 
-// const SocketInstance = io('192.168.1.105:3003',  {
-//   path: "/",
-//   // transports: ['websocket']
-// });
-// const SocketInstance = SocketIO('192.168.1.105:3003');
-// export SocketInstance;
 
-// Vue.use(VueSocketIO, SocketInstance);
-// import { MyVuexStore } from './my-vuex-store.js'
-
+Vue.use(SocialSharing);
 Vue.use(new VueSocketIO({
   debug: true,
   // connection: '192.168.1.105:3003',

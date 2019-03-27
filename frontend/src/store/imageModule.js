@@ -212,10 +212,11 @@ export default {
     getVisitedUserImages(context, { userId }) {
       context.commit({ type: "setIsLoading", isLoading: true });
 
-      return imageServices.getUserImages(userId).then(images => {
+      return imageServices.getUserImages(userId).then(res => {
         context.commit({ type: "setIsLoading", isLoading: false });
-        context.commit({ type: "setVisitedUserImages", images });
-        return images;
+        context.commit({ type: "setVisitedUserImages", images:res.images });
+        context.rootState.userModule.loggedInUser = res.loggedInUser
+        return res.images;
       });
     },
     getViewedImageOwner(context, { userId }) {

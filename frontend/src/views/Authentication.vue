@@ -38,7 +38,7 @@
 <script>
 import userServices from "../services/userServices.js"
 export default {
-    name:'authentication',
+    name:'login',
     data(){
       return{
         credentials:{

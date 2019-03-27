@@ -52,19 +52,6 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
-
-// app.configure(function() {
-//   app.use(express.static('public'));
-//   app.use(express.cookieParser());
-//   app.use(express.bodyParser());
-//   app.use(express.session({ secret: 'keyboard cat' }));
-//   app.use(passport.initialize());
-//   app.use(passport.session());
-//   app.use(app.router);
-// });
-
-
-
 passport.serializeUser(function(user, done) {
   console.log("serializeUser()", user._id);
   done(null, user._id);

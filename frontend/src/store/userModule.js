@@ -34,8 +34,6 @@ export default {
 
     setVisitedUser(state, { user }) {
       state.visitedUser = user;
-      // state.visitedUserSamples = data.samples;
-      // state.visitedUserFavorites = data.favorites;
     },
 
     setSeachedUsers(state, { res }) {
@@ -76,8 +74,9 @@ export default {
     addFollowers(context, { followeeId }) {
       return userServices
         .addFollowers(followeeId, context.state.loggedInUser._id)
-        .then(users => {
-          context.commit({ type: "updateUsers", users });
+        .then(res => {
+          context.commit({ type: "updateUsers", users:res.users });
+          context.commit({type:"setLoggedInUser", user:res.loggedInUser})
           return users;
         });
     },
@@ -86,6 +85,7 @@ export default {
         .removeFollowers(followeeId, context.state.loggedInUser._id)
         .then(users => {
           context.commit({ type: "updateUsers", users });
+          context.commit({type:"setLoggedInUser", user:res.loggedInUser})
           return users;
         });
     },
