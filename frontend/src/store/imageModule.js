@@ -1,8 +1,8 @@
 import imageServices from "../services/imageServices.js";
 import cloudinaryService from "../services/cloudinaryService.js";
 import userServices from "../services/userServices.js";
-import { stat } from "fs";
-import { resolve } from "url";
+// import { stat } from "fs";
+// import { resolve } from "url";
 
 export default {
   state: {
@@ -75,11 +75,11 @@ export default {
     setUserFavoriteImages(state, { images }) {
       state.userFavoriteImages = images;
     },
-    setInitalImages(state, { res }) {
-      state.imagesForFeed = res;
+    setInitalImages(state, { images }) {
+      state.imagesForFeed = images;
     },
-    setAddionalImages(state, { res }) {
-      state.imagesForFeed = state.imagesForFeed.concat(res);
+    setAddionalImages(state, { images }) {
+      state.imagesForFeed = state.imagesForFeed.concat(images);
     },
 
     SOCKET_CONNECT(state) {
@@ -204,7 +204,8 @@ export default {
         return [];
       } else {
         return userServices.getUserNamesById(ids).then(res => {
-          context.commit({ type: "setFolloweesThatLiked", users: res });
+          context.commit({ type: "setFolloweesThatLiked", users: res.users });
+          context.rootState.userModule.loggedInUser = res.loggedInUser
           return res;
         });
       }
@@ -215,17 +216,18 @@ export default {
       return imageServices.getUserImages(userId).then(res => {
         context.commit({ type: "setIsLoading", isLoading: false });
         context.commit({ type: "setVisitedUserImages", images:res.images });
-        context.rootState.userModule.loggedInUser = res.loggedInUser
+        context.rootState.userModule.loggedInUser = res.loggedInUser;;
         return res.images;
       });
     },
     getViewedImageOwner(context, { userId }) {
-      return userServices.getUserById(userId).then(user => {
-        context.commit({ type: "setVisitedImageOwner", user });
+      return userServices.getUserById(userId).then(res => {
+        context.commit({ type: "setVisitedImageOwner", user:res.user });
+        context.rootState.userModule.loggedInUser = res.loggedInUser;;
       });
     },
     setViewedImage(context, { image }) {
-      imageServices.getNamesOfLikes;
+      //TODO - thsetViewedImageink if this needs to go to the database
       context.commit({ type: "setViewedImage", image });
       return image;
     },
@@ -236,21 +238,25 @@ export default {
       });
     },
     deleteComment(context, { commentId, imageId }) {
+      //TODO also update image in feed
       return imageServices.deleteComment(commentId, imageId).then(res => {
         if (context.state.viewedImage) {
-          context.commit({ type: "updateViewedImage", image: res.value });
+          context.commit({ type: "updateViewedImage", image: res.image.value });
         }
-        return res.value.comments;
+        context.rootState.userModule.loggedInUser = res.loggedInUser
+        return res.image.value.comments;
       });
     },
     addUserComment(context, { comment, imageId, writerId }) {
       return imageServices
         .addUserComment(comment, imageId, writerId)
         .then(res => {
+          console.log("comment res", res)
           if (context.state.viewedImage) {
-            context.commit({ type: "updateViewedImage", image: res.value });
+            context.commit({ type: "updateViewedImage", image: res.image.value });
           }
-          return res.value.comments;
+          context.rootState.userModule.loggedInUser = res.loggedInUser
+          return res.image.value.comments;
         });
     },
     editComment(context, { commentId, imageId, newComment }) {
@@ -258,34 +264,41 @@ export default {
         .editComment(commentId, imageId, newComment)
         .then(res => {
           if (context.state.viewedImage) {
-            context.commit({ type: "updateViewedImage", image: res.value });
+            context.commit({ type: "updateViewedImage", image: res.image.value });
           }
-          return res.value.comments;
+          context.rootState.userModule.loggedInUser = res.loggedInUser
+          return res.image.value.comments;
         });
     },
     getUserFavoriteImages(context, { userId }) {
       context.commit({ type: "setIsLoading", isLoading: true });
-      return userServices.getImagesByImageId(userId).then(images => {
-        context.commit({ type: "setUserFavoriteImages", images });
+      return userServices.getImagesByImageId(userId).then(res => {
+        context.commit({ type: "setUserFavoriteImages", images:res.images });
         context.commit({ type: "setIsLoading", isLoading: false });
-
-        return images;
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        return res.images;
       });
     },
     addUserLike(context, { imageId, userId }) {
+      console.log('likes',imageId, userId)
       return imageServices.addUserLike(imageId, userId).then(res => {
         if (context.state.viewedImage) {
-          context.commit({ type: "updateViewedImage", image: res.value });
+          context.commit({ type: "updateViewedImage", image: res.image.value });
         }
-        return res.value.likes;
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        console.log("why are there nylls here", res.image.value.likes)
+        return res.image.value.likes;
       });
     },
     removeUserLike(context, { imageId, userId }) {
+      console.log('likes',imageId, userId)
       return imageServices.removeUserLike(imageId, userId).then(res => {
         if (context.state.viewedImage) {
-          context.commit({ type: "updateViewedImage", image: res.value });
+          context.commit({ type: "updateViewedImage", image: res.image.value });
         }
-        return res.value.likes;
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        console.log("why are there nylls here", res.image.value.likes)
+        return res.image.value.likes;
       });
     },
     addImage(context, { imgDetails, image }) {
@@ -294,7 +307,9 @@ export default {
     },
     getInitalImages(context) {
       return imageServices.getInitalImages().then(res => {
-        context.commit({ type: "setInitalImages", res });
+        context.commit({ type: "setInitalImages", images:res.images });
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+
       });
     },
     getAdditionalImages(context) {
@@ -306,7 +321,8 @@ export default {
       return imageServices
         .getAdditionalImages(startingPoint, feedImages)
         .then(res => {
-          context.commit({ type: "setAddionalImages", res });
+          context.commit({ type: "setAddionalImages", images:res.images });
+          context.rootState.userModule.loggedInUser = res.loggedInUser;
         });
     },
     getAdditionalUserImages(context, { userId, startingPoint }) {
@@ -319,21 +335,25 @@ export default {
     },
     getImagesByLocation(context, { location }) {
       context.commit({ type: "setIsLoading", isLoading: true });
-      return imageServices.getImagesByLocation(location).then(images => {
+      return imageServices.getImagesByLocation(location).then(res => {
         context.commit({ type: "setIsLoading", isLoading: false });
-        return images;
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        return res.images;
       });
     },
     getImagesByHashtag(context, { hashtag }) {
       context.commit({ type: "setIsLoading", isLoading: true });
-      return imageServices.getImagesByHashtag(hashtag).then(images => {
+      return imageServices.getImagesByHashtag(hashtag).then(res => {
         context.commit({ type: "setIsLoading", isLoading: false });
-        return images;
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        return res.images;
       });
     },
     getImageById(context, { imageId }) {
-      return imageServices.getImageById(imageId).then(image => {
-        return image;
+      console.log("imageId", imageId)
+      return imageServices.getImageById(imageId).then(res => {
+        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        return res.image;
       });
     }
   }

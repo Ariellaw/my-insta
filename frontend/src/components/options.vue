@@ -16,7 +16,7 @@ export default {};
   z-index: 10;
   background-color: #fff;
   height: 30rem;
-  width: 22rem;
+  width: 33rem;
   position: absolute;
   left: 0;
   right: 0;

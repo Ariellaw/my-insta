@@ -11,7 +11,7 @@
         <label for="file-input-footer">
           <i class="fas fa-upload btn"></i>
         </label>
-        
+
         <input
           type="file"
           name="pic"
@@ -32,19 +32,16 @@
 <script>
 export default {
   data() {
-    return {
-      loggedInUserName: "Ariella_wills1"
-    };
+    return {};
   },
   methods: {
     goToLoggedInUserProfile() {
-      var userName = this.loggedInUserName;
+      var userName = this.loggedInUser.userName;
       this.$router.push({ name: "user-profile", params: { userName } });
       this.$router.go();
     },
 
     getCloudinaryUrl() {
-
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
@@ -59,7 +56,12 @@ export default {
     }
   },
   components: {},
-  watch: {}
+  watch: {},
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
+  }
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="image && imageOwner && loggedInUser && viewedImage">
+  <transition name="modal" v-if="imageOwner && loggedInUser && viewedImage && followeesThatLiked">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -51,7 +51,7 @@
             <div v-if="loggedInUser" class="icons">
               <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
               <i @click="addUserLike" v-else class="far fa-heart btn"></i>
-              
+
               <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i>
               <i
                 v-if="inUserFavorites"
@@ -63,7 +63,10 @@
             <span class="column" v-if="followeesThatLiked && viewedImage.likes">
               <span class="namesOfLikes" v-if="followeesThatLiked.length===1">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0]}} like this
+                {{followeesThatLiked[0]}}
+                <span
+                  v-if="viewedImage.likes>1"
+                >and{{viewedImage.length-1}} others</span>like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
                 <i class="far fa-thumbs-up"></i>
@@ -73,7 +76,7 @@
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} and {{followeesThatLiked.length-2}} others like this
               </span>
-              
+
               <span
                 v-else-if="followeesThatLiked.length===0"
                 :class="{'visibilityNone':viewedImage.likes.length===0}"
@@ -87,8 +90,8 @@
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
-              @keydown="userIsTyping(loggedInUserName, viewedImage._id)"
-              @keyup.enter="addUserComment(newComment, viewedImage._id, loggedInUserId)"
+              @keydown="userIsTyping(loggedInUser.userName, viewedImage._id)"
+              @keyup.enter="addUserComment(newComment, viewedImage._id, loggedInUser._id)"
               v-model="newComment"
             ></textarea>
           </div>
@@ -101,37 +104,35 @@
 <script>
 import moment from "moment";
 import userComment from "./user-comment.vue";
-import socialMedia from "./social-media.vue"
+import socialMedia from "./social-media.vue";
 
 export default {
   name: "view-image",
   props: ["image"],
   data() {
     return {
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      loggedInUserName: "Ariella_wills1",
       newComment: null,
       displayVertically: false,
       windowWidth: null,
-      socialMediaModule:false,
+      socialMediaModule: false
     };
   },
 
   created() {
     window.scrollTo(0, 0);
 
-    this.$store
-      .dispatch({
-        type: "getLoggedInUser",
-        userName: this.loggedInUserName
-      })
-      .then(user => this.loadImage(user));
-
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
   },
-
+  mounted() {
+    console.log(
+      "mounted",
+      this.viewedImage.likes,
+      this.followeesThatLiked,
+      this.loggedInUser
+    );
+  },
   filters: {
     moment: function(date) {
       return moment(date).fromNow();
@@ -170,56 +171,99 @@ export default {
         imageId: this.image._id
       });
     },
-    loadImage(user) {
+    loadImage() {
       this.$store
         .dispatch({ type: "getImageById", imageId: this.$route.params.image })
         .then(image => {
+          console.log("important IMAGE", image);
           this.getViewedImageOwner(image.ownerId);
           this.$store.dispatch({ type: "setViewedImage", image });
-          this.$store
-            .dispatch({ type: "getViewedImageFollowers", image, user })
+          this.$store.dispatch({
+            type: "getViewedImageFollowers",
+            image,
+            user: this.loggedInUser
+          });
+        })
+        .catch(err => {
+          console.log("err", err);
+          this.$router.push({ name: "login" });
         });
     },
     userIsTyping(userName, imageId) {
       this.$socket.emit("typing", { userName, imageId });
     },
     addFollowers(followeeId) {
-      this.$store.dispatch({ type: "addFollowers", followeeId });
+      this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
+        console.log("addFollowers err", err);
+        this.$router.push({ name: "login" });
+      });
     },
     removeFollowers(followeeId) {
-      this.$store.dispatch({ type: "removeFollowers", followeeId });
+      this.$store
+        .dispatch({ type: "removeFollowers", followeeId })
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     addUserLike() {
+      console.log(
+        this.viewedImage,
+        this.viewedImage.likes,
+        this.followeesThatLiked,
+        this.loggedInUser._id
+      );
       this.$socket.emit("likeAdded", {
-        image: this.image,
+        image: this.viewedImage,
         user: this.loggedInUser
-        // followees: this.followeesThatLiked
       });
 
-      this.$store.dispatch({
-        type: "addUserLike",
-        imageId: this.image._id,
-        userId: this.loggedInUser._id
-      });
+      this.$store
+        .dispatch({
+          type: "addUserLike",
+          imageId: this.viewedImage._id,
+          userId: this.loggedInUser._id
+        })
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     removeUserLike() {
+      console.log(
+        this.viewedImage.likes,
+        this.followeesThatLiked,
+        this.loggedInUser
+      );
+
       this.$socket.emit("likeRemoved", {
-        image: this.image,
+        image: this.viewedImage,
         user: this.loggedInUser
       });
 
-      this.$store.dispatch({
-        type: "removeUserLike",
-        imageId: this.image._id,
-        userId: this.loggedInUser._id,
-        userName: this.loggedInUserName
-      });
+      this.$store
+        .dispatch({
+          type: "removeUserLike",
+          imageId: this.viewedImage._id,
+          userId: this.loggedInUser._id,
+          userName: this.loggedInUser.userName
+        })
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     getViewedImageOwner(userId) {
-      this.$store.dispatch({
-        type: "getViewedImageOwner",
-        userId
-      });
+      console.log("getViewedImageOwner", userId);
+      this.$store
+        .dispatch({
+          type: "getViewedImageOwner",
+          userId
+        })
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
 
     addUserComment(comment, imageId, writerId) {
@@ -236,26 +280,41 @@ export default {
           imageId,
           writerId
         })
-        .then(comments => {
-          this.newComment = null;
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
         });
+      // .then(comments => {
+      // });
+      this.newComment = null;
     },
 
     addToUserFavorites() {
-      this.$store.dispatch({
-        type: "addToUserFavorites",
-        imageId: this.image._id
-      });
+      this.$store
+        .dispatch({
+          type: "addToUserFavorites",
+          imageId: this.image._id
+        })
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     removeFromUserFavorites() {
-      this.$store.dispatch({
-        type: "removeFromUserFavorites",
-        imageId: this.image._id
-      });
+      this.$store
+        .dispatch({
+          type: "removeFromUserFavorites",
+          imageId: this.image._id
+        })
+        .catch(err => {
+          console.log("addFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
-      this.$router.push({ name: "user-profile", params: { userName } });
+      console.log("go to owner profile", userName);
+      this.$router.push({ name: "user-profile", params: { userName, image:null } });
     },
     goToLocationImages() {
       this.$router.push(
@@ -286,14 +345,17 @@ export default {
   computed: {
     followeesThatLiked() {
       var followees = this.$store.getters.followeesThatLiked;
-      var users = []; 
-      followees.forEach(followee => {
-        if(followee.userName === this.loggedInUserName){
-          users.push("You");
-        } else{
-          users.push(followee.userName);
-        }
-      })
+      console.log("for each is not working", followees);
+      var users = [];
+      if (followees) {
+        followees.forEach(followee => {
+          if (followee.userName === this.loggedInUser.userName) {
+            users.push("You");
+          } else {
+            users.push(followee.userName);
+          }
+        });
+      }
       return users;
     },
     viewedImage() {
@@ -309,15 +371,19 @@ export default {
       return this.$store.getters.viewedImageOwner;
     },
     isFollowing() {
-      return this.loggedInUser.followees.includes(this.imageOwner._id);
+      if (this.loggedInUser.followees) {
+        return this.loggedInUser.followees.includes(this.imageOwner._id);
+      }
     },
     followingStatusClass() {
       return {
-        displayNone: this.loggedInUserId === this.imageOwner._id
+        displayNone: this.loggedInUser._id === this.imageOwner._id
       };
     },
     inUserFavorites() {
-      return this.loggedInUser.favorites.includes(this.image._id);
+      if (this.loggedInUser.favorites) {
+        return this.loggedInUser.favorites.includes(this.viewedImage._id);
+      }
     },
     isLiked() {
       if (this.viewedImage.likes) {
@@ -326,6 +392,7 @@ export default {
     }
   },
   mounted() {
+    this.loadImage();
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
         this.windowWidth = window.innerWidth;
@@ -339,7 +406,9 @@ export default {
   },
   watch: {
     $route() {
-      this.loadImage(this.loggedInUser);
+      if (this.$route.params.image) {
+        this.loadImage();
+      }
     }
   },
   components: {

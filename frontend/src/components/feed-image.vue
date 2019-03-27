@@ -1,12 +1,15 @@
 <template>
-  <div class="modal-container feed-image displayVertical" v-if="image && imageOwner">
+  <div
+    class="modal-container feed-image displayVertical"
+    v-if="image && imageOwner && loggedInUser"
+  >
     <div
       class="currImage btn"
       :style="{ backgroundImage: 'url(' + image.image + ')' }"
       @click="$emit('displayFeedImage', image)"
     ></div>
 
-    <div class="user-info bold-reg">
+    <div class="user-info bold-reg" v-if="loggedInUser">
       <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
       <span class="btn">
         <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
@@ -33,13 +36,13 @@
         :key="comment.id"
       ></user-comment>
     </div>
-    <div class="likes-and-followers">
-      <div v-if="loggedInUser" class="icons">
+    <div class="likes-and-followers" v-if="likes">
+      <div class="icons">
         <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
         <i @click="addUserLike" v-else class="far fa-heart btn"></i>
-        
+
         <i class="fas fa-share-alt btn"></i>
-        
+
         <i v-if="inUserFavorites" @click="removeFromUserFavorites" class="fas fa-bookmark btn"></i>
         <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
       </div>
@@ -56,7 +59,7 @@
         class="viewed-image-text-area"
         placeholder="Add a comment....."
         name
-        v-on:keyup.enter="addUserComment(comment, image._id, loggedInUserId)"
+        v-on:keyup.enter="addUserComment(comment, image._id, loggedInUser._id)"
         v-model="comment"
       ></textarea>
     </div>
@@ -70,8 +73,6 @@ export default {
   props: ["image"],
   data() {
     return {
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      loggedInUserName: "Ariella_wills1",
       comment: null,
       imageComments: this.image.comments,
       displayVertically: false,
@@ -80,10 +81,6 @@ export default {
   },
   created() {
     this.getViewedImageOwner(this.image.ownerId);
-    this.$store.dispatch({
-      type: "getLoggedInUser",
-      userName: this.loggedInUserName
-    });
   },
 
   filters: {
@@ -93,16 +90,24 @@ export default {
   },
   methods: {
     addFollowers(followeeId) {
-      this.$store.dispatch({ type: "addFollowers", followeeId });
+      this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
+        console.log("addFollowers err", err);
+        this.$router.push({ name: "login" });
+      });
     },
     removeFollowers(followeeId) {
-      this.$store.dispatch({ type: "removeFollowers", followeeId });
+      this.$store
+        .dispatch({ type: "removeFollowers", followeeId })
+        .catch(err => {
+          console.log("removeFollowers err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     addUserLike() {
       this.$socket.emit("likeAdded", {
         image: this.image,
         userId: this.loggedInUser._id,
-        userName: this.loggedInUserName,
+        userName: this.loggedInUser.userName
         // followees: this.followeesThatLiked
       });
       this.$store
@@ -111,13 +116,19 @@ export default {
           imageId: this.image._id,
           userId: this.loggedInUser._id
         })
-        .then(likes => (this.likes = likes));
+        .then(likes => {
+          this.likes = likes;
+        })
+        .catch(err => {
+          console.log("addLike err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     removeUserLike() {
       this.$socket.emit("likeRemoved", {
         image: this.image,
         userId: this.loggedInUser._id,
-        userName: this.loggedInUserName,
+        userName: this.loggedInUser.userName
         // followees: this.followeesThatLiked
       });
       this.$store
@@ -126,13 +137,22 @@ export default {
           imageId: this.image._id,
           userId: this.loggedInUser._id
         })
-        .then(likes => (this.likes = likes));
+        .then(likes => (this.likes = likes))
+        .catch(err => {
+          console.log("removelike err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     getViewedImageOwner(userId) {
-      this.$store.dispatch({
-        type: "getViewedImageOwner",
-        userId
-      });
+      this.$store
+        .dispatch({
+          type: "getViewedImageOwner",
+          userId
+        })
+        .catch(err => {
+          console.log("getvieed imageowner err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     goToLocationImages() {
       this.$router.push(
@@ -161,6 +181,10 @@ export default {
         .then(comments => {
           this.imageComments = comments;
           this.comment = null;
+        })
+        .catch(err => {
+          console.log("addUserComment err", err);
+          this.$router.push({ name: "login" });
         });
     },
     goToUserProfile(word) {
@@ -176,19 +200,33 @@ export default {
           } else {
             return;
           }
+        })
+        .catch(err => {
+          console.log("hashtag go to profile err", err);
+          this.$router.push({ name: "login" });
         });
     },
     addToUserFavorites() {
-      this.$store.dispatch({
-        type: "addToUserFavorites",
-        imageId: this.image._id
-      });
+      this.$store
+        .dispatch({
+          type: "addToUserFavorites",
+          imageId: this.image._id
+        })
+        .catch(err => {
+          console.log("favs err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     removeFromUserFavorites() {
-      this.$store.dispatch({
-        type: "removeFromUserFavorites",
-        imageId: this.image._id
-      });
+      this.$store
+        .dispatch({
+          type: "removeFromUserFavorites",
+          imageId: this.image._id
+        })
+        .catch(err => {
+          console.log("favs err", err);
+          this.$router.push({ name: "login" });
+        });
     },
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
@@ -209,15 +247,19 @@ export default {
       return this.$store.getters.viewedImageOwner;
     },
     isFollowing() {
-      return this.loggedInUser.followees.includes(this.imageOwner._id);
+      if (this.loggedInUser.followees) {
+        return this.loggedInUser.followees.includes(this.imageOwner._id);
+      }
     },
     followingStatusClass() {
       return {
-        displayNone: this.loggedInUserId === this.imageOwner._id
+        displayNone: this.loggedInUser._id === this.imageOwner._id
       };
     },
     inUserFavorites() {
-      return this.loggedInUser.favorites.includes(this.image._id);
+      if (this.loggedInUser.favorites) {
+        return this.loggedInUser.favorites.includes(this.image._id);
+      }
     },
     isLiked() {
       if (this.likes) {

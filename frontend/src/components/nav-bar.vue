@@ -81,7 +81,6 @@ export default {
       lastWindow: null,
       windowWidth: null,
       cellphoneDisplay: false,
-      loggedInUserName: "Ariella_wills1"
     };
   },
   methods: {
@@ -151,10 +150,7 @@ export default {
         });
     },
     goToLoggedInUserProfile() {
-      // var userName = this.loggedInUserName;
-      // this.$router.push({ name: "user-profile", params: { userName } });
-      // this.$router.go();
-      var userName = this.loggedInUserName;
+      var userName = this.loggedInUser.userName;
       this.$router.push({ name: "user-profile", params: { userName } });
     },
     findRelevantUsers() {

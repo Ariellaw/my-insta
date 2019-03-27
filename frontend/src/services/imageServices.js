@@ -8,6 +8,7 @@ const BASE_URL = (process.env.NODE_ENV !== 'development')
 
 
 function getImageById(imageId) {
+  console.log("getImageById",imageId)
   return axios.get(`${BASE_URL}/image/${imageId}`).then(res => {
     return res.data;
   });

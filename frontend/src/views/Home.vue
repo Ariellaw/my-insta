@@ -28,8 +28,6 @@ export default {
   name: "home",
   data() {
     return {
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      loggedInUserName: "Ariella_wills1",
       showModal: false,
       chosenImage: null,
       userImages: null
@@ -67,6 +65,10 @@ export default {
         .dispatch({ type: "getVisitedUserImages", userId })
         .then(images => {
           this.userImages = images;
+        })
+        .catch(err => {
+          console.log("getUserImages ERR", err);
+          this.$router.push({ name: "login" });
         });
     },
 
@@ -81,16 +83,22 @@ export default {
       return idx;
     },
     displayFeedImage(image) {
-          this.$router.push({ params: { image: image._id } });
-          this.getUserImages(image.ownerId);
-          this.chosenImage = image;
-          this.showModal = true;
+      this.$router.push({ params: { image: image._id } });
+      this.getUserImages(image.ownerId);
+      this.chosenImage = image;
+      this.showModal = true;
     },
     getInitalImages() {
-      this.$store.dispatch({ type: "getInitalImages" });
+      this.$store.dispatch({ type: "getInitalImages" }).catch(err => {
+        console.log("getInitalImages ERR", err);
+        this.$router.push({ name: "login" });
+      });
     },
     getAdditionalImages() {
-      this.$store.dispatch({ type: "getAdditionalImages" });
+      this.$store.dispatch({ type: "getAdditionalImages" }).catch(err => {
+        console.log("getAdditionalImages ERR", err);
+        this.$router.push({ name: "login" });
+      });
     },
 
     scroll() {
@@ -106,22 +114,23 @@ export default {
   },
   created() {
     // window.scrollTo(0, 0);
-
+    this.getInitalImages();
     const imageId = this.$route.params.image;
     if (imageId && this.$route.name === "home" && imageId !== "new-image") {
-      this.$store.dispatch({ type: "getImageById", imageId }).then(image => {
-        this.chosenImage = image;
-        this.showModal = true;
-        this.getUserImages(image.ownerId);
-      });
+      this.$store
+        .dispatch({ type: "getImageById", imageId })
+        .then(image => {
+          this.chosenImage = image;
+          this.showModal = true;
+          this.getUserImages(image.ownerId);
+        })
+        .catch(err => {
+          console.log("getImageById ERR", err);
+          this.$router.push({ name: "login" });
+        });
     }
-    this.$store.dispatch({
-      type: "getLoggedInUser",
-      userName: this.loggedInUserName
-    });
   },
   beforeMount() {
-    this.getInitalImages();
   },
   mounted() {
     this.scroll();

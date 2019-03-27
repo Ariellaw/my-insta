@@ -43,7 +43,7 @@ export default {
           document.documentElement.offsetHeight - 1;
 
         if (bottomOfWindow) {
-          this.$emit('getAdditionalImages')
+          this.$emit("getAdditionalImages");
         }
       };
     },
@@ -87,11 +87,14 @@ export default {
   computed: {
     isLoading() {
       return this.$store.getters.isLoading;
+    },
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
     }
   },
   created() {
     const imageId = this.$route.params.image;
-    if (imageId  && imageId !== "new-image") {
+    if (imageId && imageId !== "new-image") {
       this.$store.dispatch({ type: "getImageById", imageId }).then(image => {
         this.viewedImage = image;
         this.showModal = true;

@@ -1,5 +1,8 @@
 <template>
-  <div class="comment-container" v-if="commentOwner && words && nickName">
+  <div
+    class="comment-container"
+    v-if="commentOwner && words && comment && loggedInUser && nickName"
+  >
     <div class="comment-container" v-if="commentTextArea">
       <textarea
         v-model="editedComment"
@@ -17,14 +20,14 @@
         :key="index"
       >{{word+' '}}</span>
     </span>
-    <span class="icons" v-if="viewedImage" :class="{'canEdit':commentOwner._id===loggedInUserId}">
+    <span class="icons" v-if="viewedImage" :class="{'canEdit':commentOwner._id===loggedInUser._id}">
       <i class="far fa-edit btn" @click="showTextArea()"></i>
       <i class="fas fa-times btn" @click="$emit('deleteComment', comment.id)"></i>
     </span>
     <span
       v-if="viewedImage"
       class="time"
-      :class="{'CEtime':commentOwner._id===loggedInUserId}"
+      :class="{'CEtime':commentOwner._id===loggedInUser._id}"
     >{{ comment.timeStamp | moment }}</span>
   </div>
 </template>
@@ -36,8 +39,6 @@ export default {
   props: ["comment"],
   data() {
     return {
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
-      loggedInUserName: "Ariella_wills1",
       commentOwner: null,
       nickName: null,
       words: null,
@@ -46,21 +47,10 @@ export default {
     };
   },
   created() {
-    this.$store
-      .dispatch({ type: "getUserById", userId: this.comment.writerId })
-      .then(res => {
-        this.commentOwner = res;
-        if (res._id === this.loggedInUserId) {
-          this.nickName = "You";
-        } else {
-          this.nickName = res.userName;
-        }
-      });
+    if (this.comment.writerId) {
+      this.getNickName();
+    }
     this.words = this.comment.comment.split(" ");
-    this.$store.dispatch({
-      type: "getLoggedInUser",
-      userName: this.loggedInUserName
-    });
   },
   filters: {
     moment: function(date) {
@@ -83,6 +73,19 @@ export default {
     }
   },
   methods: {
+    getNickName() {
+      this.$store
+        .dispatch({ type: "getUserById", userId: this.comment.writerId })
+        .then(res => {
+          console.log("comment", res);
+          this.commentOwner = res;
+          if (this.commentOwner._id === this.loggedInUser._id) {
+            this.nickName = "You";
+          } else {
+            this.nickName = res.userName;
+          }
+        });
+    },
     showTextArea() {
       this.commentTextArea = !this.commentTextArea;
     },

@@ -1,5 +1,4 @@
 import userServices from "../services/userServices.js";
-// import cloudinaryService from '../services/cloudinaryService.js'
 
 export default {
   state: {
@@ -36,8 +35,8 @@ export default {
       state.visitedUser = user;
     },
 
-    setSeachedUsers(state, { res }) {
-      state.searchedUsers = res;
+    setSeachedUsers(state, { users }) {
+      state.searchedUsers = users;
     },
 
   },
@@ -45,76 +44,83 @@ export default {
 
 
     getUserNamesById(context, { ids }) {
-      return userServices.getUserNamesById(ids).then(users => {
-        return users;
+      return userServices.getUserNamesById(ids).then(res => {
+        console.log("names", res)
+        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        return res.users;
       });
     },
     getVisitedUser(context, { userName }) {
-      return userServices.getUserByUsername(userName).then(user => {
-        context.commit({ type: "setVisitedUser", user });
-        return user;
-      });
-    },
-    getLoggedInUser(context, { userName }) {
-      return userServices.getUserByUsername(userName).then(user => {
-        context.commit({ type: "setLoggedInUser", user });
-        return user;
+      return userServices.getUserByUsername(userName).then(res => {
+        context.commit({ type: "setVisitedUser", user:res.user });
+        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        return res.user;
       });
     },
     getUserById(context, { userId }) {
-      return userServices.getUserById(userId).then(user => {
-        return user;
+      console.log("why no work getById", userId)
+  
+      return userServices.getUserById(userId).then(res => {
+        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        return res.user;
       });
     },
     getUserByUsername(context, { userName }) {
-      return userServices.getUserByUsername(userName).then(user => {
-        return user;
+      return userServices.getUserByUsername(userName).then(res => {
+        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        return res.user;
       });
     },
     addFollowers(context, { followeeId }) {
       return userServices
         .addFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
+          console.log(res)
           context.commit({ type: "updateUsers", users:res.users });
           context.commit({type:"setLoggedInUser", user:res.loggedInUser})
-          return users;
+          return res.users;
         });
     },
     removeFollowers(context, { followeeId }) {
       return userServices
         .removeFollowers(followeeId, context.state.loggedInUser._id)
-        .then(users => {
-          context.commit({ type: "updateUsers", users });
+        .then(res => {
+          console.log(res)
+          context.commit({ type: "updateUsers", users:res.users });
           context.commit({type:"setLoggedInUser", user:res.loggedInUser})
-          return users;
+          return res;
         });
     },
     addToUserFavorites(context, { imageId }) {
       return userServices
         .addToUserFavorites(imageId, context.state.loggedInUser._id)
-        .then(user => {
-          context.commit({ type: "updateLoggedInUser", user: user.value });
-          return user;
+        .then(res => {
+          context.commit({ type: "updateLoggedInUser", user: res.user.value });
+          // context.commit({type: "setLoggedInUser", user:res.loggedInUser})
+          return res;
         });
     },
     removeFromUserFavorites(context, { imageId }) {
       return userServices
         .removeFromUserFavorites(imageId, context.state.loggedInUser._id)
-        .then(user => {
-          context.commit({ type: "updateLoggedInUser", user: user.value });
-          return user;
+        .then(res => {
+          context.commit({ type: "updateLoggedInUser", user: res.user.value });
+          // context.commit({type: "setLoggedInUser", user:res.loggedInUser})
+          return res;
         });
     },
     updateUserDetails(context, { userDetails }) {
-      userServices.updateUserDetails(userDetails).then(user => {
-        context.commit({ type: "updateLoggedInUser", user: user.value });
-        return user.value;
+      userServices.updateUserDetails(userDetails).then(res => {
+        context.commit({ type: "updateLoggedInUser", user: res.value });
+        context.commit({type: "setLoggedInUser", user:res.value.loggedInUser})
+        return res.value;
       });
     },
 
     findRelevantUsers(context, { keyword }) {
       userServices.findRelevantUsers(keyword).then(res => {
-        context.commit({ type: "setSeachedUsers", res });
+        context.commit({ type: "setSeachedUsers", users:res.users });
+        context.commit({type: "setLoggedInUser", user:res.loggedInUser})
       });
     }
   }

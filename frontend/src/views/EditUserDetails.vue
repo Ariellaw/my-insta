@@ -95,7 +95,6 @@ export default {
   created() {
     const userName = this.$route.params.userName;
     this.$store.dispatch({ type: "getVisitedUser", userName })
-    // this.$store.dispatch({ type: "getLoggedInUser", userId });
   },
   computed: {
     loggedInUser() {

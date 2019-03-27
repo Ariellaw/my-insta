@@ -53,11 +53,6 @@
               <button @click="editProfile" class="edit-profile-or-following-btn btn">Edit Profile</button>
               <i class="fas fa-cog settings" @click="displayOptions()"></i>
             </section>
-            <!-- <button
-              @click="editProfile"
-              v-if="loggedInUser._id === visitedUser._id"
-              class="edit-profile-or-following-btn btn"
-            >Edit Profile</button>-->
             <button
               @click="removeFollowers(visitedUser._id)"
               v-else-if="followingVisitedUser"
@@ -134,8 +129,6 @@ export default {
   data() {
     return {
       filter: "album",
-      loggedInUserName: "Ariella_wills1",
-      loggedInUserId: "5c5fecdbd16a8d56eaca3c96",
       cellphoneDisplay: false,
       windowWidth: null,
       userId: null,
@@ -163,8 +156,7 @@ export default {
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
         console.log("addFollowers ERR", err);
-
-        this.$router.push({ name: "register" });
+        this.$router.push({ name: "login" });
       });
     },
     removeFollowers(followeeId) {
@@ -172,8 +164,7 @@ export default {
         .dispatch({ type: "removeFollowers", followeeId })
         .catch(err => {
           console.log("removeFollowers ERR", err);
-
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: "login" });
         });
     },
     editProfile() {
@@ -205,10 +196,12 @@ export default {
   },
   created() {
     const userName = this.$route.params.userName;
+    console.log("profile created userName", userName);
     this.$store
       .dispatch({ type: "getVisitedUser", userName })
       .then(user => {
         this.userId = user._id;
+        console.log("profile created user._id", user._id);
 
         if (user._id !== null) {
           this.$store.dispatch({
@@ -221,11 +214,6 @@ export default {
       .catch(err => {
         this.$router.push({ name: "login" });
       });
-
-    // this.$store.dispatch({
-    //   type: "getLoggedInUser",
-    //   userName: this.loggedInUserName
-    // });
     if (window.innerWidth <= 700) {
       this.cellphoneDisplay = true;
     }

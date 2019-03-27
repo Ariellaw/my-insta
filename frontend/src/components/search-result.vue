@@ -10,12 +10,17 @@
 
 <script>
 export default {
-  props:['user'],
-  methods:{
-    goToUserProfile(){
+  props: ["user"],
+  methods: {
+    goToUserProfile() {
       this.$router.push(`/user/${this.user._id}`);
       this.$router.go();
       this.$emit("resetKeyword");
+    }
+  },
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
     }
   }
 };
@@ -31,7 +36,7 @@ export default {
   align-items: center;
   background-color: #fafafa;
   text-decoration: none;
-  color:black;
+  color: black;
 
   &.search-result:hover {
     background-color: darken(#fafafa, 5%);
@@ -49,9 +54,9 @@ export default {
     flex-direction: column;
     font-size: 14px;
     text-align: left;
-      .name{
-        color:darkgray;
-      }
+    .name {
+      color: darkgray;
+    }
   }
 }
 </style>

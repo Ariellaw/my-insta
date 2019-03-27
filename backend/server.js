@@ -53,18 +53,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 passport.serializeUser(function(user, done) {
-  console.log("serializeUser()", user._id);
+  // console.log("serializeUser()", user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {
-  console.log("deserializeUser()", id);
+  // console.log("deserializeUser()", id);
   userService.getById(id)
     .then(user => {
-      console.log("deserializeUser() success", user);
+      // console.log("deserializeUser() success", user);
       done(null, user);
     }).catch(err => {
-      console.log("deserializeUser() err", err);
+      // console.log("deserializeUser() err", err);
       done(err);
     })
 });

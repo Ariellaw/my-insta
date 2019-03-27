@@ -42,8 +42,8 @@ export default {
     data(){
       return{
         credentials:{
-          username:null,
-          password:null
+          username:"Ariella_wills1",
+          password:"12345"
         }
       }
     },

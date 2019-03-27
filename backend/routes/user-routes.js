@@ -12,29 +12,28 @@ function addUserRoutes(app, passport) {
 
         userService.getUserNamesById(ids)
             .then(users =>{
-                return res.json(users);
+                return res.json({users, loggedInUser: req.user});
             })
     })
     app.get(`${BASE}/:userId`,
+    connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
         const userId = req.params.userId;
+        console.log("why no work getById", userId)
 
         userService.getById(userId)
             .then(user => {
-                return res.json(user);
+                return res.json({user, loggedInUser: req.user});
             })
     })
 
     app.get(`${BASE}/:userName/nickname`,
         connectEnsureLogin.ensureLoggedIn(),
-        (req, res) => {
-            console.log("req.user in nickname:", req.user);
-            
+        (req, res) => {            
             const userName = req.params.userName;
-
             userService.getUserByUsername(userName)
                 .then(user => {
-                    return res.json(user);
+                    return res.json({user, loggedInUser: req.user});
                 })
         })
     app.put(`${BASE}/:followeeId/followers`,
@@ -59,13 +58,14 @@ function addUserRoutes(app, passport) {
                 })
     })
     app.delete(`${BASE}/:imageId/:loggedInUserId/favorites`, 
+    connectEnsureLogin.ensureLoggedIn(),
     (req, res) =>{
         const imageId = req.params.imageId;
         const loggedInUserId = req.params.loggedInUserId;
 
         userService.removeFromUserFavorites(imageId, loggedInUserId)
             .then(user =>{
-                return res.json(user);
+                return res.json({user,  loggedInUser: req.user });
             })
     })
     app.put(`${BASE}/:imageId/favorites`, 
@@ -76,36 +76,39 @@ function addUserRoutes(app, passport) {
 
         userService.addToUserFavorites(imageId, loggedInUserId)
             .then(user =>{
-                return res.json(user);
+                return res.json({user, loggedInUser: req.user});
             })
     })
     app.get(`${BASE}/:userId/images`, 
+    connectEnsureLogin.ensureLoggedIn(),
     (req,res)=>{
         const userId = req.params.userId;
 
         userService.getImagesByImageId(userId)
             .then(images =>{
-                return res.json(images);
+                return res.json({images, loggedInUser: req.user});
             })
 
     })
 
     app.put(`${BASE}/:userId/userDetails`, 
+    connectEnsureLogin.ensureLoggedIn(),
     (req,res)=>{
         const userDetails = req.body.userDetails;
         userService.updateUserDetails(userDetails)
             .then(user =>{
-                return res.json(user);
+                return res.json({user, loggedInUser: req.user});
             })
     })
 
     app.get(`${BASE}/searchResults/users/:keyword`,
+    connectEnsureLogin.ensureLoggedIn(),
     (req, res) =>{
         const keyword = req.params.keyword;
         userService.findRelevantUsers(keyword)
             .then(users => {
 
-                return res.json(users)
+                return res.json({users, loggedInUser: req.user})
             } )
     })
 

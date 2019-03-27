@@ -26,7 +26,7 @@ export default {
       country: null,
       type: null,
       image: null,
-      loggedInUserName: "Ariella_wills1",
+
   
     };
   },
@@ -34,10 +34,7 @@ export default {
     gallaryOfImages
   },
   created() {
-    this.$store.dispatch({
-      type: "getLoggedInUser",
-      userName: this.loggedInUserName
-    });
+
     const keyword = this.$route.params.keyword;
     this.type = this.$route.params.type;
     if (this.type === "locations") {

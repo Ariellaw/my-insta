@@ -17,15 +17,11 @@ function initDbConnection() {
     return client.connect()
         .then(connectedClient => {
             console.log("Connected successfully to server and to AriellaGram");
-            // console.log("client1", client1)
-            // console.log("err", err)
-
             dataBaseConnection = connectedClient;
             return dataBaseConnection;
 
         }).catch(err =>
             console.log("Failed to connect to MongoDB", err)
-
         );
 
 }
