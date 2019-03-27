@@ -11,7 +11,6 @@ function getUserNamesById(ids){
             return res.data})
 }
 function getUserById(userId) {
-    console.log("why no work getById", userId)
     return axios.get(`${BASE_URL}/${userId}`)
         .then(res =>{
             return res.data

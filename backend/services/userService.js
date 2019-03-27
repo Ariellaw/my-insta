@@ -17,7 +17,6 @@ function getUserNamesById(ids){
 }
 
 function getById(userId) {
-  console.log("why no work getById", userId)
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db => {
     return db.collection(userDb).findOne({ _id: _id });
@@ -173,7 +172,6 @@ function _getListProperty(userId, listName) {
     });
 }
 function getImagesByImageId(userId) {
-  console.log("getImagesByImageId", userId)
   return getById(userId).then(user => {
     var favorites = user.favorites;
     for (var i = 0; i < favorites.length; i++) {

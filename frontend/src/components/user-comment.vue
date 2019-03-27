@@ -20,9 +20,9 @@
         :key="index"
       >{{word+' '}}</span>
     </span>
-    <span class="icons" v-if="viewedImage" :class="{'canEdit':commentOwner._id===loggedInUser._id}">
-      <i class="far fa-edit btn" @click="showTextArea()"></i>
-      <i class="fas fa-times btn" @click="$emit('deleteComment', comment.id)"></i>
+    <span class="icons" v-if="viewedImage" :class="{'canEdit':comment.writerId===loggedInUser._id}">
+      <i class="far fa-edit" @click="showTextArea()"></i>
+      <i class="fas fa-times" @click="$emit('deleteComment', comment.id)"></i>
     </span>
     <span
       v-if="viewedImage"
@@ -67,7 +67,7 @@ export default {
       return this.$store.getters.loggedInUser;
     },
     viewedImage() {
-      if (this.$route.params.imageId) {
+      if (this.$route.params.image) {
         return true;
       } else return false;
     }
@@ -77,7 +77,6 @@ export default {
       this.$store
         .dispatch({ type: "getUserById", userId: this.comment.writerId })
         .then(res => {
-          console.log("comment", res);
           this.commentOwner = res;
           if (this.commentOwner._id === this.loggedInUser._id) {
             this.nickName = "You";
@@ -115,7 +114,6 @@ export default {
   text-decoration: none;
   font-weight: 600;
   color: blue;
-  cursor: pointer;
 }
 .dots {
   color: darkgray;
@@ -126,7 +124,7 @@ export default {
   margin-top: 1rem;
   border-radius: 2rem;
   width: 100%;
-  // padding: 0.7rem;
+  cursor: pointer;
   &:hover {
     .canEdit {
       display: inline;

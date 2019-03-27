@@ -45,7 +45,6 @@ export default {
 
     getUserNamesById(context, { ids }) {
       return userServices.getUserNamesById(ids).then(res => {
-        console.log("names", res)
         context.commit({type:"setLoggedInUser", user:res.loggedInUser})
         return res.users;
       });
@@ -58,7 +57,6 @@ export default {
       });
     },
     getUserById(context, { userId }) {
-      console.log("why no work getById", userId)
   
       return userServices.getUserById(userId).then(res => {
         context.commit({type:"setLoggedInUser", user:res.loggedInUser})
@@ -75,7 +73,6 @@ export default {
       return userServices
         .addFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
-          console.log(res)
           context.commit({ type: "updateUsers", users:res.users });
           context.commit({type:"setLoggedInUser", user:res.loggedInUser})
           return res.users;
@@ -85,7 +82,6 @@ export default {
       return userServices
         .removeFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
-          console.log(res)
           context.commit({ type: "updateUsers", users:res.users });
           context.commit({type:"setLoggedInUser", user:res.loggedInUser})
           return res;

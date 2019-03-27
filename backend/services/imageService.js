@@ -13,7 +13,6 @@ function getImagesByUserId(userId) {
   );
 }
 function getImageById(imageId) {
-  console.log("what is not working here? getImageById", imageId)
   const _id = new ObjectId(imageId);
   return mongoService
     .connect()
@@ -152,7 +151,6 @@ function additionalUserImages(startingPoint, userId) {
   );
 }
 function getImagesByUserId(userId) {
-  console.log("getImagesByUserId",userId)
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db =>
     db

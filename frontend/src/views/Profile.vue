@@ -137,7 +137,6 @@ export default {
   },
   methods: {
     displayOptions() {
-      console.log("display options");
       this.optionsModual = true;
     },
     changeFilter(filter) {
@@ -196,12 +195,10 @@ export default {
   },
   created() {
     const userName = this.$route.params.userName;
-    console.log("profile created userName", userName);
     this.$store
       .dispatch({ type: "getVisitedUser", userName })
       .then(user => {
         this.userId = user._id;
-        console.log("profile created user._id", user._id);
 
         if (user._id !== null) {
           this.$store.dispatch({

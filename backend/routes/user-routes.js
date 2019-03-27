@@ -19,7 +19,6 @@ function addUserRoutes(app, passport) {
     connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
         const userId = req.params.userId;
-        console.log("why no work getById", userId)
 
         userService.getById(userId)
             .then(user => {

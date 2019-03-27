@@ -251,7 +251,6 @@ export default {
       return imageServices
         .addUserComment(comment, imageId, writerId)
         .then(res => {
-          console.log("comment res", res)
           if (context.state.viewedImage) {
             context.commit({ type: "updateViewedImage", image: res.image.value });
           }
@@ -280,24 +279,20 @@ export default {
       });
     },
     addUserLike(context, { imageId, userId }) {
-      console.log('likes',imageId, userId)
       return imageServices.addUserLike(imageId, userId).then(res => {
         if (context.state.viewedImage) {
           context.commit({ type: "updateViewedImage", image: res.image.value });
         }
         context.rootState.userModule.loggedInUser = res.loggedInUser;
-        console.log("why are there nylls here", res.image.value.likes)
         return res.image.value.likes;
       });
     },
     removeUserLike(context, { imageId, userId }) {
-      console.log('likes',imageId, userId)
       return imageServices.removeUserLike(imageId, userId).then(res => {
         if (context.state.viewedImage) {
           context.commit({ type: "updateViewedImage", image: res.image.value });
         }
         context.rootState.userModule.loggedInUser = res.loggedInUser;
-        console.log("why are there nylls here", res.image.value.likes)
         return res.image.value.likes;
       });
     },
