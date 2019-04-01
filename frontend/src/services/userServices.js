@@ -4,7 +4,12 @@ const BASE_URL = (process.env.NODE_ENV !== 'development')
  : "//192.168.1.105:3003/user";
 
 
-
+function createNewUser(user){
+    return axios.post(`${BASE_URL}/newUser`, {user})
+        .then(res =>{
+            return res.data;
+        })
+}
 function getUserNamesById(ids){
     return axios.post(`${BASE_URL}/userNameById`, {ids})
         .then(res => {
@@ -22,15 +27,14 @@ function getUserByUsername(userName){
     .then(res =>{
         return res.data       
     }).catch(error=>{
-        // this.$router.push({name:'authentication'})
     })
 }
-function updateFollowers(followeeId, followerId){
-//TODO - ask Eyali about best practices - https://blog.mwaysolutions.com/2014/06/05/10-best-practices-for-better-restful-api/
-   return axios.put(`${BASE_URL}/updateFollowers`, {followeeId, followerId})
-   .then(res => {
-       return res.data
-   })
+
+function getLoggedInUser(){
+return axios.get(`${BASE_URL}/loggedInUser`)
+    .then(res=>{
+        return res.data;
+    })
 }
 
 function addFollowers(followeeId, followerId){
@@ -88,9 +92,9 @@ function findRelevantUsers(keyword){
             return res.data;
         })
 }
+
 export default {
     getUserById,
-    updateFollowers,
     addFollowers,
     removeFollowers,
     addToUserFavorites,
@@ -100,5 +104,7 @@ export default {
     authenticateUser,
     findRelevantUsers,
     getUserByUsername,
-    getUserNamesById
+    getUserNamesById,
+    getLoggedInUser,
+    createNewUser
 }

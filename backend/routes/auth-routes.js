@@ -7,7 +7,7 @@ function addAuthRoutes(app, passport) {
     "/login",
     passport.authenticate("local", {
       // successRedirect: "/#/home",
-      failureRedirect: "/#/login?faliure=falure"
+      failureRedirect: "/#/login?faliure=faliure"
       //   failureFlash: true,
       //   successFlash: "Welcome!"
     }),

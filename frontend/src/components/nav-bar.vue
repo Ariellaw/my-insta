@@ -152,6 +152,7 @@ export default {
     goToLoggedInUserProfile() {
       var userName = this.loggedInUser.userName;
       this.$router.push({ name: "user-profile", params: { userName } });
+      this.$router.go();
     },
     findRelevantUsers() {
       if (this.keyword) {

@@ -2,13 +2,25 @@
   <div class="options-container">
     <div class="option">Change Password</div>
     <div class="option">Change Settings</div>
-    <div class="option">Log Out</div>
+    <!-- <router-link  to="//logout">Log out</router-link> -->
+    <div class="option" @click="logOut()" >Log Out</div>
     <div class="option" @click="$emit('close')">Cancel</div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "options",
+  methods: {
+    logOut() {
+      console.log("logout cmp");
+      this.$store.dispatch({ type: "logout" });
+      //TODO: relative location, maybe use $router
+      window.location="http://192.168.1.105:3003/logout";
+      // this.$router.push({ path: "http://192.168.1.105:3003/logout" });
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

@@ -27,33 +27,19 @@ export default {
       type: null,
       image: null,
 
-  
     };
   },
   components: {
     gallaryOfImages
   },
   created() {
-
     const keyword = this.$route.params.keyword;
     this.type = this.$route.params.type;
     if (this.type === "locations") {
-      this.image =
-        "https://www.st-christophers.co.uk/__data/assets/image/0004/454954/berlin_hero_updated.jpg";
-      this.getCountryInfo(keyword);
-      this.city = keyword.charAt(0).toUpperCase() + keyword.slice(1);
-      this.$store
-        .dispatch({ type: "getImagesByLocation", location: keyword })
-        .then(images => (this.images = images));
+      this.getLocation(keyword);
     }
     if (this.type === "hashtag") {
-      var hashtag = keyword;
-      this.$store
-        .dispatch({ type: "getImagesByHashtag", hashtag })
-        .then(images => {
-          this.images = images;
-          this.image = images[0].image;
-        });
+      this.getHashtagImages(keyword);
     }
   },
   mounted() {},
@@ -63,6 +49,31 @@ export default {
     }
   },
   methods: {
+    getLocation(keyword) {
+      this.image =
+        "https://www.st-christophers.co.uk/__data/assets/image/0004/454954/berlin_hero_updated.jpg";
+      this.getCountryInfo(keyword);
+      this.city = keyword.charAt(0).toUpperCase() + keyword.slice(1);
+      this.$store
+        .dispatch({ type: "getImagesByLocation", location: keyword })
+        .then(images => (this.images = images)).catch(err => {
+          console.log("getVisitedUserImages ERR", err);
+          this.$router.push({ name: "login" });
+        });
+    },
+    getHashtagImages(keyword) {
+      var hashtag = keyword;
+      this.$store
+        .dispatch({ type: "getImagesByHashtag", hashtag })
+        .then(images => {
+          this.images = images;
+          this.image = images[0].image;
+        }).catch(err => {
+          console.log("getVisitedUserImages ERR", err);
+          this.$router.push({ name: "login" });
+        });
+    },
+
     loadMap(lat, lng) {
       var myLatLng = { lat, lng };
       this.map = new google.maps.Map(document.getElementById("myMap"), {

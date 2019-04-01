@@ -5,7 +5,7 @@
       @goForward1Img="goForward1Img"
       v-if="showModal"
       :image="viewedImage"
-      @close="showModal = false"
+      @close="close()"
     ></view-image>
 
     <h1 v-if="isLoading">Loading...</h1>
@@ -27,7 +27,7 @@
 import viewImage from "./view-image.vue";
 export default {
   name: "image-gallery",
-  props: ["displayedImages"],
+  // props: ["displayedImages"],
   data() {
     return {
       showModal: false,
@@ -36,17 +36,21 @@ export default {
   },
 
   methods: {
-    scroll() {
-      window.onscroll = () => {
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight >=
-          document.documentElement.offsetHeight - 1;
-
-        if (bottomOfWindow) {
-          this.$emit("getAdditionalImages");
-        }
-      };
+    close() {
+      this.showModal = false;
+      this.$store.dispatch({ type: "setViewedImage", image:null});
     },
+    // scroll() {
+    //   window.onscroll = () => {
+    //     let bottomOfWindow =
+    //       document.documentElement.scrollTop + window.innerHeight >=
+    //       document.documentElement.offsetHeight - 1;
+
+    //     if (bottomOfWindow ) {
+    //       this.$emit("getAdditionalImages");
+    //     }
+    //   };
+    // },
 
     goBack1Image() {
       var idx = this.getIndexOfCurrImage();
@@ -85,6 +89,9 @@ export default {
     }
   },
   computed: {
+    displayedImages() {
+      return this.$store.getters.viewedImageCollection;
+    },
     isLoading() {
       return this.$store.getters.isLoading;
     },

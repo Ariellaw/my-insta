@@ -1,5 +1,5 @@
 <template>
-  <div id="user-feed page-container" v-if="imagesForFeed">
+<div id="user-feed page-container" v-if="imagesForFeed">
     <div
       class="user-feed"
       v-for="image in imagesForFeed"
@@ -15,7 +15,7 @@
       :image="chosenImage"
       @close="closeModal()"
     ></view-image>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -39,6 +39,7 @@ export default {
       this.userImages = null;
       this.$router.push({ params: { image: null } });
       this.$router.go();
+      this.$store.dispatch({ type: "setViewedImage", image: null });
     },
     goBack1Image() {
       var idx = this.getIndexOfCurrImage();
@@ -95,10 +96,7 @@ export default {
       });
     },
     getAdditionalImages() {
-      this.$store.dispatch({ type: "getAdditionalImages" }).catch(err => {
-        console.log("getAdditionalImages ERR", err);
-        this.$router.push({ name: "login" });
-      });
+      this.$store.dispatch({ type: "getAdditionalImages" });
     },
 
     scroll() {
@@ -106,7 +104,7 @@ export default {
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
           document.documentElement.offsetHeight - 1;
-        if (bottomOfWindow) {
+        if (bottomOfWindow && this.imagesForFeed.length>2) {
           this.getAdditionalImages();
         }
       };
@@ -130,8 +128,7 @@ export default {
         });
     }
   },
-  beforeMount() {
-  },
+  beforeMount() {},
   mounted() {
     this.scroll();
   },

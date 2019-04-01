@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import userProfile from './views/Profile.vue'
 import editUserDetails from './views/EditUserDetails.vue'
-import Authentication from './views/Authentication.vue'
+import Login from './views/Authentication.vue'
 import SearchResults from './views/searchResults.vue'
 import Register from './views/Register.vue'
 
@@ -11,11 +11,6 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/home/:image?',
-      name: 'home',
-      component: Home
-    },
     {
       path: '/user/:userName/:image?',
       name: 'user-profile',
@@ -29,7 +24,7 @@ export default new Router({
     {
      path:'/login',
      name: 'login',
-     component:Authentication
+     component:Login
     },
     {
       path:'/search/:type/:keyword/:image?',
@@ -41,7 +36,11 @@ export default new Router({
       name:'register',
       component:Register
     },
-    
+    {
+      path: '/:image?',
+      name: 'home',
+      component: Home
+    },    
     {
       path: '/about',
       name: 'about',

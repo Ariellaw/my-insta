@@ -4,7 +4,7 @@ export default {
   state: {
     visitedUser: null,
     loggedInUser: null,
-    searchedUsers: null,
+    searchedUsers: null
   },
   getters: {
     visitedUser: state => {
@@ -15,14 +15,17 @@ export default {
     },
     searchedUsers: state => {
       return state.searchedUsers;
-    },
-
+    }
   },
   mutations: {
-  
-    updateUsers(state, { users }) {
+
+    updateUsers(state, { users, followeeId }) {
       state.loggedInUser = users[1].value;
-      state.visitedUser = users[0].value;
+      if (state.visitedUser) {
+        if (state.visitedUser._id === followeeId) {
+          state.visitedUser = users[0].value;
+        }
+      }
     },
     setLoggedInUser(state, { user }) {
       state.loggedInUser = user;
@@ -37,35 +40,37 @@ export default {
 
     setSeachedUsers(state, { users }) {
       state.searchedUsers = users;
-    },
-
+    }
   },
   actions: {
-
-
+    registerNewUser(context,{user}){
+      return userServices.createNewUser(user);
+    },
     getUserNamesById(context, { ids }) {
       return userServices.getUserNamesById(ids).then(res => {
-        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.users;
       });
     },
+    setVisitedUser(context, user){
+      context.commit({ type: "setVisitedUser", user });
+    },
     getVisitedUser(context, { userName }) {
       return userServices.getUserByUsername(userName).then(res => {
-        context.commit({ type: "setVisitedUser", user:res.user });
-        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        context.commit({ type: "setVisitedUser", user: res.user });
+        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.user;
       });
     },
     getUserById(context, { userId }) {
-  
       return userServices.getUserById(userId).then(res => {
-        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.user;
       });
     },
     getUserByUsername(context, { userName }) {
       return userServices.getUserByUsername(userName).then(res => {
-        context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.user;
       });
     },
@@ -73,8 +78,15 @@ export default {
       return userServices
         .addFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
-          context.commit({ type: "updateUsers", users:res.users });
-          context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+          context.commit({ type: "updateUsers", users: res.users, followeeId });
+          context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
+          var imageOwner = context.rootState.imageModule.viewedImageOwner;
+          if (imageOwner) {
+            if (imageOwner._id === followeeId) {
+              context.rootState.imageModule.viewedImageOwner =
+                res.users[0].value;
+            }
+          }
           return res.users;
         });
     },
@@ -82,8 +94,15 @@ export default {
       return userServices
         .removeFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
-          context.commit({ type: "updateUsers", users:res.users });
-          context.commit({type:"setLoggedInUser", user:res.loggedInUser})
+          context.commit({ type: "updateUsers", users: res.users, followeeId });
+          context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
+          var imageOwner = context.rootState.imageModule.viewedImageOwner;
+          if (imageOwner) {
+            if (imageOwner._id === followeeId) {
+              context.rootState.imageModule.viewedImageOwner =
+                res.users[0].value;
+            }
+          }
           return res;
         });
     },
@@ -108,15 +127,31 @@ export default {
     updateUserDetails(context, { userDetails }) {
       userServices.updateUserDetails(userDetails).then(res => {
         context.commit({ type: "updateLoggedInUser", user: res.value });
-        context.commit({type: "setLoggedInUser", user:res.value.loggedInUser})
+        context.commit({
+          type: "setLoggedInUser",
+          user: res.value.loggedInUser
+        });
         return res.value;
       });
     },
 
     findRelevantUsers(context, { keyword }) {
       userServices.findRelevantUsers(keyword).then(res => {
-        context.commit({ type: "setSeachedUsers", users:res.users });
-        context.commit({type: "setLoggedInUser", user:res.loggedInUser})
+        context.commit({ type: "setSeachedUsers", users: res.users });
+        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
+      });
+    },
+    logout(context) {
+      console.log("actions logout 1", context.state.loggedInUser);
+      context.commit({ type: "setLoggedInUser", user: null });
+      console.log("actions logout 2", context.state.loggedInUser);
+    },
+
+    getLoggedInUser(context) {
+      userServices.getLoggedInUser().then(res => {
+        console.log("loggedinuser", res.loggedInUser);
+        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
+        return res.loggedInUser;
       });
     }
   }

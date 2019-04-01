@@ -5,6 +5,21 @@ const BASE = '/user'
 
 
 function addUserRoutes(app, passport) {
+    app.get(`${BASE}/loggedInUser`,
+    connectEnsureLogin.ensureLoggedIn(),
+    (req,res)=>{
+        return res.json({loggedInUser:req.user})
+    })
+    app.post(`${BASE}/newUser`,(req, res)=>{
+        const newUser = req.body.user;
+        userService.createNewUser(newUser).then(mongoRes =>{
+            if(mongoRes.success===false){
+                return res.json({message:mongoRes.msg})
+            }
+            else return res.json({message:"success"})
+        })
+    })
+
     app.post(`${BASE}/userNameById`,
     connectEnsureLogin.ensureLoggedIn(),
     (req,res) =>{
@@ -53,6 +68,7 @@ function addUserRoutes(app, passport) {
 
             userService.removeFollowers(followeeId, followerId)
                 .then(users => {
+                    console.log(users)
                     return res.json({users, loggedInUser: req.user});
                 })
     })

@@ -32,11 +32,16 @@
           justify-content: flex-start;
         }
       }
-  
-      .edit-user-input {
+      .editBio{
+        height:15rem;
+      }
+      input{
         height: 4rem;
+      }
+      .edit-user-input {
+        @include textarea;
         border-radius: 1rem;
-        padding: 1rem;
+        // padding: 1rem;
         width: 72%;
         max-width:70rem;
         justify-content: flex-end;

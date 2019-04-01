@@ -13,17 +13,17 @@
       <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
       <span class="btn">
         <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
-        <span
+        <!-- <span
           v-if="isFollowing"
           :class="followingStatusClass"
           @click="removeFollowers(image.ownerId)"
-        >Following</span>
-        <span
+        >Following</span>-->
+        <!-- <span
           v-else
           :class="followingStatusClass"
           class="follow"
           @click="addFollowers(image.ownerId)"
-        >Follow</span>
+        >Follow</span>-->
         <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
       </span>
     </div>
@@ -36,12 +36,13 @@
         :key="comment.id"
       ></user-comment>
     </div>
+    <social-media v-if="socialMediaModule" :image="image" @close="socialMediaModule=false"></social-media>
     <div class="likes-and-followers" v-if="likes">
       <div class="icons">
         <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
         <i @click="addUserLike" v-else class="far fa-heart btn"></i>
 
-        <i class="fas fa-share-alt btn"></i>
+        <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i>
 
         <i v-if="inUserFavorites" @click="removeFromUserFavorites" class="fas fa-bookmark btn"></i>
         <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
@@ -69,6 +70,7 @@
 <script>
 import moment from "moment";
 import userComment from "./user-comment.vue";
+import socialMedia from "./social-media.vue";
 export default {
   props: ["image"],
   data() {
@@ -76,11 +78,13 @@ export default {
       comment: null,
       imageComments: this.image.comments,
       displayVertically: false,
-      likes: this.image.likes
+      likes: this.image.likes,
+      socialMediaModule: false,
+      imageOwner: null
     };
   },
   created() {
-    this.getViewedImageOwner(this.image.ownerId);
+    this.getImageOwner(this.image.ownerId);
   },
 
   filters: {
@@ -104,12 +108,11 @@ export default {
         });
     },
     addUserLike() {
-      this.$socket.emit("likeAdded", {
-        image: this.image,
-        userId: this.loggedInUser._id,
-        userName: this.loggedInUser.userName
-        // followees: this.followeesThatLiked
+         this.$socket.emit("likeAdded", {
+        image: this.viewedImage,
+        user: this.loggedInUser
       });
+
       this.$store
         .dispatch({
           type: "addUserLike",
@@ -127,9 +130,7 @@ export default {
     removeUserLike() {
       this.$socket.emit("likeRemoved", {
         image: this.image,
-        userId: this.loggedInUser._id,
-        userName: this.loggedInUser.userName
-        // followees: this.followeesThatLiked
+        user: this.loggedInUser
       });
       this.$store
         .dispatch({
@@ -143,15 +144,14 @@ export default {
           this.$router.push({ name: "login" });
         });
     },
-    getViewedImageOwner(userId) {
+    getImageOwner(userId) {
       this.$store
         .dispatch({
-          type: "getViewedImageOwner",
+          type: "getUserById",
           userId
         })
-        .catch(err => {
-          console.log("getvieed imageowner err", err);
-          this.$router.push({ name: "login" });
+        .then(user => {
+          this.imageOwner = user;
         });
     },
     goToLocationImages() {
@@ -168,7 +168,7 @@ export default {
     addUserComment(comment, imageId, writerId) {
       this.$socket.emit("commentAdded", {
         comment,
-        image: this.viewedImage,
+        image: this.image,
         writerId
       });
       this.$store
@@ -243,19 +243,19 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    imageOwner() {
-      return this.$store.getters.viewedImageOwner;
-    },
-    isFollowing() {
-      if (this.loggedInUser.followees) {
-        return this.loggedInUser.followees.includes(this.imageOwner._id);
-      }
-    },
-    followingStatusClass() {
-      return {
-        displayNone: this.loggedInUser._id === this.imageOwner._id
-      };
-    },
+    // imageOwner() {
+    //   return this.$store.getters.viewedImageOwner;
+    // },
+    // isFollowing() {
+    //   if (this.loggedInUser.followees) {
+    //     return this.loggedInUser.followees.includes(this.imageOwner._id);
+    //   }
+    // },
+    // followingStatusClass() {
+    //   return {
+    //     displayNone: this.loggedInUser._id === this.imageOwner._id
+    //   };
+    // },
     inUserFavorites() {
       if (this.loggedInUser.favorites) {
         return this.loggedInUser.favorites.includes(this.image._id);
@@ -269,7 +269,8 @@ export default {
   },
 
   components: {
-    userComment
+    userComment,
+    socialMedia
   }
 };
 </script>

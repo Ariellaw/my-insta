@@ -1,198 +1,581 @@
 <template>
-  <div id="login-box">
-  <div class="left">
-    <h1>Sign up</h1>
-    
-    <input type="text" name="username" placeholder="Username" />
-    <input type="text" name="email" placeholder="E-mail" />
-    <input type="password" name="password" placeholder="Password" />
-    <input type="password" name="password2" placeholder="Retype password" />
-    
-    <input type="submit" name="signup_submit" value="Sign me up" />
+  <div class="form_wrapper">
+    <div class="form_container">
+      <div class="title_container">
+        <h2>Sign up form</h2>
+      </div>
+      <div class="row clearfix">
+        <div class>
+          <form>
+            <div class="input_field">
+              <span>
+                <i aria-hidden="true" class="fas fa-user"></i>
+              </span>
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                v-model="user.userName"
+                required
+              >
+            </div>
+            <div class="input_field">
+              <span>
+                <i aria-hidden="true" class="fa fa-envelope"></i>
+              </span>
+              <input type="email" name="email" placeholder="Email" v-model="user.email" required>
+            </div>
+            <div class="input_field">
+              <span>
+                <i aria-hidden="true" class="fa fa-lock"></i>
+              </span>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                v-model="user.password"
+                required
+              >
+            </div>
+            <div class="input_field">
+              <span>
+                <i aria-hidden="true" class="fa fa-lock"></i>
+              </span>
+              <input
+                type="password"
+                name="password"
+                placeholder="Re-type Password"
+                v-model="password2"
+                required
+              >
+            </div>
+            <p class="red" v-if="passwordNotValidated">Passwords must match!!</p>
+
+            <div class="row clearfix">
+              <div class="col_half">
+                <div class="input_field">
+                  <span>
+                    <i aria-hidden="true" class="fa fa-user"></i>
+                  </span>
+                  <input type="text" name="name" placeholder="First Name" v-model="user.firstName">
+                </div>
+              </div>
+              <div class="col_half">
+                <div class="input_field">
+                  <span>
+                    <i aria-hidden="true" class="fa fa-user"></i>
+                  </span>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Last Name"
+                    v-model="user.lastName"
+                    required
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="input_field select_option">
+              <div class="select_arrow"></div>
+            </div>
+            <input class="button" type="submit" value="Register" @click.prevent="registerUser()">
+            <h3 class="red">{{message}}</h3>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <div class="right">
-    <span class="loginwith">Sign in with<br />social network</span>
-    
-    <button class="social-signin facebook">Log in with facebook</button>
-    <button class="social-signin twitter">Log in with Twitter</button>
-    <button class="social-signin google">Log in with Google+</button>
-  </div>
-  <div class="or">OR</div>
-</div>
 </template>
 
 <script>
 export default {
-      name: "register",
-
-
-}
+  name: "register",
+  data() {
+    return {
+      user: {
+        userName: "",
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: ""
+      },
+      password2: null,
+      message: null
+    };
+  },
+  methods: {
+    registerUser() {
+      if (this.passwordNotValidated) {
+        return;
+      } else {
+        this.$store
+          .dispatch({ type: "registerNewUser", user: this.user })
+          .then(res => {
+            if (res.message === "success") {
+              this.$router.push({
+                name: "login",
+                query: { success: "new-user" }
+              });
+            } else {
+              console.log("failure message", res.message);
+              this.message = res.message;
+            }
+          });
+      }
+    }
+  },
+  computed: {
+    passwordNotValidated() {
+      return (
+        this.user.password &&
+        this.password2 &&
+        this.user.password !== this.password2
+      );
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-
-
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
-*:focus {
-  outline: none;
-}
+$yellow: #f5ba1a;
+$black: #000000;
+$grey: #cccccc;
 
 body {
-  margin: 0;
-  padding: 0;
-  background: #DDD;
-  font-size: 16px;
-  color: #222;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 14px;
+  background: #f2f2f2;
 }
-
-#login-box {
+.clearfix {
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+  }
+}
+.form_wrapper {
+  background: #fff;
+  width: 400px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 25px;
+  margin: 8% auto 0;
   position: relative;
-  margin: 5% auto;
-  width: 600px;
-  height: 400px;
-  background: #FFF;
-  border-radius: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
+  z-index: 1;
+  border-top: 5px solid $yellow;
 
-.left {
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  transform-origin: 50% 0%;
+  transform: scale3d(1, 1, 1);
+  transition: none;
+  animation: expand 0.8s 0.6s ease-out forwards;
+  opacity: 0;
+  h2 {
+    font-size: 1.5em;
+    line-height: 1.5em;
+    margin: 0;
+  }
+  .title_container {
+    text-align: center;
+    padding-bottom: 15px;
+  }
+  h3 {
+    font-size: 1.1em;
+    font-weight: normal;
+    line-height: 1.5em;
+    margin: 0;
+  }
+  label {
+    font-size: 12px;
+  }
+  .row {
+    margin: 10px -15px;
+    > div {
+      padding: 0 15px;
+      box-sizing: border-box;
+    }
+  }
+  .col_half {
+    width: 50%;
+    float: left;
+  }
+  .input_field {
+    position: relative;
+    margin-bottom: 20px;
+    -webkit-animation: bounce 0.6s ease-out;
+    animation: bounce 0.6s ease-out;
+    > span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #333;
+      height: 100%;
+      border-right: 1px solid $grey;
+      text-align: center;
+      width: 30px;
+      > i {
+        padding-top: 10px;
+      }
+    }
+  }
+  .textarea_field {
+    > span {
+      > i {
+        padding-top: 10px;
+      }
+    }
+  }
+  input {
+    &[type="text"],
+    &[type="email"],
+    &[type="password"] {
+      width: 100%;
+      padding: 8px 10px 9px 35px;
+      height: 35px;
+      border: 1px solid $grey;
+      box-sizing: border-box;
+      outline: none;
+      -webkit-transition: all 0.3s ease-in-out;
+      -moz-transition: all 0.3s ease-in-out;
+      -ms-transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
+    }
+    &[type="text"]:hover,
+    &[type="email"]:hover,
+    &[type="password"]:hover {
+      background: #fafafa;
+    }
+    &[type="text"]:focus,
+    &[type="email"]:focus,
+    &[type="password"]:focus {
+      -webkit-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
+      -moz-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
+      box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
+      border: 1px solid $yellow;
+      background: #fafafa;
+    }
+    &[type="submit"] {
+      background: $yellow;
+      height: 35px;
+      line-height: 35px;
+      width: 100%;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      -webkit-transition: all 0.3s ease-in-out;
+      -moz-transition: all 0.3s ease-in-out;
+      -ms-transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        background: darken($yellow, 7%);
+      }
+      &:focus {
+        background: darken($yellow, 7%);
+      }
+    }
+    &[type="checkbox"],
+    &[type="radio"] {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+  }
+}
+.form_container {
+  margin-bottom: 6rem;
+  .row {
+    .col_half.last {
+      border-left: 1px solid $grey;
+    }
+  }
+}
+.checkbox_option {
+  label {
+    margin-right: 1em;
+    position: relative;
+    &:before {
+      content: "";
+      display: inline-block;
+      width: 0.5em;
+      height: 0.5em;
+      margin-right: 0.5em;
+      vertical-align: -2px;
+      border: 2px solid $grey;
+      padding: 0.12em;
+      background-color: transparent;
+      background-clip: content-box;
+      transition: all 0.2s ease;
+    }
+    &:after {
+      border-right: 2px solid $black;
+      border-top: 2px solid $black;
+      content: "";
+      height: 20px;
+      left: 2px;
+      position: absolute;
+      top: 7px;
+      transform: scaleX(-1) rotate(135deg);
+      transform-origin: left top;
+      width: 7px;
+      display: none;
+    }
+  }
+  input {
+    &:hover + label:before {
+      border-color: $black;
+    }
+    &:checked + label {
+      &:before {
+        border-color: $black;
+      }
+      &:after {
+        -moz-animation: check 0.8s ease 0s running;
+        -webkit-animation: check 0.8s ease 0s running;
+        animation: check 0.8s ease 0s running;
+        display: block;
+        width: 7px;
+        height: 20px;
+        border-color: $black;
+      }
+    }
+  }
+}
+.radio_option {
+  label {
+    margin-right: 1em;
+    &:before {
+      content: "";
+      display: inline-block;
+      width: 0.5em;
+      height: 0.5em;
+      margin-right: 0.5em;
+      border-radius: 100%;
+      vertical-align: -3px;
+      border: 2px solid $grey;
+      padding: 0.15em;
+      background-color: transparent;
+      background-clip: content-box;
+      transition: all 0.2s ease;
+    }
+  }
+  input {
+    &:hover + label:before {
+      border-color: $black;
+    }
+    &:checked + label:before {
+      background-color: $black;
+      border-color: $black;
+    }
+  }
+}
+.select_option {
+  position: relative;
+  width: 100%;
+  select {
+    display: inline-block;
+    width: 100%;
+    height: 35px;
+    padding: 0px 15px;
+    cursor: pointer;
+    color: #7b7b7b;
+    border: 1px solid $grey;
+    border-radius: 0;
+    background: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.2s ease;
+    &::-ms-expand {
+      display: none;
+    }
+    &:hover,
+    &:focus {
+      color: $black;
+      background: #fafafa;
+      border-color: $black;
+      outline: none;
+    }
+  }
+}
+.select_arrow {
   position: absolute;
-  top: 0;
-  left: 0;
-  box-sizing: border-box;
-  padding: 40px;
-  width: 300px;
-  height: 400px;
+  top: calc(50% - 4px);
+  right: 15px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-width: 8px 5px 0 5px;
+  border-style: solid;
+  border-color: #7b7b7b transparent transparent transparent;
 }
 
-h1 {
-  margin: 0 0 20px 0;
-  font-weight: 300;
-  font-size: 28px;
+.select_option select {
+  &:hover + .select_arrow,
+  &:focus + .select_arrow {
+    border-top-color: $black;
+  }
 }
-
-input[type="text"],
-input[type="password"] {
-  display: block;
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  padding: 4px;
-  width: 220px;
-  height: 32px;
-  border: none;
-  border-bottom: 1px solid #AAA;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 15px;
-  transition: 0.2s ease;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-bottom: 2px solid #16a085;
-  color: #16a085;
-  transition: 0.2s ease;
-}
-
-input[type="submit"] {
-  margin-top: 28px;
-  width: 120px;
-  height: 32px;
-  background: #16a085;
-  border: none;
-  border-radius: 2px;
-  color: #FFF;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  text-transform: uppercase;
-  transition: 0.1s ease;
-  cursor: pointer;
-}
-
-input[type="submit"]:hover,
-input[type="submit"]:focus {
-  opacity: 0.8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  transition: 0.1s ease;
-}
-
-input[type="submit"]:active {
-  opacity: 1;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  transition: 0.1s ease;
-}
-
-.or {
-  position: absolute;
-  top: 180px;
-  left: 280px;
-  width: 40px;
-  height: 40px;
-  background: #DDD;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  line-height: 40px;
+.credit {
+  position: relative;
+  z-index: 1;
   text-align: center;
+  padding: 15px;
+  color: $yellow;
+  a {
+    color: darken($yellow, 7%);
+  }
+}
+@-webkit-keyframes check {
+  0% {
+    height: 0;
+    width: 0;
+  }
+  25% {
+    height: 0;
+    width: 7px;
+  }
+  50% {
+    height: 20px;
+    width: 7px;
+  }
 }
 
-.right {
-  position: absolute;
-  top: 0;
-  right: 0;
-  box-sizing: border-box;
-  padding: 40px;
-  width: 300px;
-  height: 400px;
-  background: url('https://goo.gl/YbktSj');
-  background-size: cover;
-  background-position: center;
-  border-radius: 0 2px 2px 0;
+@keyframes check {
+  0% {
+    height: 0;
+    width: 0;
+  }
+  25% {
+    height: 0;
+    width: 7px;
+  }
+  50% {
+    height: 20px;
+    width: 7px;
+  }
 }
 
-.right .loginwith {
-  display: block;
-  margin-bottom: 40px;
-  font-size: 28px;
-  color: #FFF;
-  text-align: center;
+@-webkit-keyframes expand {
+  0% {
+    -webkit-transform: scale3d(1, 0, 1);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: scale3d(1, 1.2, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1, 0.85, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1, 1.05, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
 }
 
-button.social-signin {
-  margin-bottom: 20px;
-  width: 220px;
-  height: 36px;
-  border: none;
-  border-radius: 2px;
-  color: #FFF;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  transition: 0.2s ease;
-  cursor: pointer;
+@keyframes expand {
+  0% {
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: scale3d(1, 1.2, 1);
+    transform: scale3d(1, 1.2, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1, 0.85, 1);
+    transform: scale3d(1, 0.85, 1);
+  }
+  75% {
+    -webkit-transform: scale3d(1, 1.05, 1);
+    transform: scale3d(1, 1.05, 1);
+  }
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
 }
 
-button.social-signin:hover,
-button.social-signin:focus {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  transition: 0.2s ease;
+@-webkit-keyframes bounce {
+  0% {
+    -webkit-transform: translate3d(0, -25px, 0);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: translate3d(0, 10px, 0);
+  }
+  50% {
+    -webkit-transform: translate3d(0, -6px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0, 2px, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
 
-button.social-signin:active {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  transition: 0.2s ease;
+@keyframes bounce {
+  0% {
+    -webkit-transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, -25px, 0);
+    opacity: 0;
+  }
+  25% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+  50% {
+    -webkit-transform: translate3d(0, -6px, 0);
+    transform: translate3d(0, -6px, 0);
+  }
+  75% {
+    -webkit-transform: translate3d(0, 2px, 0);
+    transform: translate3d(0, 2px, 0);
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
-
-button.social-signin.facebook {
-  background: #32508E;
-}
-
-button.social-signin.twitter {
-  background: #55ACEE;
-}
-
-button.social-signin.google {
-  background: #DD4B39;
+@media (max-width: 600px) {
+  .form_wrapper {
+    .col_half {
+      width: 100%;
+      float: none;
+    }
+  }
+  .bottom_row {
+    .col_half {
+      width: 50%;
+      float: left;
+    }
+  }
+  .form_container {
+    .row {
+      .col_half.last {
+        border-left: none;
+      }
+    }
+  }
+  .remember_me {
+    padding-bottom: 20px;
+  }
 }
 </style>

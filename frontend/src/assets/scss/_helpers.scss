@@ -1,60 +1,55 @@
-.btn{
-    cursor: pointer;
+.btn {
+  cursor: pointer;
 }
-.bold-reg{
-    font-weight: bold;
-    font-family: monst-bold;
+.bold-reg {
+  font-weight: bold;
+  font-family: monst-bold;
+}
+.darkScreen {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
-.right{
-    float:right;
+.right {
+  float: right;
 }
 
 .displayNone {
-    display: none;
+  display: none;
 }
 .visibilityNone {
-    visibility:hidden;
+  visibility: hidden;
 }
-.red{
-    color:red;
+.red {
+  color: red;
 }
 
-.page-container{
-    margin:0 auto;
+.page-container {
+  margin: 0 auto;
 
-@media only screen 
-  and (max-width: 2500px) {
-        width:72%;
-  }
-
-  @media only screen 
-  and (max-width: 1500px) {
-        width:80%;
+  @media only screen and (max-width: 2500px) {
+    width: 72%;
   }
 
-  @media only screen 
-  and (max-width: 1350px) {
-        width:85%;
-    
+  @media only screen and (max-width: 1500px) {
+    width: 80%;
   }
 
-  @media only screen 
-  and (max-width: 1200px) {
-        width:90%;
+  @media only screen and (max-width: 1350px) {
+    width: 85%;
   }
 
-  @media only screen 
-  and (max-width: 1000px) {
-        width:94%;
+  @media only screen and (max-width: 1200px) {
+    width: 90%;
   }
-  @media only screen 
-  and (max-width: 800px) {
-        width:97%;
+
+  @media only screen and (max-width: 1000px) {
+    width: 94%;
   }
-  @media only screen 
-  and (max-width: 700px) {
-        width:100%;
-        overflow-x: hidden;
+  @media only screen and (max-width: 800px) {
+    width: 97%;
+  }
+  @media only screen and (max-width: 700px) {
+    width: 100%;
+    overflow-x: hidden;
   }
 }

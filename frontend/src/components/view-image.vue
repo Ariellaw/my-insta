@@ -34,6 +34,11 @@
               <p @click="goToLocationImages" class="image-location">{{viewedImage.location}}</p>
             </span>
           </div>
+          <social-media
+            v-if="socialMediaModule"
+            :image="viewedImage"
+            @close="socialMediaModule=false"
+          ></social-media>
           <div class="comments" v-if="viewedImage.comments">
             <user-comment
               @goToUserProfile="goToUserProfile"
@@ -46,7 +51,6 @@
             ></user-comment>
             <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
           </div>
-          <social-media v-if="socialMediaModule" :image="viewedImage"></social-media>
           <div class="likes-and-followers">
             <div v-if="loggedInUser" class="icons">
               <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
@@ -66,15 +70,19 @@
                 {{followeesThatLiked[0]}}
                 <span
                   v-if="viewedImage.likes>1"
-                >and{{viewedImage.length-1}} others</span>like this
+                >and {{viewedImage.likes.length-1}} others</span>like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} like this
+                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
+                <span
+                  v-if="viewedImage.likes>2"
+                >and {{viewedImage.likes.length-2}} others</span>
+                like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} and {{followeesThatLiked.length-2}} others like this
+                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} and {{viewedImage.likes.length-2}} others like this
               </span>
 
               <span
@@ -125,14 +133,7 @@ export default {
       this.displayVertically = true;
     }
   },
-  mounted() {
-    console.log(
-      "mounted",
-      this.viewedImage.likes,
-      this.followeesThatLiked,
-      this.loggedInUser
-    );
-  },
+
   filters: {
     moment: function(date) {
       return moment(date).fromNow();
@@ -175,7 +176,6 @@ export default {
       this.$store
         .dispatch({ type: "getImageById", imageId: this.$route.params.image })
         .then(image => {
-          console.log("important IMAGE", image);
           this.getViewedImageOwner(image.ownerId);
           this.$store.dispatch({ type: "setViewedImage", image });
           this.$store.dispatch({
@@ -202,17 +202,11 @@ export default {
       this.$store
         .dispatch({ type: "removeFollowers", followeeId })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("removeFollowers err", err);
           this.$router.push({ name: "login" });
         });
     },
     addUserLike() {
-      console.log(
-        this.viewedImage,
-        this.viewedImage.likes,
-        this.followeesThatLiked,
-        this.loggedInUser._id
-      );
       this.$socket.emit("likeAdded", {
         image: this.viewedImage,
         user: this.loggedInUser
@@ -225,17 +219,11 @@ export default {
           userId: this.loggedInUser._id
         })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("addUserLike err", err);
           this.$router.push({ name: "login" });
         });
     },
     removeUserLike() {
-      console.log(
-        this.viewedImage.likes,
-        this.followeesThatLiked,
-        this.loggedInUser
-      );
-
       this.$socket.emit("likeRemoved", {
         image: this.viewedImage,
         user: this.loggedInUser
@@ -249,19 +237,18 @@ export default {
           userName: this.loggedInUser.userName
         })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("removeUserLike err", err);
           this.$router.push({ name: "login" });
         });
     },
     getViewedImageOwner(userId) {
-      console.log("getViewedImageOwner", userId);
       this.$store
         .dispatch({
           type: "getViewedImageOwner",
           userId
         })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("getViewedImageOwner err", err);
           this.$router.push({ name: "login" });
         });
     },
@@ -281,7 +268,7 @@ export default {
           writerId
         })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("addUserComment err", err);
           this.$router.push({ name: "login" });
         });
       // .then(comments => {
@@ -296,7 +283,7 @@ export default {
           imageId: this.image._id
         })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("addToUserFavorites err", err);
           this.$router.push({ name: "login" });
         });
     },
@@ -307,14 +294,16 @@ export default {
           imageId: this.image._id
         })
         .catch(err => {
-          console.log("addFollowers err", err);
+          console.log("removeFromUserFavorites err", err);
           this.$router.push({ name: "login" });
         });
     },
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
-      console.log("go to owner profile", userName);
-      this.$router.push({ name: "user-profile", params: { userName, image:null } });
+      this.$router.push({
+        name: "user-profile",
+        params: { userName, image: null }
+      });
     },
     goToLocationImages() {
       this.$router.push(
@@ -345,7 +334,6 @@ export default {
   computed: {
     followeesThatLiked() {
       var followees = this.$store.getters.followeesThatLiked;
-      console.log("for each is not working", followees);
       var users = [];
       if (followees) {
         followees.forEach(followee => {

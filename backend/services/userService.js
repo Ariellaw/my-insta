@@ -4,7 +4,7 @@ const imagesDb = "post";
 const ObjectId = require("mongodb").ObjectId;
 const ImageService = require("./imageService");
 
-function getUserNamesById(ids){
+function getUserNamesById(ids) {
   for (var i = 0; i < ids.length; i++) {
     ids[i] = new ObjectId(ids[i]);
   }
@@ -16,6 +16,18 @@ function getUserNamesById(ids){
   );
 }
 
+function createNewUser(newUser) {
+  return getUserByUsername(newUser.userName).then(user => {
+   if(user){
+     return Promise.resolve({success:false, msg: "This username already exists in our system"});
+   }
+   else{
+    var newUserObj = _createUserObj(newUser.userName, newUser.password, newUser.email, newUser.firstName, newUser.lastName)
+     return mongoService.connect()
+     .then(db => db.collection(userDb).insertOne(newUserObj));
+   }
+  })
+}
 function getById(userId) {
   const _id = new ObjectId(userId);
   return mongoService.connect().then(db => {
@@ -28,9 +40,11 @@ function getUserByUsername(userName) {
     userName = userName.slice(1);
   }
   return mongoService.connect().then(db => {
-        return db.collection(userDb).findOne({ userName: { $regex: `^${userName}$`, $options: "i" } })
+    return db
+      .collection(userDb)
+      .findOne({ userName: { $regex: `^${userName}$`, $options: "i" } });
 
-        // return db.collection(userDb).findOne({ userName });
+    // return db.collection(userDb).findOne({ userName });
   });
 }
 
@@ -196,26 +210,24 @@ function updateUserDetails(userDetails) {
     var email = userDetails.email || user.email;
     var userName = userDetails.userName || user.userName;
     var profilePic = userDetails.profilePic || user.profilePic;
+    var bio = userDetails.bio||user.bio;
 
-    return mongoService
-      .connect()
-      .then(db =>
-        db
-          .collection(userDb)
-          .findOneAndUpdate(
-            { _id: _id },
-            {
-              $set: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                userName: userName,
-                profilePic: profilePic
-              }
-            },
-            { returnOriginal: false }
-          )
-      );
+    return mongoService.connect().then(db =>
+      db.collection(userDb).findOneAndUpdate(
+        { _id: _id },
+        {
+          $set: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            userName: userName,
+            profilePic: profilePic,
+            bio:bio
+          }
+        },
+        { returnOriginal: false }
+      )
+    );
   });
 }
 
@@ -226,7 +238,7 @@ function findRelevantUsers(keyword) {
       .find({
         $or: [
           { bio: { $regex: `.*${keyword}.*`, $options: "i" } },
-          { userName: { $regex: `.*${keyword}.*`, $options: "i" } },
+          { userName: { $regex: `.*${keyword}.*`, $options: "i" } }
           // { hashtags: { $regex: `.*${keyword}.*`, $options: "i" } }
         ]
       })
@@ -251,5 +263,23 @@ module.exports = {
   updateUserDetails,
   findRelevantUsers,
   getUserByUsername,
-  getUserNamesById
+  getUserNamesById,
+  createNewUser
 };
+
+function _createUserObj(userName, password, email, firstName, lastName) {
+  var user = {
+    firstName,
+    lastName,
+    userName: userName,
+    password: password,
+    followees: [],
+    followers: [],
+    favorites: [],
+    profilePic: "https://www.rd.com/wp-content/uploads/2017/10/203_The-Dogist-Puppies-760x506.jpg",
+    backgroundPic: "",
+    email: email,
+    bio: ""
+  };
+  return user;
+}
