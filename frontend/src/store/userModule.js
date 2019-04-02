@@ -18,7 +18,6 @@ export default {
     }
   },
   mutations: {
-
     updateUsers(state, { users, followeeId }) {
       state.loggedInUser = users[1].value;
       if (state.visitedUser) {
@@ -31,7 +30,7 @@ export default {
       state.loggedInUser = user;
     },
     updateLoggedInUser(state, { user }) {
-      console.log("setlogged in user", user)
+      console.log("setlogged in user", user);
       state.loggedInUser = user;
     },
 
@@ -44,7 +43,7 @@ export default {
     }
   },
   actions: {
-    registerNewUser(context,{user}){
+    registerNewUser(context, { user }) {
       return userServices.createNewUser(user);
     },
     getUserNamesById(context, { ids }) {
@@ -53,7 +52,7 @@ export default {
         return res.users;
       });
     },
-    setVisitedUser(context, user){
+    setVisitedUser(context, user) {
       context.commit({ type: "setVisitedUser", user });
     },
     getVisitedUser(context, { userName }) {
@@ -80,14 +79,6 @@ export default {
         .addFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
           context.commit({ type: "updateUsers", users: res.users, followeeId });
-          context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
-          var imageOwner = context.rootState.imageModule.viewedImageOwner;
-          if (imageOwner) {
-            if (imageOwner._id === followeeId) {
-              context.rootState.imageModule.viewedImageOwner =
-                res.users[0].value;
-            }
-          }
           return res.users;
         });
     },
@@ -96,15 +87,7 @@ export default {
         .removeFollowers(followeeId, context.state.loggedInUser._id)
         .then(res => {
           context.commit({ type: "updateUsers", users: res.users, followeeId });
-          context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
-          var imageOwner = context.rootState.imageModule.viewedImageOwner;
-          if (imageOwner) {
-            if (imageOwner._id === followeeId) {
-              context.rootState.imageModule.viewedImageOwner =
-                res.users[0].value;
-            }
-          }
-          return res;
+          return res.users;
         });
     },
     addToUserFavorites(context, { imageId }) {
@@ -112,7 +95,6 @@ export default {
         .addToUserFavorites(imageId, context.state.loggedInUser._id)
         .then(res => {
           context.commit({ type: "updateLoggedInUser", user: res.user.value });
-          // context.commit({type: "setLoggedInUser", user:res.loggedInUser})
           return res;
         });
     },
@@ -121,15 +103,14 @@ export default {
         .removeFromUserFavorites(imageId, context.state.loggedInUser._id)
         .then(res => {
           context.commit({ type: "updateLoggedInUser", user: res.user.value });
-          // context.commit({type: "setLoggedInUser", user:res.loggedInUser})
           return res;
         });
     },
     updateUserDetails(context, { userDetails }) {
       userServices.updateUserDetails(userDetails).then(res => {
-        console.log("updateUserDetails loggedin User actions", res.value)
+        console.log("updateUserDetails loggedin User actions", res.value);
         context.commit({ type: "updateLoggedInUser", user: res.value });
-        
+
         return res.value;
       });
     },
@@ -141,9 +122,7 @@ export default {
       });
     },
     logout(context) {
-      console.log("actions logout 1", context.state.loggedInUser);
       context.commit({ type: "setLoggedInUser", user: null });
-      console.log("actions logout 2", context.state.loggedInUser);
     },
 
     getLoggedInUser(context) {

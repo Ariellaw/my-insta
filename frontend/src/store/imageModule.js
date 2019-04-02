@@ -255,7 +255,6 @@ export default {
     getViewedImageOwner(context, { userId }) {
       return userServices.getUserById(userId).then(res => {
         context.commit({ type: "setVisitedImageOwner", user: res.user });
-        console.log("viewedImage Owner actios", res.user);
         context.rootState.userModule.loggedInUser = res.loggedInUser;
       });
     },
@@ -390,7 +389,6 @@ export default {
       });
     },
     getImageById(context, { imageId }) {
-      console.log("imageId", imageId);
       return imageServices.getImageById(imageId).then(res => {
         context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image;

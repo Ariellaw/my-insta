@@ -27,7 +27,7 @@
                   <i class="far fa-envelope"></i>
                 </button>
                 <button class="mobile-following">
-                  <i class="fas fa-user-check"></i>
+                  <i class="fas fa-user-check" @click="removeFollowers(visitedUser._id)"></i>
                 </button>
               </div>
               <button
@@ -35,8 +35,6 @@
                 v-else
                 class="follower-user-btn btn"
               >Follow</button>
-
-              <!-- <i class="fas fa-cog btn"></i> -->
             </div>
           </div>
         </div>
@@ -55,8 +53,8 @@
                 <i class="fas fa-cog settings" @click="displayOptions()"></i>
               </section>
               <button
-                @click="removeFollowers(visitedUser._id)"
                 v-else-if="followingVisitedUser"
+                @click="removeFollowers(visitedUser._id)"
                 class="edit-profile-or-following-btn btn"
               >Following</button>
               <button
@@ -64,12 +62,10 @@
                 v-else
                 class="follower-user-btn btn"
               >Follow</button>
-
-              <!-- <i class="fas fa-cog btn"></i> -->
             </div>
           </div>
           <div class="numbers">
-            <p>
+            <p v-if="usersImages">
               <span class="bold-reg" v-if="usersImages">{{usersImages.length+" "}}</span>posts
             </p>
             <p>
@@ -160,15 +156,12 @@ export default {
         });
     },
     addFollowers(followeeId) {
-      console.log("cmp addFollowers");
       this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
         console.log("addFollowers ERR", err);
         this.$router.push({ name: "login" });
       });
     },
     removeFollowers(followeeId) {
-      console.log("cmp removeFollowers");
-
       this.$store
         .dispatch({ type: "removeFollowers", followeeId })
         .catch(err => {
@@ -184,16 +177,18 @@ export default {
     }
   },
   computed: {
-    usersImages(){
+    usersImages() {
       return this.$store.getters.viewedImageCollection;
     },
     followingVisitedUser() {
-      return (
-        this.loggedInUser.followees.findIndex(
-          followeeId => followeeId === this.visitedUser._id
-        ) > -1
-      );
+      return this.loggedInUser.followees.includes(this.visitedUser._id);
     },
+    // return (
+    //   this.loggedInUser.followees.findIndex(
+    //     followeeId => followeeId === this.visitedUser._id
+    //   ) > -1
+    // );
+
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -215,9 +210,8 @@ export default {
       this.cellphoneDisplay = true;
     }
   },
-  destroyed(){
-    this.$store
-      .dispatch({ type: "setVisitedUser", user:null })
+  destroyed() {
+    this.$store.dispatch({ type: "setVisitedUser", user: null });
   },
   components: {
     galleryOfImages,
