@@ -1,5 +1,5 @@
-<template>
-  <div class="footer">
+<template  >
+  <div class="footer" v-if="loggedInUser">
     <form
       class="update-user-cover-pic"
       ref="form"

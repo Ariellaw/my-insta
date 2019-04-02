@@ -31,6 +31,7 @@ export default {
       state.loggedInUser = user;
     },
     updateLoggedInUser(state, { user }) {
+      console.log("setlogged in user", user)
       state.loggedInUser = user;
     },
 
@@ -126,11 +127,9 @@ export default {
     },
     updateUserDetails(context, { userDetails }) {
       userServices.updateUserDetails(userDetails).then(res => {
+        console.log("updateUserDetails loggedin User actions", res.value)
         context.commit({ type: "updateLoggedInUser", user: res.value });
-        context.commit({
-          type: "setLoggedInUser",
-          user: res.value.loggedInUser
-        });
+        
         return res.value;
       });
     },

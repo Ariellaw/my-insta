@@ -107,12 +107,12 @@ function addUserRoutes(app, passport) {
     })
 
     app.put(`${BASE}/:userId/userDetails`, 
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req,res)=>{
         const userDetails = req.body.userDetails;
         userService.updateUserDetails(userDetails)
             .then(user =>{
-                return res.json({user, loggedInUser: req.user});
+                return res.json({user});
             })
     })
 

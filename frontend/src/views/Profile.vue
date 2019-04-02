@@ -184,6 +184,9 @@ export default {
     }
   },
   computed: {
+    usersImages(){
+      return this.$store.getters.viewedImageCollection;
+    },
     followingVisitedUser() {
       return (
         this.loggedInUser.followees.findIndex(

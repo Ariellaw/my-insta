@@ -231,7 +231,6 @@ export default {
     goToImageOwnerProfile() {
       var userName = this.imageOwner.userName;
       this.$router.push({ name: "user-profile", params: { userName } });
-      // this.$router.go();
     },
     goToLocationImages() {
       this.$router.push(

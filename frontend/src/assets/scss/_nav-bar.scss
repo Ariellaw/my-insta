@@ -18,7 +18,7 @@
   .nav-buttons-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-items:center;
     @media only screen and (max-width: 700px) {
       justify-content: center;

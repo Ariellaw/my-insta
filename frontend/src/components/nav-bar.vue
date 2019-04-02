@@ -1,16 +1,22 @@
 <template>
   <nav class="main-nav-bar">
-    <div class="dd" v-if="cellphoneDisplay && navbarTitle" @click="goBackToLastWindow()">
-      <i class="fas fa-arrow-left btn"></i>
-      {{navbarTitle}}
-      <!-- <i class="fas fa-cog btn" @click="displayOptions()"></i> -->
+    <div v-if="cellphoneDisplay && navbarTitle" class="cellphone-navbar-container">
+      <div class="cellphone-navbar" @click="goBackToLastWindow()">
+        <i class="fas fa-arrow-left btn"></i>
+        <h3 class="navbar-title">{{navbarTitle}}</h3>
+      </div>
+      <i class="fas fa-cog btn" @click="$emit('displayOptions')" v-if="loggedInUser"></i>
     </div>
-    <div v-else class="nav-buttons-container page-container">
+    <div
+      v-else
+      class="nav-buttons-container page-container"
+      :class="{'center':!loggedInUser, 'spaceBetween':loggedInUser}"
+    >
       <div @click="goToFeed" class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i>
         <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
       </div>
-      <ul>
+      <ul v-if="loggedInUser">
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">
             <input
@@ -33,7 +39,7 @@
           </div>
         </li>
       </ul>
-      <div class="menu-icons">
+      <div v-if="loggedInUser" class="menu-icons">
         <form
           class="update-user-cover-pic"
           ref="form"
@@ -58,7 +64,7 @@
         </form>
         <i class="fas fa-comment btn"></i>
         <i class="far fa-heart btn"></i>
-        <div v-if="loggedInUser" class="userName-container btn" @click="goToLoggedInUserProfile">
+        <div class="userName-container btn" @click="goToLoggedInUserProfile">
           <img :src="loggedInUser.profilePic" alt class="userImg">
           <span class="userName">{{loggedInUser.userName}}</span>
         </div>
@@ -80,7 +86,7 @@ export default {
       navbarTitle: "Locations",
       lastWindow: null,
       windowWidth: null,
-      cellphoneDisplay: false,
+      cellphoneDisplay: false
     };
   },
   methods: {
@@ -210,6 +216,29 @@ export default {
 </script>
 
  <style lang="scss" scoped>
+.cellphone-navbar-container {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .cellphone-navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .navbar-title {
+      margin-right: 0.5rem;
+    }
+  }
+}
+.center {
+  justify-content: center;
+}
+.spaceBetween {
+  justify-content: space-between;
+}
 ul {
   list-style-type: none;
   margin: 0;

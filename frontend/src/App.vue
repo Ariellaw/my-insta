@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <nav-bar @close="close()" @addnewimage="addnewimage"></nav-bar>
-    <router-view/>
+  <div :class="{'darkScreen':optionsModual}">
+    <nav-bar @close="close()" @addnewimage="addnewimage" @displayOptions="displayOptions"></nav-bar>
+    <router-view v-if="!optionsModual"/>
+    <user-options v-if="optionsModual" @close="optionsModual=false"></user-options>
 
     <upload-post @close="close()" v-if="newImageModual && image.file" :image="image.file"></upload-post>
     <footer-nav @addnewimage="addnewimage"></footer-nav>
@@ -12,16 +13,22 @@
 import NavBar from "./components/nav-bar.vue";
 import FooterNav from "./components/footer.vue";
 import uploadPost from "./components/upload-post";
+import userOptions from "./components/options.vue";
 export default {
   data() {
     return {
       newImageModual: false,
+      optionsModual:false,
       image: {
         file: null
       }
     };
   },
   methods: {
+    displayOptions() {
+      console.log("showo the options moidule")
+      this.optionsModual=true;
+    },
     close() {
       this.image.file = null;
       this.newImageModual = false;
@@ -45,7 +52,8 @@ export default {
   components: {
     NavBar,
     uploadPost,
-    FooterNav
+    FooterNav,
+    userOptions
   }
 };
 //change ID on URL to profile to userName

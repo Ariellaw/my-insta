@@ -2,12 +2,13 @@
   <!-- <div>FUCK</div> -->
   <div v-if="loggedInUser">
     <form
-      @keyup="userMadeChanges=true"
+      @keyup="tempUpdate"
       class="edit-profile-container page-container"
       ref="form"
       action
       method="POST"
       enctype="multipart/form-data"
+      @submit.prevent="updateUserDetails"
     >
       <div v-if="currProfilePic && loggedInUser" class="update-profile-pic-container">
         <img :src="currProfilePic" alt="profile-picture" class="edit-image">
@@ -20,7 +21,7 @@
             name="user-profile-pic"
             id="file-input-edit"
             accept="image/*"
-            @change="uploadImage()"
+            @change="uploadImage"
           >
         </div>
       </div>
@@ -79,9 +80,8 @@
       </label>
       <input
         type="submit"
-        value="Submit"
+        value="Update"
         class="sumbit-btn btn"
-        @click.prevent="updateUserDetails()"
         :class="{'sumbit-btn-after-changes':userMadeChanges }"
       >
     </form>
@@ -110,14 +110,7 @@ export default {
   //  @input="user.profilePic = $event.target.value"
   created() {
     console.log("The edit page is created", this.loggedInUser);
-    // const userName = this.$route.params.userName;
-    this.$store
-      .dispatch({ type: "getLoggedInUser" })
-      .then(user => console.log("this.loggedInUser", this.loggedInUser, user))
-      .catch(err => {
-        console.log("get loggedin User Edit ERR", err);
-        this.$router.push({ name: "login" });
-      });
+    this.getLoggedInUser();
   },
   computed: {
     loggedInUser() {
@@ -130,6 +123,16 @@ export default {
     }
   },
   methods: {
+    getLoggedInUser() {
+      this.$store
+        .dispatch({ type: "getLoggedInUser" })
+        .then(user =>
+          console.log("this.loggedInUser", this.loggedInUser, user)
+        );
+    },
+    tempUpdate() {
+      this.userMadeChanges = true;
+    },
     updateUserDetails() {
       this.user._id = this.loggedInUser._id;
       this.$store
@@ -139,11 +142,8 @@ export default {
         })
         .then(() => {
           this.userMadeChanges = false;
-        })
-        // .catch(err => {
-        //   console.log("update User details ERR", err);
-        //   this.$router.push({ name: "login" });
-        // });
+          this.getLoggedInUser();
+        });
     },
     uploadImage() {
       var elForm = this.$refs.form;
