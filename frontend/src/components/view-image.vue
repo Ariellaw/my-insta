@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="imageOwner && loggedInUser && viewedImage && followeesThatLiked">
+  <transition name="modal" v-if="imageOwner && loggedInUser && viewedImage">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -69,20 +69,24 @@
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]}}
                 <span
-                  v-if="viewedImage.likes>1"
-                >and {{viewedImage.likes.length-1}} others</span>like this
+                  v-if="viewedImage.likes.length>1"
+                >and {{viewedImage.likes.length-1}} others </span>like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
-                  v-if="viewedImage.likes>2"
-                >and {{viewedImage.likes.length-2}} others</span>
+                  v-if="viewedImage.likes.length>2"
+                >and {{viewedImage.likes.length-2}} others  </span>
                 like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
                 <i class="far fa-thumbs-up"></i>
-                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}} and {{viewedImage.likes.length-2}} others like this
+                {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
+                <span
+                  v-if="viewedImage.likes.length>2"
+                >
+                  and {{viewedImage.likes.length-2}} others </span> like this
               </span>
 
               <span
@@ -151,14 +155,12 @@ export default {
         newComment: data.editedComment
       });
 
-      this.$store
-        .dispatch({
-          type: "editComment",
-          commentId: data.commentId,
-          imageId: this.image._id,
-          newComment: data.editedComment
-        })
-        .then(() => this.$router.go());
+      this.$store.dispatch({
+        type: "editComment",
+        commentId: data.commentId,
+        imageId: this.viewedImage._id,
+        newComment: data.editedComment
+      });
     },
     deleteComment(commentId) {
       this.$socket.emit("commentDeleted", {
@@ -169,7 +171,7 @@ export default {
       this.$store.dispatch({
         type: "deleteComment",
         commentId,
-        imageId: this.image._id
+        imageId: this.viewedImage._id
       });
     },
     loadImage() {
@@ -181,7 +183,7 @@ export default {
           this.$store.dispatch({
             type: "getViewedImageFollowers",
             image,
-            user: this.loggedInUser
+            loggedInUser: this.loggedInUser
           });
         })
         .catch(err => {
@@ -334,17 +336,13 @@ export default {
   computed: {
     followeesThatLiked() {
       var followees = this.$store.getters.followeesThatLiked;
-      var users = [];
-      if (followees) {
-        followees.forEach(followee => {
-          if (followee.userName === this.loggedInUser.userName) {
-            users.push("You");
-          } else {
-            users.push(followee.userName);
-          }
-        });
+      var idx = followees.findIndex(
+        followee => followee === this.loggedInUser.userName
+      );
+      if (idx > -1) {
+        followees[idx] = "You";
       }
-      return users;
+      return followees;
     },
     viewedImage() {
       return this.$store.getters.viewedImage;

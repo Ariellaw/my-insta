@@ -12,12 +12,12 @@ var SocialSharing = require('vue-social-sharing');
 
 
 const SocketInstance = socketio('http://192.168.1.105:8810');
+// const SocketInstance = socketio('8810');
 
 
 Vue.use(SocialSharing);
 Vue.use(new VueSocketIO({
   debug: true,
-  // connection: '192.168.1.105:3003',
   connection: SocketInstance,
   vuex: {
       store,

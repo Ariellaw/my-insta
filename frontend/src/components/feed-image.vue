@@ -109,7 +109,7 @@ export default {
     },
     addUserLike() {
          this.$socket.emit("likeAdded", {
-        image: this.viewedImage,
+        image: this.image,
         user: this.loggedInUser
       });
 

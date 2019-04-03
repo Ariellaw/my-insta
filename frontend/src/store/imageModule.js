@@ -22,6 +22,7 @@ export default {
       return state.viewedImageCollection;
     },
     followeesThatLiked: state => {
+      console.log("getters followeesThatLiked", state.followeesThatLiked);
       return state.followeesThatLiked;
     },
     isTyping: state => {
@@ -115,103 +116,115 @@ export default {
       if (idx >= 0) {
         state.imagesForFeed[idx].comments = comments;
       }
-    }
-  },
-  SOCKET_commentEdited(state, data) {
-    var img = state.viewedImage;
-    var comments = data.image.comments;
-    var idx = comments.findIndex(comment => comment.id === data.commentId);
-    if (idx !== -1) {
-      var commentToUpdate = comments[idx];
-      commentToUpdate.comment = data.newComment;
-      commentToUpdate.timeStamp = Date.now();
-      comments.splice(idx, 1, commentToUpdate);
-    }
+      // }
+    },
+    SOCKET_commentEdited(state, data) {
+      var img = state.viewedImage;
+      var comments = data.image.comments;
+      var idx = comments.findIndex(comment => comment.id === data.commentId);
+      if (idx !== -1) {
+        var commentToUpdate = comments[idx];
+        commentToUpdate.comment = data.newComment;
+        commentToUpdate.timeStamp = Date.now();
+        comments.splice(idx, 1, commentToUpdate);
+      }
 
-    if (img) {
-      if (img._id === data.image._id) {
-        state.viewedImage.comments = comments;
+      if (img) {
+        if (img._id === data.image._id) {
+          state.viewedImage.comments = comments;
+        }
       }
-    }
-    idx = state.imagesForFeed.findIndex(image => image._id === data.image._id);
-    if (idx >= 0) {
-      state.imagesForFeed[idx].comments = comments;
-    }
-  },
-  SOCKET_commentDeleted(state, data) {
-    var img = state.viewedImage;
-    var comments = data.image.comments;
-    var idx = comments.findIndex(comment => comment.id === data.commentId);
-    if (idx > -1) {
-      comments.splice(idx, 1);
-    }
-    if (img) {
-      if (img._id === data.image._id) {
-        state.viewedImage.comments = comments;
+      idx = state.imagesForFeed.findIndex(
+        image => image._id === data.image._id
+      );
+      if (idx >= 0) {
+        state.imagesForFeed[idx].comments = comments;
       }
-    }
-    idx = state.imagesForFeed.findIndex(image => image._id === data.image._id);
-    if (idx >= 0) {
-      state.imagesForFeed[idx].comments = comments;
-    }
-  },
+    },
+    SOCKET_commentDeleted(state, data) {
+      var img = state.viewedImage;
+      var comments = data.image.comments;
+      var idx = comments.findIndex(comment => comment.id === data.commentId);
+      if (idx > -1) {
+        comments.splice(idx, 1);
+      }
+      if (img) {
+        if (img._id === data.image._id) {
+          state.viewedImage.comments = comments;
+        }
+      }
+      idx = state.imagesForFeed.findIndex(
+        image => image._id === data.image._id
+      );
+      if (idx >= 0) {
+        state.imagesForFeed[idx].comments = comments;
+      }
+    },
 
-  SOCKET_typing(state, data) {
-    var img = state.viewedImage;
-    if (img._id === data.imageId) {
-      state.isTyping = data.userName;
-    }
-  },
-  SOCKET_likeAdded(state, data) {
-    var img = state.viewedImage;
-    var likes = data.image.likes;
-    var user = data.user;
-    var followees = state.followeesThatLiked;
+    SOCKET_typing(state, data) {
+      var img = state.viewedImage;
+      if (img._id === data.imageId) {
+        state.isTyping = data.userName;
+      }
+    },
+    SOCKET_likeAdded(state, data) {
+      console.log("SOCKET_likeAdded")
+      var img = state.viewedImage;
+      var likes = data.image.likes;
+      var user = data.user;
+      var followees = state.followeesThatLiked;
 
-    if (
-      followees.findIndex(followee => followee._id === data.user._id) === -1
-    ) {
-      state.followeesThatLiked.splice(0, 0, data.user);
-    }
-    if (likes.findIndex(id => id === user._id) === -1) {
-      likes.splice(0, 0, user._id);
-    }
-    if (img) {
-      if (img._id === data.image._id) {
-        state.viewedImage.likes = likes;
+      var idx = followees.findIndex(followee => followee === user.userName);
+      if (idx === -1) {
+        state.followeesThatLiked.splice(0, 0, user.userName);
       }
-    }
-    idx = state.imagesForFeed.findIndex(image => image._id === data.image._id);
-    if (idx >= 0) {
-      state.imagesForFeed[idx].likes = likes;
-    }
-  },
-  SOCKET_likeRemoved(state, data) {
-    var img = state.viewedImage;
-    var likes = data.image.likes;
-    var user = data.user;
-    var followees = state.followeesThatLiked;
-    var idx = followees.findIndex(followee => followee._id === user._id);
-    if (idx > -1) {
-      state.followeesThatLiked.splice(idx, 1);
-    }
-    idx = likes.findIndex(id => id === user._id);
-    if (idx !== -1) {
-      likes.splice(idx, 1);
-    }
-    if (img) {
-      if (img._id === data.image._id) {
-        state.viewedImage.likes = likes;
+      if (likes.findIndex(id => id === user._id) === -1) {
+        likes.splice(0, 0, user._id);
       }
-    }
-    idx = state.imagesForFeed.findIndex(image => image._id === data.image._id);
-    if (idx >= 0) {
-      state.imagesForFeed[idx].likes = likes;
+      if (img) {
+        if (img._id === data.image._id) {
+          state.viewedImage.likes = likes;
+        }
+      }
+      idx = state.imagesForFeed.findIndex(
+        image => image._id === data.image._id
+      );
+      if (idx >= 0) {
+        state.imagesForFeed[idx].likes = likes;
+      }
+    },
+    SOCKET_likeRemoved(state, data) {
+      console.log("SOCKET_likeRemoved")
+
+      var img = state.viewedImage;
+      var likes = data.image.likes;
+      var user = data.user;
+      var followees = state.followeesThatLiked;
+      var idx = followees.findIndex(followee => followee === user.userName || followee === "You");
+      if (idx > -1) {
+        console.log("found a username to splice")
+        state.followeesThatLiked.splice(idx, 1);
+      }
+      idx = likes.findIndex(id => id === user._id);
+      if (idx !== -1) {
+        likes.splice(idx, 1);
+      }
+      if (img) {
+        if (img._id === data.image._id) {
+          state.viewedImage.likes = likes;
+        }
+      }
+      idx = state.imagesForFeed.findIndex(
+        image => image._id === data.image._id
+      );
+      if (idx >= 0) {
+        state.imagesForFeed[idx].likes = likes;
+      }
     }
   },
   actions: {
-    getViewedImageFollowers(context, { image, user }) {
-      var followees = user.followees;
+    getViewedImageFollowers(context, { image, loggedInUser }) {
+      var followees = loggedInUser.followees;
 
       var ids = [];
       followees.forEach(followeeId => {
@@ -220,10 +233,10 @@ export default {
         }
       });
       if (
-        image.likes.findIndex(id => id === user._id) > -1 &&
-        ids.findIndex(id => id === user._id) === -1
+        image.likes.findIndex(id => id === loggedInUser._id) > -1 &&
+        ids.findIndex(id => id === loggedInUser._id) === -1
       ) {
-        ids.splice(0, 0, user._id);
+        ids.splice(0, 0, loggedInUser._id);
       }
 
       if (ids.length === 0) {
@@ -231,9 +244,18 @@ export default {
         return [];
       } else {
         return userServices.getUserNamesById(ids).then(res => {
-          context.commit({ type: "setFolloweesThatLiked", users: res.users });
-          context.rootState.userModule.loggedInUser = res.loggedInUser;
-          return res;
+          var users = [];
+          res.users.forEach(user => {
+            if (user.userName === loggedInUser.userName) {
+              users.unshift(loggedInUser.userName);
+            } else {
+              users.push(user.userName);
+            }
+          });
+          console.log("actions usernames", users)
+          context.commit({ type: "setFolloweesThatLiked", users });
+          // context.rootState.userModule.loggedInUser = res.loggedInUser;
+          return users;
         });
       }
     },
@@ -319,7 +341,7 @@ export default {
     addUserLike(context, { imageId, userId }) {
       return imageServices.addUserLike(imageId, userId).then(res => {
         context.commit({ type: "updateViewedImage", image: res.image.value });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image.value.likes;
       });
     },
@@ -327,7 +349,7 @@ export default {
       return imageServices.removeUserLike(imageId, userId).then(res => {
         context.commit({ type: "updateViewedImage", image: res.image.value });
 
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image.value.likes;
       });
     },

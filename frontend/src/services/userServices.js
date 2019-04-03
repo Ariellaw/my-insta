@@ -80,7 +80,9 @@ function updateUserDetails(userDetails){
 //TODO move to authentication services :-)
 function authenticateUser(credentials){
     // console.log('services', credentials)
-    return axios.post('http://192.168.1.105:3003/login', {credentials})
+    // return axios.post('http://192.168.1.105:3003/login', {credentials})
+    return axios.post('/login', {credentials})
+
         .then(res =>{
             return res.data
         })
