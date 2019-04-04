@@ -109,11 +109,12 @@ function removeUserLike(imageId, userId) {
 }
 
 function addNewImage(imgDetails, image) {
-  var tags = _getTags(imageDetails.text, []);
+  var tags = _getTags(imgDetails.text, []);
   var imgObj = _createImgObj(imgDetails, image, tags);
+  console.log("imgObj", imgObj)
   return mongoService
     .connect()
-    .then(db => db.collection(imagesDb).insert(imgObj));
+    .then(db => db.collection(imagesDb).insertOne(imgObj));
 }
 function getInitalFeedImages() {
   return mongoService.connect().then(db =>
@@ -250,7 +251,7 @@ function _createImgObj(imgDetails, image, tags) {
   comments.push(comment);
   var imgObj = {
     image: image,
-    ownerId: new ObjectId("5c5fecdbd16a8d56eaca3c98"),
+    ownerId: ObjectId(imgDetails.ownerId),
     comments: comments,
     hashtags:tags,
     likes: [],

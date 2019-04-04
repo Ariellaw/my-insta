@@ -13,7 +13,7 @@ export default {
   props: ["user"],
   methods: {
     goToUserProfile() {
-      this.$router.push(`/user/${this.user._id}`);
+      this.$router.push({name:'user-profile', params:{userName:this.user.userName}});
       this.$router.go();
       this.$emit("resetKeyword");
     }

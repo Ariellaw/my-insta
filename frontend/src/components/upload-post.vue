@@ -44,6 +44,7 @@ export default {
   computed: {},
   methods: {
     submitImage() {
+      console.log("this.imgDetails", this.imgDetails)
       this.$store
         .dispatch({
           type: "addImage",

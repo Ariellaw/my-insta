@@ -24,7 +24,7 @@ app.use(
   cors({
     // origin: ['http://192.168.1.105:8080'],
     // origin: "*",
-    origin: ["http://192.168.1.105:8080"],
+    origin: ["http://192.168.1.105:3003"],
     credentials: true // enable set cookie
     // Access-Control-Allow-Origin: https://maps.googleapis.com
   })
@@ -107,9 +107,9 @@ addAuthRoutes(app,passport);
 // })
 
 const PORT = process.env.PORT || 3003;
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
+var server = app.listen(PORT, () => console.log(`Example app listening on port ${PORT}`));
 
-var server = app.listen(8810);
+// var server = app.listen(8810);
 const io = require("socket.io")(server, {
   path: "/socket.io"
 });
@@ -129,6 +129,7 @@ io.on("connection", function(socket) {
     io.emit("commentDeleted", data);
   });
   socket.on("commentEdited", function(data) {
+    console.log("commentEdited")
     io.emit("commentEdited", data);
   });
   socket.on("typing", function(data) {

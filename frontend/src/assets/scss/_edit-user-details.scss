@@ -6,7 +6,6 @@
   
     font-size: 2rem;
     width: 95%;
-    height: 95vh;
     border: 1px solid $dark-border-color;
     background-color:$lighter-layout-color;
     border-radius: .5rem;
@@ -16,6 +15,12 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100vh;
+    @media screen and (max-height:800px) {
+      height:120vh;
+    }
+    @media screen and (max-height:700px) {
+      height:130vh;
+    }
     .edit-profile-label {
       display: flex;
       flex-direction: row;

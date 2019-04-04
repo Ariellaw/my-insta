@@ -136,6 +136,7 @@ export default {
 
   .comment {
     width: fit-content;
+     
   }
   .icons {
     color: darkgray;

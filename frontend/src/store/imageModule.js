@@ -168,22 +168,22 @@ export default {
       }
     },
     SOCKET_likeAdded(state, data) {
-      console.log("SOCKET_likeAdded")
+      console.log("SOCKET_likeAdded");
       var img = state.viewedImage;
       var likes = data.image.likes;
       var user = data.user;
       var followees = state.followeesThatLiked;
 
-      var idx = followees.findIndex(followee => followee === user.userName);
-      if (idx === -1) {
-        state.followeesThatLiked.splice(0, 0, user.userName);
-      }
       if (likes.findIndex(id => id === user._id) === -1) {
         likes.splice(0, 0, user._id);
       }
       if (img) {
         if (img._id === data.image._id) {
           state.viewedImage.likes = likes;
+          var idx = followees.findIndex(followee => followee === user.userName);
+          if (idx === -1) {
+            state.followeesThatLiked.splice(0, 0, user.userName);
+          }
         }
       }
       idx = state.imagesForFeed.findIndex(
@@ -194,17 +194,13 @@ export default {
       }
     },
     SOCKET_likeRemoved(state, data) {
-      console.log("SOCKET_likeRemoved")
+      console.log("SOCKET_likeRemoved");
 
       var img = state.viewedImage;
       var likes = data.image.likes;
       var user = data.user;
       var followees = state.followeesThatLiked;
-      var idx = followees.findIndex(followee => followee === user.userName || followee === "You");
-      if (idx > -1) {
-        console.log("found a username to splice")
-        state.followeesThatLiked.splice(idx, 1);
-      }
+
       idx = likes.findIndex(id => id === user._id);
       if (idx !== -1) {
         likes.splice(idx, 1);
@@ -212,6 +208,12 @@ export default {
       if (img) {
         if (img._id === data.image._id) {
           state.viewedImage.likes = likes;
+          var idx = followees.findIndex(
+            followee => followee === user.userName || followee === "You"
+          );
+          if (idx > -1) {
+            state.followeesThatLiked.splice(idx, 1);
+          }
         }
       }
       idx = state.imagesForFeed.findIndex(
@@ -252,7 +254,7 @@ export default {
               users.push(user.userName);
             }
           });
-          console.log("actions usernames", users)
+          console.log("actions usernames", users);
           context.commit({ type: "setFolloweesThatLiked", users });
           // context.rootState.userModule.loggedInUser = res.loggedInUser;
           return users;
@@ -354,6 +356,8 @@ export default {
       });
     },
     addImage(context, { imgDetails, image }) {
+      imgDetails.ownerId = context.rootState.userModule.loggedInUser._id;
+      console.log("addimage ownder  ID", imgDetails.ownerId )
       return imageServices.addImage(imgDetails, image);
       //TODO: findout if displayedprofile is loggedinuserprofiel and update inthat case
     },

@@ -61,6 +61,8 @@
         textarea {
           @include textarea;
           height: 70%;
+          margin-bottom: 2rem;
+          border-radius: 1rem;
         }
       }
     }

@@ -61,7 +61,7 @@ export default {
 
 <style lang="scss" scoped>
 .module {
-  z-index: 10;
+  z-index: 99999999;
   background-color: #fff;
   height: 30rem;
   width: 33rem;
@@ -77,8 +77,9 @@ export default {
   height: 40rem;
   display: flex;
   flex-direction: column;
-  @media screen and (max-width: 700px){
-      top: 35%
+  @media screen and (max-width: 700px) {
+    top: 7rem;
+    transform: translateY(0%);
   }
   .title,
   .cancel {

@@ -26,6 +26,7 @@ export default {
       country: null,
       type: null,
       image: null,
+
    
     };
   },

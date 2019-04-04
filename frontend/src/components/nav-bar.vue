@@ -5,7 +5,7 @@
         <i class="fas fa-arrow-left btn"></i>
         <h3 class="navbar-title">{{navbarTitle}}</h3>
       </div>
-      <i class="fas fa-cog btn" @click="$emit('displayOptions')" v-if="loggedInUser"></i>
+      <i class="fas fa-cog btn"  @click="$emit('displayOptions')" v-if="loggedInUser  && $route.name === 'user-profile' && this.$route.params.image===null"></i>
     </div>
     <div
       v-else
