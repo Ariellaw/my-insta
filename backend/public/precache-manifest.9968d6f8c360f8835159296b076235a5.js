@@ -32,12 +32,12 @@ self.__precacheManifest = [
     "url": "/fonts/OpenSans-Bold.f5331cb6.ttf"
   },
   {
-    "revision": "c88cecbffad6d8e731fd95de49561ebd",
-    "url": "/fonts/Montserrat-SemiBold.c88cecbf.ttf"
-  },
-  {
     "revision": "100b38fa184634fc89bd07a84453992c",
     "url": "/fonts/Montserrat-Light.100b38fa.ttf"
+  },
+  {
+    "revision": "c88cecbffad6d8e731fd95de49561ebd",
+    "url": "/fonts/Montserrat-SemiBold.c88cecbf.ttf"
   },
   {
     "revision": "bc392ec9e175ca84e646553bf285614e",
