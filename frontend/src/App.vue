@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     displayOptions() {
-      console.log("showo the options moidule")
       this.optionsModual=true;
     },
     close() {

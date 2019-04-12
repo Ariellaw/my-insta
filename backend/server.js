@@ -24,7 +24,7 @@ app.use(
   cors({
     // origin: ['http://192.168.1.105:8080'],
     // origin: "*",
-    origin: ["http://192.168.1.105:3003"],
+    origin: ["http://10.100.102.4:3003"],
     credentials: true // enable set cookie
     // Access-Control-Allow-Origin: https://maps.googleapis.com
   })

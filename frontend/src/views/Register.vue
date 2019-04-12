@@ -80,6 +80,7 @@
             </div>
             <input class="button" type="submit" value="Register" @click.prevent="registerUser()">
             <h3 class="red">{{message}}</h3>
+            <router-link class="toLogin" to="login">I already have an account!</router-link>
           </form>
         </div>
       </div>
@@ -117,7 +118,6 @@ export default {
                 query: { success: "new-user" }
               });
             } else {
-              console.log("failure message", res.message);
               this.message = res.message;
             }
           });
@@ -137,6 +137,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
 $yellow: #f5ba1a;
 $black: #000000;
 $grey: #cccccc;
@@ -154,6 +156,12 @@ body {
     visibility: hidden;
     height: 0;
   }
+}
+.toLogin {
+  color: #a9a9a9;
+  float: left;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .form_wrapper {
   background: #fff;

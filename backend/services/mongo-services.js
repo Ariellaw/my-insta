@@ -1,7 +1,8 @@
 const MongoClient = require('mongodb').MongoClient;
+const secrets = require('../secrets.js');
 var dataBaseConnection;
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const url = `mongodb+srv://AriellaGram:${secrets.getMongoDBPassword()}@ariellagram-yxske.mongodb.net/test?retryWrites=true`;
 
 // Database Name
 const dbName = 'AriellaGram';

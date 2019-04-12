@@ -90,7 +90,6 @@ function addImageRoutes(app) {
     (req, res) => {
       const imgDetails = req.body.imgDetails;
       const image = req.body.image;
-      console.log("routes imgDetails", imgDetails)
       imageService.addNewImage(imgDetails, image).then(image => {
         return res.json({image,  loggedInUser: req.user});
       });

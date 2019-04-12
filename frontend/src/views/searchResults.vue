@@ -16,6 +16,7 @@
 
 <script>
 import gallaryOfImages from "../components/gallary-of-images.vue";
+import secrets from "../../secrets.js"
 import axios from "axios";
 export default {
   name: "searh-results-page",
@@ -26,7 +27,8 @@ export default {
       country: null,
       type: null,
       image: null,
-
+      googleAPI:secrets.getGoogleAPI(),
+      opencagedataAPI:secrets.getOpencagedataAPI()
    
     };
   },

@@ -342,6 +342,7 @@ export default {
       if (idx > -1) {
         followees[idx] = "You";
       }
+      //TODO - "You should always appear first"
       return followees;
     },
     viewedImage() {

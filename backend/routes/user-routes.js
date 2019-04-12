@@ -68,7 +68,6 @@ function addUserRoutes(app, passport) {
 
             userService.removeFollowers(followeeId, followerId)
                 .then(users => {
-                    console.log(users)
                     return res.json({users, loggedInUser: req.user});
                 })
     })
@@ -107,7 +106,7 @@ function addUserRoutes(app, passport) {
     })
 
     app.put(`${BASE}/:userId/userDetails`, 
-    // connectEnsureLogin.ensureLoggedIn(),
+    connectEnsureLogin.ensureLoggedIn(),
     (req,res)=>{
         const userDetails = req.body.userDetails;
         userService.updateUserDetails(userDetails)

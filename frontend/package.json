@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --dest ../backend/public"
   },
+
   "dependencies": {
     "axios": "^0.18.0",
     "cloudinary-core": "^2.6.2",

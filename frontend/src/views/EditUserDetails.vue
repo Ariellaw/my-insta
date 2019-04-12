@@ -1,8 +1,6 @@
 <template>
-  <!-- <div>FUCK</div> -->
   <div v-if="loggedInUser">
     <form
-      @keyup="tempUpdate"
       class="edit-profile-container page-container"
       ref="form"
       action
@@ -33,7 +31,7 @@
           class="edit-user-input fName"
           placeholder="First name...."
           :value="loggedInUser.firstName"
-          @input="user.firstName = $event.target.value"
+          @keyup="tempUpdate('firstName',$event.target.value)"
         >
       </label>
       <label for="idLName" class="edit-profile-label">
@@ -43,7 +41,7 @@
           id="idLName"
           class="edit-user-input lName"
           :value="loggedInUser.lastName"
-          @input="user.lastName = $event.target.value"
+          @keyup="tempUpdate('lastName',$event.target.value)"
           placeholder="Last name...."
         >
       </label>
@@ -54,7 +52,7 @@
           id="idUName"
           class="edit-user-input userName"
           :value="loggedInUser.userName"
-          @input="user.userName = $event.target.value"
+          @keyup="tempUpdate('userName',$event.target.value)"
           placeholder="Username...."
         >
       </label>
@@ -65,7 +63,7 @@
           id="idEmail"
           class="edit-user-input email"
           :value="loggedInUser.email"
-          @input="user.email = $event.target.value"
+          @keyup="tempUpdate('email',$event.target.value)"
           placeholder="Email...."
         >
       </label>
@@ -73,9 +71,9 @@
         <h3>Bio:</h3>
         <textarea
           class="edit-user-input editBio"
+          @keyup="tempUpdate('bio',$event.target.value)"
           :value="loggedInUser.bio"
           placeholder="Bio...."
-          @input="user.bio = $event.target.value"
         ></textarea>
       </label>
       <input
@@ -97,21 +95,13 @@ export default {
     return {
       profilePicChanged: false,
       userMadeChanges: false,
-      user: {
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        profilePic: null,
-        bio: ""
-      }
     };
   },
   //  @input="user.profilePic = $event.target.value"
   created() {
-    console.log("The edit page is created", this.loggedInUser);
     this.getLoggedInUser();
   },
+  mounted() {},
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
@@ -124,25 +114,27 @@ export default {
   },
   methods: {
     getLoggedInUser() {
-      this.$store
-        .dispatch({ type: "getLoggedInUser" })
-        .then(user =>
-          console.log("this.loggedInUser", this.loggedInUser, user)
-        );
+      this.$store.dispatch({ type: "getLoggedInUser" });
     },
-    tempUpdate() {
+    tempUpdate(detailToUpdate, detail) {
+      console.log("edit details", detailToUpdate, detail);
+      this.$store.dispatch({ type: "updateLoggedInUserTemp",  detailToUpdate, detail });
+
       this.userMadeChanges = true;
     },
     updateUserDetails() {
-      this.user._id = this.loggedInUser._id;
       this.$store
         .dispatch({
           type: "updateUserDetails",
-          userDetails: this.user
+          userDetails: this.loggedInUser
         })
         .then(() => {
           this.userMadeChanges = false;
           this.getLoggedInUser();
+        })
+        .catch(err => {
+          console.log("getVisitedUserImages ERR", err);
+          this.$router.push({ name: "login" });
         });
     },
     uploadImage() {

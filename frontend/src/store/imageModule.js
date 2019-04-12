@@ -22,7 +22,6 @@ export default {
       return state.viewedImageCollection;
     },
     followeesThatLiked: state => {
-      console.log("getters followeesThatLiked", state.followeesThatLiked);
       return state.followeesThatLiked;
     },
     isTyping: state => {
@@ -116,13 +115,13 @@ export default {
       if (idx >= 0) {
         state.imagesForFeed[idx].comments = comments;
       }
-      // }
     },
     SOCKET_commentEdited(state, data) {
       var img = state.viewedImage;
       var comments = data.image.comments;
       var idx = comments.findIndex(comment => comment.id === data.commentId);
-      if (idx !== -1) {
+      if (idx > -1) {
+
         var commentToUpdate = comments[idx];
         commentToUpdate.comment = data.newComment;
         commentToUpdate.timeStamp = Date.now();
@@ -168,7 +167,6 @@ export default {
       }
     },
     SOCKET_likeAdded(state, data) {
-      console.log("SOCKET_likeAdded");
       var img = state.viewedImage;
       var likes = data.image.likes;
       var user = data.user;
@@ -194,7 +192,6 @@ export default {
       }
     },
     SOCKET_likeRemoved(state, data) {
-      console.log("SOCKET_likeRemoved");
 
       var img = state.viewedImage;
       var likes = data.image.likes;
@@ -254,7 +251,6 @@ export default {
               users.push(user.userName);
             }
           });
-          console.log("actions usernames", users);
           context.commit({ type: "setFolloweesThatLiked", users });
           // context.rootState.userModule.loggedInUser = res.loggedInUser;
           return users;
@@ -357,7 +353,6 @@ export default {
     },
     addImage(context, { imgDetails, image }) {
       imgDetails.ownerId = context.rootState.userModule.loggedInUser._id;
-      console.log("addimage ownder  ID", imgDetails.ownerId )
       return imageServices.addImage(imgDetails, image);
       //TODO: findout if displayedprofile is loggedinuserprofiel and update inthat case
     },

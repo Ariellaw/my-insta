@@ -111,7 +111,6 @@ function removeUserLike(imageId, userId) {
 function addNewImage(imgDetails, image) {
   var tags = _getTags(imgDetails.text, []);
   var imgObj = _createImgObj(imgDetails, image, tags);
-  console.log("imgObj", imgObj)
   return mongoService
     .connect()
     .then(db => db.collection(imagesDb).insertOne(imgObj));
@@ -243,12 +242,14 @@ function _getTags(newComment, hashtags) {
   return hashtags;
 }
 function _createImgObj(imgDetails, image, tags) {
-  var comment = createCommentObj("5c5fecdbd16a8d56eaca3c98", imgDetails.text);
+  var comment = createCommentObj(imgDetails.ownerId, imgDetails.text);
   //TODO - change word text to comment
   var comments = [];
   var timeStamp = Date.now();
-
+  console.log("comment", comment);
   comments.push(comment);
+  console.log("comments", comments)
+
   var imgObj = {
     image: image,
     ownerId: ObjectId(imgDetails.ownerId),

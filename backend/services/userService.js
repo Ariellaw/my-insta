@@ -204,31 +204,31 @@ function updateUserDetails(userDetails) {
   var userId = userDetails._id;
   const _id = new ObjectId(userId);
 
-  return getById(userId).then(user => {
-    var firstName = userDetails.firstName || user.firstName;
-    var lastName = userDetails.lastName || user.lastName;
-    var email = userDetails.email || user.email;
-    var userName = userDetails.userName || user.userName;
-    var profilePic = userDetails.profilePic || user.profilePic;
-    var bio = userDetails.bio||user.bio;
+  // return getById(userId).then(user => {
+  //   var firstName = userDetails.firstName || user.firstName;
+  //   var lastName = userDetails.lastName || user.lastName;
+  //   var email = userDetails.email || user.email;
+  //   var userName = userDetails.userName || user.userName;
+  //   var profilePic = userDetails.profilePic || user.profilePic;
+  //   var bio = userDetails.bio||user.bio;
 
     return mongoService.connect().then(db =>
       db.collection(userDb).findOneAndUpdate(
         { _id: _id },
         {
           $set: {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            userName: userName,
-            profilePic: profilePic,
-            bio:bio
+            firstName: userDetails.firstName,
+            lastName: userDetails.lastName,
+            email: userDetails.email,
+            userName: userDetails.userName,
+            profilePic: userDetails.profilePic,
+            bio:userDetails.bio
           }
         },
         { returnOriginal: false }
       )
     );
-  });
+  // });
 }
 
 function findRelevantUsers(keyword) {

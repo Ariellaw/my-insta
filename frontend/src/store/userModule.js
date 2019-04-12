@@ -30,7 +30,7 @@ export default {
       state.loggedInUser = user;
     },
     updateLoggedInUser(state, { user }) {
-      console.log("setlogged in user", user);
+      console.log("updateloggedinUser", user)
       state.loggedInUser = user;
     },
 
@@ -43,6 +43,14 @@ export default {
     }
   },
   actions: {
+    updateLoggedInUserTemp(context, { detailToUpdate, detail}){
+      var user = context.state.loggedInUser;
+      user[detailToUpdate]=detail;
+      if(!user){
+        return;
+      }
+      context.commit({type:"updateLoggedInUser", user})
+    },
     registerNewUser(context, { user }) {
       return userServices.createNewUser(user);
     },
@@ -108,7 +116,6 @@ export default {
     },
     updateUserDetails(context, { userDetails }) {
       userServices.updateUserDetails(userDetails).then(res => {
-        console.log("updateUserDetails loggedin User actions", res.value);
         context.commit({ type: "updateLoggedInUser", user: res.value });
 
         return res.value;
@@ -127,7 +134,6 @@ export default {
 
     getLoggedInUser(context) {
       userServices.getLoggedInUser().then(res => {
-        console.log("loggedinuser", res.loggedInUser);
         context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.loggedInUser;
       });

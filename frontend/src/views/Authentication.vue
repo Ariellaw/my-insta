@@ -26,7 +26,7 @@
         </div>
         <div class="red" v-if="showMessage">
           {{message}}
-          <i class="fas fa-times-circle"></i>
+          <i class="fas fa-times" @click="showMessage=false"></i>
         </div>
 
         <div class="buttons">
@@ -52,9 +52,7 @@
         <a href="javascript:void(0)" class="googleplus"></a>
       </div>
     </div>
-
-    <!-- <span class="resp-info"></span> -->
-    <i class="far fa-times-circle"></i>
+    <!-- <i class="far fa-times-circle"></i> -->
   </div>
 </template>
 
@@ -78,8 +76,7 @@ export default {
     }
   },
   created() {
-    console.log(this.$route);
-    if (this.$route.query.success === "new-user") {
+    if (this.$route.query.success === "new-user" ||this.$route.query.faliure === "no-user") {
       this.showMessage = true;
       this.message = "Please login";
     } else if (this.$route.query.faliure === "faliure") {
@@ -129,8 +126,8 @@ div.loginpanel {
   padding: 20px;
   margin: 0 auto;
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 40%;
+  transform: translateY(-30%);
   background-color: fade(#ddd, 60%);
   border-radius: 4px;
   box-shadow: 0 0 5px 1px #333;
@@ -343,18 +340,12 @@ div.loginpanel {
     }
   }
 }
-// .resp-info:before {
-//   content: "fuck!!!";
-//   position: fixed;
-//   bottom: 10px;
-//   left: 10px;
-//   color: #f00;
-// }
+
 @media only screen and (max-width: 555px) {
   div.loginpanel {
     width: 90%;
-    top: 30%;
-    transform: translateY(30%);
+    top: 7rem;
+    transform: translateY(0px);
 
     div.buttons {
       flex-direction: column;
@@ -367,18 +358,14 @@ div.loginpanel {
       }
     }
   }
-  .resp-info:before {
-    content: "max 555";
-  }
+
 }
 @media only screen and (max-width: 400px) {
   div.loginpanel {
     width: 100%;
     border-radius: 0;
   }
-  .resp-info:before {
-    content: "max 400";
-  }
+
 }
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
 @import url(http://weloveiconfonts.com/api/?family=entypo);
