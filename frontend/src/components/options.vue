@@ -16,7 +16,6 @@ export default {
       console.log("logout cmp");
       this.$store.dispatch({ type: "logout" });
       //TODO: relative location, maybe use $router
-      // window.location="http://192.168.1.105:3003/logout";
       window.location = "/logout";
     }
   }

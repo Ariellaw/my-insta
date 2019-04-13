@@ -8,8 +8,8 @@
       enctype="multipart/form-data"
       @submit.prevent="updateUserDetails"
     >
-      <div v-if="currProfilePic && loggedInUser" class="update-profile-pic-container">
-        <img :src="currProfilePic" alt="profile-picture" class="edit-image">
+      <div v-if="loggedInUser" class="update-profile-pic-container">
+        <img :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image">
         <h3>{{loggedInUser.userName}}</h3>
         <div class="image-upload">
           <label for="file-input-edit" class="btn">Update your Profile Picture</label>
@@ -97,7 +97,6 @@ export default {
       userMadeChanges: false,
     };
   },
-  //  @input="user.profilePic = $event.target.value"
   created() {
     this.getLoggedInUser();
   },
@@ -106,11 +105,7 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    currProfilePic() {
-      if (!this.profilePicChanged) {
-        return this.loggedInUser.profilePic;
-      } else return this.user.profilePic;
-    }
+
   },
   methods: {
     getLoggedInUser() {
@@ -119,7 +114,6 @@ export default {
     tempUpdate(detailToUpdate, detail) {
       console.log("edit details", detailToUpdate, detail);
       this.$store.dispatch({ type: "updateLoggedInUserTemp",  detailToUpdate, detail });
-
       this.userMadeChanges = true;
     },
     updateUserDetails() {
@@ -130,7 +124,8 @@ export default {
         })
         .then(() => {
           this.userMadeChanges = false;
-          this.getLoggedInUser();
+          // this.getLoggedInUser();
+          this.$router.go();
         })
         .catch(err => {
           console.log("getVisitedUserImages ERR", err);
@@ -138,6 +133,7 @@ export default {
         });
     },
     uploadImage() {
+      this.getLoggedInUser();
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
@@ -145,8 +141,7 @@ export default {
           elForm
         })
         .then(url => {
-          this.user.profilePic = url;
-          this.profilePicChanged = true;
+          this.loggedInUser.profilePic = url;
           this.updateUserDetails();
         });
     }

@@ -11,7 +11,6 @@ import VueSocketIO from 'vue-socket.io';
 var SocialSharing = require('vue-social-sharing');
 
 
-// const SocketInstance = socketio('http://192.168.1.105:8810');
 const SocketInstance = socketio('/');
 
 

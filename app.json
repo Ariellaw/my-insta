@@ -1,0 +1,10 @@
+{
+    "name": "AriellaGram",
+    "description": "Ariella's better version of Instagram",
+    "repository": "https://github.com/Ariellaw/my-insta/",
+    "buildpacks": [
+        {
+          "url": "heroku/nodejs"
+        }
+      ]
+  }

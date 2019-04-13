@@ -47,12 +47,15 @@
       </div>
 
       <div class="social">
-        <a href="javascript:void(0)" class="facebook"></a>
+        <i class="fab fa-facebook-square facebook"></i>
+        <i class="fab fa-twitter twitter"></i>
+        <i class="fab fa-google-plus-square googleplus"></i>
+
+        <!-- <a href="javascript:void(0)" class="facebook"></a>
         <a href="javascript:void(0)" class="twitter"></a>
-        <a href="javascript:void(0)" class="googleplus"></a>
+        <a href="javascript:void(0)" class="googleplus"></a>-->
       </div>
     </div>
-    <!-- <i class="far fa-times-circle"></i> -->
   </div>
 </template>
 
@@ -76,7 +79,10 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.success === "new-user" ||this.$route.query.faliure === "no-user") {
+    if (
+      this.$route.query.success === "new-user" ||
+      this.$route.query.faliure === "no-user"
+    ) {
       this.showMessage = true;
       this.message = "Please login";
     } else if (this.$route.query.faliure === "faliure") {
@@ -96,17 +102,17 @@ $facebook: #3b5998;
 $twitter: #56b4ef;
 $googleplus: #dd4b39;
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
-@import url(http://weloveiconfonts.com/api/?family=entypo);
-$green: #2ecc71;
-$green-dark: #27ae60;
-$facebook: #3b5998;
-$twitter: #56b4ef;
-$googleplus: #dd4b39;
+// @import url(http://weloveiconfonts.com/api/?family=entypo);
+// $green: #2ecc71;
+// $green-dark: #27ae60;
+// $facebook: #3b5998;
+// $twitter: #56b4ef;
+// $googleplus: #dd4b39;
 [class*="entypo-"]:before {
   font-family: "entypo", sans-serif;
 }
 * {
-  font-family: "Ubuntu", sans-serif;
+  // font-family: "Ubuntu", sans-serif;
   box-sizing: border-box;
   transition: all 0.2s ease-out;
   backface-visibility: hidden;
@@ -358,14 +364,12 @@ div.loginpanel {
       }
     }
   }
-
 }
 @media only screen and (max-width: 400px) {
   div.loginpanel {
     width: 100%;
     border-radius: 0;
   }
-
 }
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
 @import url(http://weloveiconfonts.com/api/?family=entypo);
@@ -378,7 +382,7 @@ $googleplus: #dd4b39;
   font-family: "entypo", sans-serif;
 }
 * {
-  font-family: "Ubuntu", sans-serif;
+  // font-family: "Ubuntu", sans-serif;
   box-sizing: border-box;
   transition: all 0.2s ease-out;
   backface-visibility: hidden;
