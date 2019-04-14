@@ -90,15 +90,6 @@ export default {
     };
   },
   methods: {
-    // close() {
-    //   this.image.file = null;
-    //   this.newImage = false;
-    //   this.$router.push({ params: { image: null } });
-    // },
-    // uploadNewImage() {
-    //   this.$router.push({ params: { image: "new-image" } });
-    //   this.newImage = true;
-    // },
     getNavBarTitle() {
       if (this.$route.params.image === "new-image") {
         this.navbarTitle = "New Image";

@@ -121,7 +121,6 @@ export default {
       var comments = data.image.comments;
       var idx = comments.findIndex(comment => comment.id === data.commentId);
       if (idx > -1) {
-
         var commentToUpdate = comments[idx];
         commentToUpdate.comment = data.newComment;
         commentToUpdate.timeStamp = Date.now();
@@ -162,8 +161,10 @@ export default {
 
     SOCKET_typing(state, data) {
       var img = state.viewedImage;
-      if (img._id === data.imageId) {
-        state.isTyping = data.userName;
+      if (img) {
+        if (img._id === data.imageId) {
+          state.isTyping = data.userName;
+        }
       }
     },
     SOCKET_likeAdded(state, data) {
@@ -192,7 +193,6 @@ export default {
       }
     },
     SOCKET_likeRemoved(state, data) {
-
       var img = state.viewedImage;
       var likes = data.image.likes;
       var user = data.user;

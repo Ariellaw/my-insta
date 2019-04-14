@@ -40,16 +40,16 @@
           </span>
         </div>
       </form>
-      <div class="hr">
+      <!-- <div class="hr">
         <div></div>
         <div>OR</div>
         <div></div>
-      </div>
+      </div>-->
 
       <div class="social">
-        <i class="fab fa-facebook-square facebook"></i>
+        <!-- <i class="fab fa-facebook-square facebook"></i>
         <i class="fab fa-twitter twitter"></i>
-        <i class="fab fa-google-plus-square googleplus"></i>
+        <i class="fab fa-google-plus-square googleplus"></i>-->
 
         <!-- <a href="javascript:void(0)" class="facebook"></a>
         <a href="javascript:void(0)" class="twitter"></a>
@@ -79,6 +79,9 @@ export default {
     }
   },
   created() {
+    if(this.loggedInUser){
+      this.$router.push({name:"home"});
+    }
     if (
       this.$route.query.success === "new-user" ||
       this.$route.query.faliure === "no-user"
@@ -89,13 +92,22 @@ export default {
       this.showMessage = true;
       this.message = "Wrong username or password!";
     }
+
+    this.$store
+      .dispatch({ type: "getLoggedInUser" })
+      .then(user => console.log("authentication test logged in user", user));
+  },
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
-@import url(http://weloveiconfonts.com/api/?family=entypo);
+// @import url(http://weloveiconfonts.com/api/?family=entypo);
 $green: #2ecc71;
 $green-dark: #27ae60;
 $facebook: #3b5998;
@@ -372,7 +384,7 @@ div.loginpanel {
   }
 }
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
-@import url(http://weloveiconfonts.com/api/?family=entypo);
+// @import url(http://weloveiconfonts.com/api/?family=entypo);
 $green: #2ecc71;
 $green-dark: #27ae60;
 $facebook: #3b5998;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 const BASE_URL = (process.env.NODE_ENV !== 'development')
  ? '/user'
- : "//10.100.102.4:3003/user";
+ : "//10.100.102.2:3003/user";
 
  
 function createNewUser(user){

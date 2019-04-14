@@ -131,14 +131,20 @@ export default {
         this.password2 &&
         this.user.password !== this.password2
       );
+    },
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
+  },
+  created() {
+    if (this.loggedInUser) {
+      this.$router.push({ name: "home" });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
-
 $yellow: #f5ba1a;
 $black: #000000;
 $grey: #cccccc;

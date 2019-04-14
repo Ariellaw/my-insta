@@ -16,7 +16,7 @@
 
 <script>
 import gallaryOfImages from "../components/gallary-of-images.vue";
-import secrets from "../../secrets.js"
+import secrets from "../../secrets.js";
 import axios from "axios";
 export default {
   name: "searh-results-page",
@@ -27,9 +27,8 @@ export default {
       country: null,
       type: null,
       image: null,
-      googleAPI:secrets.getGoogleAPI(),
-      opencagedataAPI:secrets.getOpencagedataAPI()
-   
+      googleAPI: secrets.getGoogleAPI(),
+      opencagedataAPI: secrets.getOpencagedataAPI()
     };
   },
   components: {
@@ -59,7 +58,8 @@ export default {
       this.city = keyword.charAt(0).toUpperCase() + keyword.slice(1);
       this.$store
         .dispatch({ type: "getImagesByLocation", location: keyword })
-        .then(images => (this.images = images)).catch(err => {
+        .then(images => (this.images = images))
+        .catch(err => {
           console.log("getVisitedUserImages ERR", err);
           this.$router.push({ name: "login" });
         });
@@ -71,7 +71,8 @@ export default {
         .then(images => {
           this.images = images;
           this.image = images[0].image;
-        }).catch(err => {
+        })
+        .catch(err => {
           console.log("getVisitedUserImages ERR", err);
           this.$router.push({ name: "login" });
         });
@@ -90,7 +91,21 @@ export default {
         title: this.city
       });
     },
-    getImageOfCity(lat, lng) {},
+    getImageOfCity(lat, lng) {
+      console.log("getImageOfCity", lat, lng)
+      axios
+        .get(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${
+            this.googleAPI
+          }&location=${lat},${lng}&radius=1000`
+        )
+        .then(res => {
+          console.log("photo reference", res);
+          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${res.photos.photo_reference}&key=${this.googleAPI}`
+          console.log("map link", `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${res.photos.photo_reference}&key=${this.googleAPI}`
+)
+      });
+    },
 
     getCountryInfo(location) {
       axios
@@ -101,22 +116,13 @@ export default {
         )
         .then(res => {
           var searchResult = res.data.results[0];
+          console.log("searchResult", searchResult);
           this.loadMap(searchResult.geometry.lat, searchResult.geometry.lng);
           this.getImageOfCity(
             searchResult.geometry.lat,
             searchResult.geometry.lng
           );
           this.country = searchResult.components.country;
-
-          // axios
-          //   .get(
-          //     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${this.googleAPI}&location=${
-          //       searchResult.lat
-          //     },${searchResult.lng}&radius=1000`
-          //   )
-          //   .then(res => {
-          //     console.log("photo reference", res);
-          //   });
         });
     }
   }
