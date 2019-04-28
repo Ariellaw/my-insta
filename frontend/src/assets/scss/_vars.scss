@@ -29,11 +29,8 @@ $dark-border-color:darken(#fafafa, 15%);
     transition: opacity 0.3s ease;
 }
 @mixin textarea {
-    // width: 100%;
-    // border: none;
     resize: none;
     font-size: 18px;
-    // margin:5px;
     padding:5px;
     font-family: monospace;
 

@@ -14,18 +14,18 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
     }
+    @media screen and (max-height: 1500px) {
+      height: 90rem;
+    }
+    @media screen and (max-height: 350px) {
+      height: 80rem;
+    }
     @media screen and (max-width: 2500px) {
       width: 70rem;
-      height: 97vh;
     }
     @media screen and (max-width: 700px) {
       width: 100vw;
-      height: 140vh;
-
-      &.pop-up-image {
-      }
     }
-
     .currImage {
       display: flex;
       justify-content: space-between;
@@ -35,14 +35,8 @@
       background-repeat: no-repeat;
       width: 100%;
       max-width: 100%;
-      height: 56%;
+      height: 54%;
       order: 2;
-      @media screen and (max-width: 700px) {
-        height: 54%;
-      }
-      @media screen and (max-width: 350px) {
-        height: 51%;
-      }
     }
 
     div {
@@ -59,8 +53,8 @@
       border-bottom: 1px solid $lighter-font-color;
       font-size: 1.6rem;
       width: 100%;
-      @media screen and (max-width: 700px) {
-        height: 7%;
+      @media screen and (max-height: 500px) {
+        height: 9%;
       }
 
       .profile-pic {
@@ -69,10 +63,6 @@
         height: 6rem;
         flex-direction: row;
         margin: 1rem;
-        // @media screen and(max-height:800px) {
-        //   width: 5rem;
-        //   height: 5rem;
-        // }
       }
       .image-location {
         font-family: monst-light;
@@ -80,38 +70,33 @@
       }
     }
     .comments {
-      height: 18%;
+      height: 20%;
       border-bottom: 1px solid $lighter-font-color;
       flex-direction: column;
       overflow-y: scroll;
       overflow-x: hidden;
       order: 4;
       width: 100%;
-
-      @media screen and (max-width: 700px) {
-        height: 16%;
+      @media screen and (max-height: 500px) {
+        height: 20%;
       }
     }
     .likes-and-followers {
       order: 3;
-      height: 6%;
+      height: 5%;
       margin-left: 0px;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
       width: 100%;
-
-      @media screen and (max-width: 700px) {
-        height:5rem;
+      @media screen and (max-width: 450px) {
+        height: 7%;
       }
-      // @media screen and (max-width: 450px) {
-      //   height: 5%;
-      // }
-      // @media screen and (max-width: 350px) {
-      //   height: 8%;
-      // }
-      @media screen and (max-height:300px){
+      @media screen and (max-height: 500px) {
+        display: none;
+      }
+      @media screen and (max-width: 320px) {
         display: none;
       }
       .icons {
@@ -129,46 +114,39 @@
         flex-direction: column;
         display: flex;
         justify-content: center;
-        // line-height: 1.5;
         @media screen and (max-width: 700px) {
-          // line-height: 1;
         }
         .namesOfLikes {
           color: $darker-font-color;
-          // display: inline;
           font-size: 1.4rem;
           font-weight: bold;
           margin-bottom: 0;
-          margin-top: .5rem;
+          margin-top: 0.5rem;
         }
 
         .num-of-likes {
           margin-bottom: 0rem;
-          margin-top: 0.5rem;
         }
         .time-posted {
           color: $darker-font-color;
-          margin-top: 0.5rem;
         }
       }
     }
     .add-a-comment {
-      height: 12%;
+      height: 13%;
       order: 5;
       width: 100%;
-      @media screen and (max-width: 700px) {
-        height: 17%;
-      }
       @media screen and (max-width: 450px) {
+        height: 11%;
+      }
+      @media screen and (max-height: 500px) {
         height: 16%;
       }
-      @media screen and (max-width: 350px) {
-        height: 15%;
-      }
+      
       .viewed-image-text-area {
         @include textarea;
         height: 95%;
-        width:100%;
+        width: 100%;
       }
     }
   }
@@ -181,10 +159,6 @@
     width: 90%;
     height: 70rem;
   }
-  // @media screen and (max-width: 700px) {
-  //   width: 100vw;
-  //   height: 100vh;
-  // }
 
   flex-wrap: wrap;
   .currImage {
@@ -242,7 +216,6 @@
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
-
   }
   .likes-and-followers {
     height: 15%;
@@ -285,7 +258,7 @@
     height: 12%;
     textarea {
       @include textarea;
-      width:100%;
+      width: 100%;
     }
   }
 }

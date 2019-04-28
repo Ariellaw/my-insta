@@ -27,6 +27,7 @@ export default {
       }
     },
     setLoggedInUser(state, { user }) {
+      console.log("setLoggedINUser", user)
       state.loggedInUser = user;
     },
     updateLoggedInUser(state, { user }) {
