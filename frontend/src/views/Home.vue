@@ -1,5 +1,5 @@
 <template>
-<div id="user-feed page-container" v-if="imagesForFeed">
+  <div id="user-feed page-container" v-if="imagesForFeed">
     <div
       class="user-feed"
       v-for="image in imagesForFeed"
@@ -14,8 +14,9 @@
       v-if="showModal"
       :image="chosenImage"
       @close="closeModal()"
+      :albumLength="userImages.length"
     ></view-image>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -104,7 +105,7 @@ export default {
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
           document.documentElement.offsetHeight - 1;
-        if (bottomOfWindow && this.imagesForFeed.length>2) {
+        if (bottomOfWindow && this.imagesForFeed.length > 2) {
           this.getAdditionalImages();
         }
       };

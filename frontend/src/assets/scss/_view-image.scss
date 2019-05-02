@@ -9,12 +9,14 @@
   &.modal-container {
     flex-direction: column;
     margin-top: 1rem;
-    min-height: 60rem;
-    &.feed-image {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+    height: 130rem;
+    @media screen and (max-height: 1800px) {
+      height: 130rem;
     }
-    @media screen and (max-height: 1500px) {
+    @media screen and (max-height: 1100px) {
+      height: 100rem;
+    }
+    @media screen and (max-height: 900px) {
       height: 90rem;
     }
     @media screen and (max-height: 350px) {
@@ -26,6 +28,11 @@
     @media screen and (max-width: 700px) {
       width: 100vw;
     }
+    &.feed-image {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
     .currImage {
       display: flex;
       justify-content: space-between;
@@ -83,22 +90,20 @@
     }
     .likes-and-followers {
       order: 3;
-      height: 5%;
+      height: fit-content;;
       margin-left: 0px;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
       width: 100%;
-      @media screen and (max-width: 450px) {
-        height: 7%;
-      }
+      // @media screen and (max-width: 450px) {
+      //   height: 
+      // }
       @media screen and (max-height: 500px) {
         display: none;
       }
-      @media screen and (max-width: 320px) {
-        display: none;
-      }
+
       .icons {
         width: auto;
         i {
@@ -114,7 +119,8 @@
         flex-direction: column;
         display: flex;
         justify-content: center;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 300px) {
+          display: none;
         }
         .namesOfLikes {
           color: $darker-font-color;
@@ -133,20 +139,15 @@
       }
     }
     .add-a-comment {
-      height: 13%;
+      height: 10%;
       order: 5;
       width: 100%;
-      @media screen and (max-width: 450px) {
-        height: 11%;
-      }
-      @media screen and (max-height: 500px) {
-        height: 16%;
-      }
-      
+    
       .viewed-image-text-area {
         @include textarea;
         height: 95%;
         width: 100%;
+        margin-top:1rem;
       }
     }
   }

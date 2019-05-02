@@ -246,9 +246,7 @@ function _createImgObj(imgDetails, image, tags) {
   //TODO - change word text to comment
   var comments = [];
   var timeStamp = Date.now();
-  console.log("comment", comment);
   comments.push(comment);
-  console.log("comments", comments)
 
   var imgObj = {
     image: image,

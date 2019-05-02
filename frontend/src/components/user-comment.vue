@@ -121,7 +121,9 @@ export default {
 .comment-container {
   background-color: #f2f3f5;
   display: block;
-  margin-top: 1rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+
   border-radius: 2rem;
   width: 100%;
   cursor: pointer;

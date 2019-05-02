@@ -6,6 +6,7 @@
       v-if="showModal"
       :image="viewedImage"
       @close="close()"
+      :albumLength="displayedImages.length"
     ></view-image>
 
     <h1 v-if="isLoading">Loading...</h1>

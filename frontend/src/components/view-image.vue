@@ -8,8 +8,16 @@
 
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
-            <i class="fas fa-angle-left arrow btn" @click="$emit('goBack1Image')"></i>
-            <i class="fas fa-angle-right arrow btn" @click="$emit('goForward1Img')"></i>
+            <i
+              class="fas fa-angle-left arrow btn"
+              @click="$emit('goBack1Image')"
+              v-if="albumLength>1"
+            ></i>
+            <i
+              class="fas fa-angle-right arrow btn"
+              @click="$emit('goForward1Img')"
+              v-if="albumLength>1"
+            ></i>
           </div>
           <div class="user-info bold-reg">
             <img
@@ -70,14 +78,14 @@
                 {{followeesThatLiked[0]}}
                 <span
                   v-if="viewedImage.likes.length>1"
-                >and {{viewedImage.likes.length-1}} others </span>like this
+                >and {{viewedImage.likes.length-1}} others</span>like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
                   v-if="viewedImage.likes.length>2"
-                >and {{viewedImage.likes.length-2}} others  </span>
+                >and {{viewedImage.likes.length-2}} others</span>
                 like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
@@ -85,8 +93,7 @@
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
                   v-if="viewedImage.likes.length>2"
-                >
-                  and {{viewedImage.likes.length-2}} others </span> like this
+                >and {{viewedImage.likes.length-2}} others</span> like this
               </span>
 
               <span
@@ -120,7 +127,7 @@ import socialMedia from "./social-media.vue";
 
 export default {
   name: "view-image",
-  props: ["image"],
+  props: ["image", "albumLength"],
   data() {
     return {
       newComment: null,
@@ -132,7 +139,6 @@ export default {
 
   created() {
     window.scrollTo(0, 0);
-
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
@@ -379,6 +385,7 @@ export default {
     }
   },
   mounted() {
+    console.log("image is mounted and album is this long", this.albumLength);
     this.loadImage();
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
