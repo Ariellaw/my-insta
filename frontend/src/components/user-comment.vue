@@ -50,7 +50,9 @@ export default {
     if (this.comment.writerId) {
       this.getNickName();
     }
-    this.words = this.comment.comment.split(" ");
+    if (this.comment.comment) {
+      this.words = this.comment.comment.split(" ");
+    }
   },
   filters: {
     moment: function(date) {
@@ -121,8 +123,8 @@ export default {
 .comment-container {
   background-color: #f2f3f5;
   display: block;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 
   border-radius: 2rem;
   width: 100%;
@@ -138,7 +140,6 @@ export default {
 
   .comment {
     width: fit-content;
-     
   }
   .icons {
     color: darkgray;

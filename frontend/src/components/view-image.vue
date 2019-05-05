@@ -385,7 +385,6 @@ export default {
     }
   },
   mounted() {
-    console.log("image is mounted and album is this long", this.albumLength);
     this.loadImage();
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
@@ -397,6 +396,9 @@ export default {
         }
       });
     });
+  },
+  destroyed() {
+    this.$store.dispatch({ type: "setViewedImage", image: null });
   },
   watch: {
     $route() {

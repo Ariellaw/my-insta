@@ -13,7 +13,6 @@ export default {
   name: "options",
   methods: {
     logOut() {
-      console.log("logout cmp");
       this.$store.dispatch({ type: "logout" });
       //TODO: relative location, maybe use $router
       window.location = "/logout";

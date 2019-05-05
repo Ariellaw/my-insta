@@ -95,7 +95,6 @@ export default {
 
     this.$store
       .dispatch({ type: "getLoggedInUser" })
-      .then(user => console.log("authentication test logged in user", user));
   },
   computed: {
     loggedInUser() {

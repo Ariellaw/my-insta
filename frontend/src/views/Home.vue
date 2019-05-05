@@ -85,10 +85,11 @@ export default {
       return idx;
     },
     displayFeedImage(image) {
+      this.showModal = true;
+      this.chosenImage = image;
       this.$router.push({ params: { image: image._id } });
       this.getUserImages(image.ownerId);
-      this.chosenImage = image;
-      this.showModal = true;
+
     },
     getInitalImages() {
       this.$store.dispatch({ type: "getInitalImages" }).catch(err => {
