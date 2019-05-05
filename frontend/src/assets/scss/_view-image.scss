@@ -8,15 +8,16 @@
 .displayVertical {
   &.modal-container {
     flex-direction: column;
+    top:0;
     margin-top: 1rem;
     height: 130rem;
     @media screen and (max-height: 1800px) {
-      height: 130rem;
-    }
-    @media screen and (max-height: 1100px) {
       height: 100rem;
     }
-    @media screen and (max-height: 900px) {
+    @media screen and (max-height: 1100px) {
+      height: 95rem;
+    }
+    @media screen and (max-height: 800px) {
       height: 90rem;
     }
     @media screen and (max-height: 350px) {
@@ -32,7 +33,11 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
     }
-
+    &.pop-up-image{
+      // margin-top: 6rem;
+      margin-bottom: 20%;
+      top:0;
+    }
     .currImage {
       display: flex;
       justify-content: space-between;
@@ -66,8 +71,8 @@
 
       .profile-pic {
         @include profilePic;
-        width: 6rem;
-        height: 6rem;
+        width: 5.5rem;
+        height: 5.5rem;
         flex-direction: row;
         margin: 1rem;
       }
@@ -145,9 +150,10 @@
     
       .viewed-image-text-area {
         @include textarea;
-        height: 95%;
+        height: 90%;
         width: 100%;
-        margin-top:1rem;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
       }
     }
   }
@@ -155,6 +161,8 @@
 
 .modal-container {
   flex-direction: column;
+  max-width: 175rem;
+
 
   @media screen and (max-width: 2500px) {
     width: 90%;

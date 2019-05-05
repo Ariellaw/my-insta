@@ -42,7 +42,7 @@
         <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
         <i @click="addUserLike" v-else class="far fa-heart btn"></i>
 
-        <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i>
+        <!-- <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i> -->
 
         <i v-if="inUserFavorites" @click="removeFromUserFavorites" class="fas fa-bookmark btn"></i>
         <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>

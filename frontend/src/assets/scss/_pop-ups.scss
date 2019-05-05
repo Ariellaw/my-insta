@@ -1,11 +1,13 @@
 .modal-mask {
   z-index: 10000004;
   @include mask;
+  @media screen and (max-width: 1100px) {
+    position: absolute;
+  }
   @media screen and (max-width: 700px) {
     z-index: 1;
-    position: absolute;
     top: 0;
-    height: 100vh;
+    // height: 100vh;
     margin-top: 6rem;
     margin-bottom: 8rem;
   }

@@ -27,6 +27,9 @@ $dark-border-color:darken(#fafafa, 15%);
     background-color: rgba(0, 0, 0, 1);
     display: table;
     transition: opacity 0.3s ease;
+    @media screen and (max-width: 1100px) {
+        height: 120vh;
+    }
 }
 @mixin textarea {
     resize: none;

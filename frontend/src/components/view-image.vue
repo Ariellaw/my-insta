@@ -8,14 +8,10 @@
 
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
-            <i
-              class="fas fa-angle-left arrow btn"
-              @click="$emit('goBack1Image')"
-              v-if="albumLength>1"
-            ></i>
+            <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
             <i
               class="fas fa-angle-right arrow btn"
-              @click="$emit('goForward1Img')"
+              @click="goForward1Img"
               v-if="albumLength>1"
             ></i>
           </div>
@@ -85,15 +81,14 @@
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
                   v-if="viewedImage.likes.length>2"
-                >and {{viewedImage.likes.length-2}} others</span>
-                like this
+                >and {{viewedImage.likes.length-2}} others</span>like this
               </span>
               <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
                   v-if="viewedImage.likes.length>2"
-                >and {{viewedImage.likes.length-2}} others</span> like this
+                >and {{viewedImage.likes.length-2}} others</span>like this
               </span>
 
               <span
@@ -154,6 +149,14 @@ export default {
   //popup of all people that liked
   // write you if the person liking is you
   methods: {
+    goBack1Image() {
+      this.socialMediaModule = false;
+      this.$emit("goBack1Image");
+    },
+    goForward1Img() {
+      this.socialMediaModule = false;
+      this.$emit("goForward1Img");
+    },
     updateComment(data) {
       this.$socket.emit("commentEdited", {
         commentId: data.commentId,
@@ -399,6 +402,7 @@ export default {
   },
   destroyed() {
     this.$store.dispatch({ type: "setViewedImage", image: null });
+    this.socialMediaModule = false;
   },
   watch: {
     $route() {
