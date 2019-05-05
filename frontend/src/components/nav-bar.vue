@@ -5,7 +5,7 @@
         <i class="fas fa-arrow-left btn"></i>
         <h3 class="navbar-title">{{navbarTitle}}</h3>
       </div>
-      <i class="fas fa-cog btn"  @click="$emit('displayOptions')" v-if="loggedInUser  && $route.name === 'user-profile' && this.$route.params.image===null"></i>
+      <i class="fas fa-cog btn" @click="$emit('displayOptions')" v-if="isLoggedInUserProfile"></i>
     </div>
     <div
       v-else
@@ -171,6 +171,15 @@ export default {
     }
   },
   computed: {
+    isLoggedInUserProfile() {
+      if (this.loggedInUser) {
+        return (
+          this.loggedInUser.userName === this.$route.params.userName &&
+          this.$route.name === "user-profile" &&
+          !this.$route.params.image
+        );
+      }
+    },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -193,6 +202,14 @@ export default {
     }
   },
   mounted() {
+    // console.log(
+    //   "this.loggedInUser.userName",
+    //   this.loggedInUser.userName,
+    //   "this.$route.params.userName",
+    //   this.$route.params.userName && "this.$route.name",
+    //   this.$route.name,
+    //   this.$route.name === "user-profile"
+    // );
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
         this.windowWidth = window.innerWidth;
@@ -200,7 +217,6 @@ export default {
     });
   },
   components: {
-    // uploadPost,
     searchResult
   }
 };
