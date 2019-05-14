@@ -7,16 +7,14 @@
       </div>
       <i class="fas fa-cog btn" @click="$emit('displayOptions')" v-if="isLoggedInUserProfile"></i>
     </div>
-    <div
-      v-else
-      class="nav-buttons-container page-container"
-      :class="{'center':!loggedInUser, 'spaceBetween':loggedInUser}"
+    <div v-else class="nav-buttons-container page-container" 
+     :class="{'center':loginRegistrationPage, 'spaceBetween':!loginRegistrationPage}"
     >
       <div @click="goToFeed" class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i>
         <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
       </div>
-      <ul v-if="loggedInUser">
+      <ul v-if="!loginRegistrationPage">
         <li class="dropdown">
           <a href="javascript:void(0)" class="dropbtn">
             <input
@@ -62,13 +60,17 @@
             >
           </div>
         </form>
-        <i class="fas fa-comment btn"></i>
-        <i class="far fa-heart btn"></i>
+        <!-- <i class="fas fa-comment btn"></i> -->
+        <!-- <i class="far fa-heart btn"></i> -->
         <div class="userName-container btn" @click="goToLoggedInUserProfile">
           <img :src="loggedInUser.profilePic" alt class="userImg">
           <span class="userName">{{loggedInUser.userName}}</span>
         </div>
         <!-- <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i> -->
+      </div>
+      <div v-if="!loginRegistrationPage && !loggedInUser" class="loginReg">
+        <router-link :to="{ name: 'login'}">Login/</router-link>
+        <router-link :to="{ name: 'register'}">Register</router-link>
       </div>
     </div>
   </nav>
@@ -171,6 +173,9 @@ export default {
     }
   },
   computed: {
+    loginRegistrationPage() {
+      return this.$route.name === "register" || this.$route.name === "login";
+    },
     isLoggedInUserProfile() {
       if (this.loggedInUser) {
         return (
@@ -223,6 +228,10 @@ export default {
 </script>
 
  <style lang="scss" scoped>
+.loginReg {
+  margin-right: 1rem;
+  cursor: pointer;
+}
 .cellphone-navbar-container {
   width: 100vw;
   display: flex;

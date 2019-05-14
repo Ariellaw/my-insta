@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" v-if="imageOwner && loggedInUser && viewedImage">
+  <transition name="modal" v-if="imageOwner && viewedImage">
     <div class="modal-mask">
       <div class="modal-wrapper">
         <button class="modal-default-button" @click="$emit('close')">
@@ -9,11 +9,7 @@
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
             <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
-            <i
-              class="fas fa-angle-right arrow btn"
-              @click="goForward1Img"
-              v-if="albumLength>1"
-            ></i>
+            <i class="fas fa-angle-right arrow btn" @click="goForward1Img" v-if="albumLength>1"></i>
           </div>
           <div class="user-info bold-reg">
             <img
@@ -25,12 +21,12 @@
             <span class="btn">
               <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
               <span
-                v-if="isFollowing"
+                v-if="isFollowing && loggedInUser"
                 :class="followingStatusClass"
                 @click="removeFollowers(viewedImage.ownerId)"
               >Following</span>
               <span
-                v-else
+                v-else-if="loggedInUser"
                 :class="followingStatusClass"
                 class="follow"
                 @click="addFollowers(viewedImage.ownerId)"
@@ -56,19 +52,22 @@
             <div class="userTyping" v-if="typingUser">{{typingUser}} is typing....</div>
           </div>
           <div class="likes-and-followers">
-            <div v-if="loggedInUser" class="icons">
-              <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
-              <i @click="addUserLike" v-else class="far fa-heart btn"></i>
-
+            <div class="icons">
               <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i>
               <i
                 v-if="inUserFavorites"
                 @click="removeFromUserFavorites"
                 class="fas fa-bookmark btn"
               ></i>
-              <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
+              <i v-else-if="loggedInUser" @click="addToUserFavorites" class="far fa-bookmark btn"></i>
+              <i
+                @click="removeUserLike"
+                v-if="isLiked && loggedInUser"
+                class="fas fa-heart btn red"
+              ></i>
+              <i @click="addUserLike" v-else-if="loggedInUser" class="far fa-heart btn"></i>
             </div>
-            <span class="column" v-if="followeesThatLiked && viewedImage.likes">
+            <span class="column" v-if="followeesThatLiked && viewedImage.likes && loggedInUser">
               <span class="namesOfLikes" v-if="followeesThatLiked.length===1">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]}}
@@ -101,6 +100,7 @@
           </div>
           <div class="add-a-comment">
             <textarea
+              v-if="loggedInUser"
               class="viewed-image-text-area"
               placeholder="Add a comment....."
               name
@@ -144,10 +144,7 @@ export default {
       return moment(date).fromNow();
     }
   },
-  //TODO: make this page used the viewedImage and not other computed items - get rid of them
-  //social media popup =
-  //popup of all people that liked
-  // write you if the person liking is you
+  //TODO: popup of all people that liked
   methods: {
     goBack1Image() {
       this.socialMediaModule = false;
@@ -189,16 +186,18 @@ export default {
         .then(image => {
           this.getViewedImageOwner(image.ownerId);
           this.$store.dispatch({ type: "setViewedImage", image });
-          this.$store.dispatch({
-            type: "getViewedImageFollowers",
-            image,
-            loggedInUser: this.loggedInUser
-          });
-        })
-        .catch(err => {
-          console.log("err", err);
-          this.$router.push({ name: "login" });
+          if (this.loggedInUser) {
+            this.$store.dispatch({
+              type: "getViewedImageFollowers",
+              image,
+              loggedInUser: this.loggedInUser
+            });
+          }
         });
+      // .catch(err => {
+      //   console.log("err", err);
+      //   this.$router.push({ name: "login" });
+      // });
     },
     userIsTyping(userName, imageId) {
       this.$socket.emit("typing", { userName, imageId });
@@ -253,15 +252,14 @@ export default {
         });
     },
     getViewedImageOwner(userId) {
-      this.$store
-        .dispatch({
-          type: "getViewedImageOwner",
-          userId
-        })
-        .catch(err => {
-          console.log("getViewedImageOwner err", err);
-          this.$router.push({ name: "login" });
-        });
+      this.$store.dispatch({
+        type: "getViewedImageOwner",
+        userId
+      });
+      // .catch(err => {
+      //   console.log("getViewedImageOwner err", err);
+      //   this.$router.push({ name: "login" });
+      // });
     },
 
     addUserComment(comment, imageId, writerId) {
@@ -367,22 +365,24 @@ export default {
       return this.$store.getters.viewedImageOwner;
     },
     isFollowing() {
-      if (this.loggedInUser.followees) {
+      if (this.loggedInUser) {
         return this.loggedInUser.followees.includes(this.imageOwner._id);
       }
     },
     followingStatusClass() {
-      return {
-        displayNone: this.loggedInUser._id === this.imageOwner._id
-      };
+      if (this.loggedInUser) {
+        return {
+          displayNone: this.loggedInUser._id === this.imageOwner._id
+        };
+      }
     },
     inUserFavorites() {
-      if (this.loggedInUser.favorites) {
+      if (this.loggedInUser) {
         return this.loggedInUser.favorites.includes(this.viewedImage._id);
       }
     },
     isLiked() {
-      if (this.viewedImage.likes) {
+      if (this.viewedImage.likes && this.loggedInUser) {
         return this.viewedImage.likes.includes(this.loggedInUser._id);
       }
     }

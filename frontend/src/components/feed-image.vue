@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="modal-container feed-image displayVertical"
-    v-if="image && imageOwner && loggedInUser"
-  >
+  <div class="modal-container feed-image displayVertical" v-if="image && imageOwner">
     <div
       class="currImage btn"
       :style="{ backgroundImage: 'url(' + image.image + ')' }"
       @click="$emit('displayFeedImage', image)"
     ></div>
 
-    <div class="user-info bold-reg" v-if="loggedInUser">
+    <div class="user-info bold-reg">
       <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
       <span class="btn">
         <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
@@ -38,14 +35,12 @@
     </div>
     <social-media v-if="socialMediaModule" :image="image" @close="socialMediaModule=false"></social-media>
     <div class="likes-and-followers" v-if="likes">
-      <div class="icons">
-        <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
-        <i @click="addUserLike" v-else class="far fa-heart btn"></i>
-
-        <!-- <i class="fas fa-share-alt btn" @click="socialMediaModule=true"></i> -->
-
+      <div class="icons" v-if="loggedInUser">
         <i v-if="inUserFavorites" @click="removeFromUserFavorites" class="fas fa-bookmark btn"></i>
         <i v-else @click="addToUserFavorites" class="far fa-bookmark btn"></i>
+
+        <i @click="removeUserLike" v-if="isLiked" class="fas fa-heart btn red"></i>
+        <i @click="addUserLike" v-else class="far fa-heart btn"></i>
       </div>
       <span class="column">
         <span
@@ -57,6 +52,7 @@
     </div>
     <div class="add-a-comment">
       <textarea
+        v-if="loggedInUser"
         class="viewed-image-text-area"
         placeholder="Add a comment....."
         name
@@ -108,7 +104,7 @@ export default {
         });
     },
     addUserLike() {
-         this.$socket.emit("likeAdded", {
+      this.$socket.emit("likeAdded", {
         image: this.image,
         user: this.loggedInUser
       });
@@ -256,12 +252,12 @@ export default {
     //   };
     // },
     inUserFavorites() {
-      if (this.loggedInUser.favorites) {
+      if (this.loggedInUser) {
         return this.loggedInUser.favorites.includes(this.image._id);
       }
     },
     isLiked() {
-      if (this.likes) {
+      if (this.likes && this.loggedInUser) {
         return this.likes.includes(this.loggedInUser._id);
       }
     }

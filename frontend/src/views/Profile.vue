@@ -139,10 +139,10 @@ export default {
           userId
         })
         .then()
-        .catch(err => {
-          console.log("getVisitedUserImages ERR", err);
-          this.$router.push({ name: "login" });
-        });
+        // .catch(err => {
+        //   console.log("getVisitedUserImages ERR", err);
+        //   this.$router.push({ name: "login" });
+        // });
     },
     getUserFavoriteImages(filter) {
       this.filter = filter;
@@ -151,9 +151,9 @@ export default {
           type: "getUserFavoriteImages",
           userId: this.visitedUser._id
         })
-        .catch(err => {
-          this.$router.push({ name: "login" });
-        });
+        // .catch(err => {
+        //   this.$router.push({ name: "login" });
+        // });
     },
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
@@ -181,8 +181,10 @@ export default {
       return this.$store.getters.viewedImageCollection;
     },
     followingVisitedUser() {
-      return this.loggedInUser.followees.includes(this.visitedUser._id);
-    },
+      if(this.loggedInUser){
+       return this.loggedInUser.followees.includes(this.visitedUser._id);
+      }
+},
     // return (
     //   this.loggedInUser.followees.findIndex(
     //     followeeId => followeeId === this.visitedUser._id
@@ -201,10 +203,9 @@ export default {
     this.$store
       .dispatch({ type: "getVisitedUser", userName })
       .then(user => this.getVisitedUserImages(user._id, "album"))
-      .catch(err => {
-        console.log("getVisitedUser ERR", err);
-        this.$router.push({ name: "login" });
-      });
+
+      this.$store.dispatch({type:"getLoggedInUser"})
+
 
     if (window.innerWidth <= 700) {
       this.cellphoneDisplay = true;

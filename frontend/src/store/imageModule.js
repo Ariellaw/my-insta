@@ -268,14 +268,14 @@ export default {
           images: res.images
         });
         // context.commit({ type: "setVisitedUserImages", images:res.images });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.images;
       });
     },
     getViewedImageOwner(context, { userId }) {
       return userServices.getUserById(userId).then(res => {
         context.commit({ type: "setVisitedImageOwner", user: res.user });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
       });
     },
     setViewedImage(context, { image }) {
@@ -332,7 +332,7 @@ export default {
         });
         // context.commit({ type: "setUserFavoriteImages", images:res.images });
         context.commit({ type: "setIsLoading", isLoading: false });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.images;
       });
     },
@@ -411,7 +411,7 @@ export default {
     },
     getImageById(context, { imageId }) {
       return imageServices.getImageById(imageId).then(res => {
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image;
       });
     }

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="comment-container"
-    v-if="commentOwner && words && comment && loggedInUser && nickName"
-  >
+  <div class="comment-container" v-if="commentOwner && words && comment && nickName">
     <div class="comment-container" v-if="commentTextArea">
       <textarea
         v-model="editedComment"
@@ -20,15 +17,15 @@
         :key="index"
       >{{word+' '}}</span>
     </span>
-    <span class="icons" v-if="viewedImage" :class="{'canEdit':comment.writerId===loggedInUser._id}">
+    <span
+      class="icons"
+      v-if="viewedImage && loggedInUser"
+      :class="{'canEdit':comment.writerId===loggedInUser._id}"
+    >
       <i class="far fa-edit" @click="showTextArea()"></i>
       <i class="fas fa-times" @click="$emit('deleteComment', comment.id)"></i>
     </span>
-    <span
-      v-if="viewedImage"
-      class="time"
-      :class="{'CEtime':commentOwner._id===loggedInUser._id}"
-    >{{ comment.timeStamp | moment }}</span>
+    <span v-if="viewedImage" class="time" :class="CEtime">{{ comment.timeStamp | moment }}</span>
   </div>
 </template>
 
@@ -65,6 +62,11 @@ export default {
     }
   },
   computed: {
+    CETime() {
+      if (this.loggedInUser) {
+        return this.commentOwner._id === this.loggedInUser._id;
+      } else return false;
+    },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -80,8 +82,10 @@ export default {
         .dispatch({ type: "getUserById", userId: this.comment.writerId })
         .then(res => {
           this.commentOwner = res;
-          if (this.commentOwner._id === this.loggedInUser._id) {
-            this.nickName = "You";
+          if (this.loggedInUser) {
+            if (this.commentOwner._id === this.loggedInUser._id) {
+              this.nickName = "You";
+            }
           } else {
             this.nickName = res.userName;
           }

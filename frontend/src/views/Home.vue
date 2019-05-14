@@ -138,9 +138,9 @@ export default {
     imagesForFeed() {
       return this.$store.getters.imagesForFeed;
     },
-    loggedInUser() {
-      return this.$store.getters.loggedInUser;
-    }
+    // loggedInUser() {
+    //   return this.$store.getters.loggedInUser;
+    // }
   },
   watch: {
     showModal() {

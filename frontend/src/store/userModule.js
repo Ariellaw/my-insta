@@ -65,7 +65,6 @@ export default {
     getVisitedUser(context, { userName }) {
       return userServices.getUserByUsername(userName).then(res => {
         context.commit({ type: "setVisitedUser", user: res.user });
-        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.user;
       });
     },

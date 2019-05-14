@@ -31,23 +31,23 @@ function addUserRoutes(app, passport) {
             })
     })
     app.get(`${BASE}/:userId`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
         const userId = req.params.userId;
 
         userService.getById(userId)
             .then(user => {
-                return res.json({user, loggedInUser: req.user});
+                return res.json({user});
             })
     })
 
     app.get(`${BASE}/:userName/nickname`,
-        connectEnsureLogin.ensureLoggedIn(),
+        // connectEnsureLogin.ensureLoggedIn(),
         (req, res) => {            
             const userName = req.params.userName;
             userService.getUserByUsername(userName)
                 .then(user => {
-                    return res.json({user, loggedInUser: req.user});
+                    return res.json({user});
                 })
         })
     app.put(`${BASE}/:followeeId/followers`,
@@ -94,13 +94,13 @@ function addUserRoutes(app, passport) {
             })
     })
     app.get(`${BASE}/:userId/images`, 
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req,res)=>{
         const userId = req.params.userId;
 
         userService.getImagesByImageId(userId)
             .then(images =>{
-                return res.json({images, loggedInUser: req.user});
+                return res.json({images});
             })
 
     })
@@ -116,7 +116,7 @@ function addUserRoutes(app, passport) {
     })
 
     app.get(`${BASE}/searchResults/users/:keyword`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) =>{
         const keyword = req.params.keyword;
         userService.findRelevantUsers(keyword)

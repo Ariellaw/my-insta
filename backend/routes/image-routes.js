@@ -5,21 +5,21 @@ const connectEnsureLogin = require("connect-ensure-login");
 function addImageRoutes(app) {
   app.get(
     `${BASE}/images/:userId`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const userId = req.params.userId;
       imageService.getImagesByUserId(userId).then(images => {
-        return res.json({ images, loggedInUser: req.user });
+        return res.json({ images});
       });
     }
   );
   app.get(
     `${BASE}/image/:imageId`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const imageId = req.params.imageId;
       imageService.getImageById(imageId).then(image => {
-        return res.json({ image, loggedInUser: req.user });
+        return res.json({ image});
       });
     }
   );
@@ -98,7 +98,7 @@ function addImageRoutes(app) {
 
   app.get(
     `${BASE}/initalFeedImages`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       imageService.getInitalFeedImages().then(images => {
         return res.json({images,  loggedInUser: req.user});
@@ -107,7 +107,7 @@ function addImageRoutes(app) {
   );
   app.post(
     `${BASE}/:startingPoint/additionalFeedImages`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const startingPoint = req.params.startingPoint;
       const currFeedImages = req.body.currFeedImages;
@@ -120,7 +120,7 @@ function addImageRoutes(app) {
   );
   app.get(
     `${BASE}/:startingPoint/:userId/additionalUserImages`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const startingPoint = req.params.startingPoint;
       const userId = req.params.userId;
@@ -132,7 +132,7 @@ function addImageRoutes(app) {
   );
   app.get(
     `${BASE}/:location/explore`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const location = req.params.location;
       imageService.getImagesByLocation(location).then(images => {
@@ -142,7 +142,7 @@ function addImageRoutes(app) {
   );
   app.get(
     `${BASE}/:hashtag/search`,
-    connectEnsureLogin.ensureLoggedIn(),
+    // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       const hashtag = req.params.hashtag;
 
