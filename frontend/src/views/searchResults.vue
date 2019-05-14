@@ -7,7 +7,8 @@
     <div class="page-container">
       <div class="location-info-container">
         <img :src="image" alt class="location-img">
-        <h3 v-if="type==='locations'" class="location-name">{{this.city}}, {{this.country}}</h3>
+        <h3 v-if="type==='locations'" class="location-name">{{city}}, {{country}}</h3>
+        <h3 v-else class="location-name">{{'#'+hashtag}}</h3>
       </div>
       <gallary-of-images :displayedImages="images"></gallary-of-images>
     </div>
@@ -27,6 +28,7 @@ export default {
       country: null,
       type: null,
       image: null,
+      hashtag:null,
       googleAPI: secrets.getGoogleAPI(),
       opencagedataAPI: secrets.getOpencagedataAPI()
     };
@@ -42,6 +44,7 @@ export default {
     }
     if (this.type === "hashtag") {
       this.getHashtagImages(keyword);
+      this.hashtag = keyword.charAt(0).toUpperCase()+keyword.substring(1);
     }
   },
   mounted() {},
@@ -92,7 +95,7 @@ export default {
       });
     },
     getImageOfCity(lat, lng) {
-      console.log("getImageOfCity", lat, lng)
+      console.log("getImageOfCity", lat, lng);
       axios
         .get(
           `https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=${
@@ -101,10 +104,16 @@ export default {
         )
         .then(res => {
           console.log("photo reference", res);
-          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${res.photos.photo_reference}&key=${this.googleAPI}`
-          console.log("map link", `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${res.photos.photo_reference}&key=${this.googleAPI}`
-)
-      });
+          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${
+            res.photos.photo_reference
+          }&key=${this.googleAPI}`;
+          console.log(
+            "map link",
+            `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${
+              res.photos.photo_reference
+            }&key=${this.googleAPI}`
+          );
+        });
     },
 
     getCountryInfo(location) {
