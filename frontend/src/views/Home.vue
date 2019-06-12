@@ -89,7 +89,6 @@ export default {
       this.chosenImage = image;
       this.$router.push({ params: { image: image._id } });
       this.getUserImages(image.ownerId);
-
     },
     getInitalImages() {
       this.$store.dispatch({ type: "getInitalImages" }).catch(err => {
@@ -114,6 +113,8 @@ export default {
   },
   created() {
     // window.scrollTo(0, 0);
+    this.$store.dispatch({ type: "getLoggedInUser" });
+
     this.getInitalImages();
     const imageId = this.$route.params.image;
     if (imageId && this.$route.name === "home" && imageId !== "new-image") {
@@ -134,13 +135,16 @@ export default {
   mounted() {
     this.scroll();
   },
+  destroyed() {
+    this.$store.dispatch({ type: "getLoggedInUser" });
+  },
   computed: {
     imagesForFeed() {
       return this.$store.getters.imagesForFeed;
     },
-    // loggedInUser() {
-    //   return this.$store.getters.loggedInUser;
-    // }
+    loggedInUser() {
+      return this.$store.getters.loggedInUser;
+    }
   },
   watch: {
     showModal() {

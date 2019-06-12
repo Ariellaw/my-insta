@@ -121,7 +121,6 @@ function addUserRoutes(app, passport) {
         const keyword = req.params.keyword;
         userService.findRelevantUsers(keyword)
             .then(users => {
-
                 return res.json({users, loggedInUser: req.user})
             } )
     })

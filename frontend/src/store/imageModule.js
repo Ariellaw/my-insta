@@ -1,8 +1,7 @@
 import imageServices from "../services/imageServices.js";
 import cloudinaryService from "../services/cloudinaryService.js";
 import userServices from "../services/userServices.js";
-// import { stat } from "fs";
-// import { resolve } from "url";
+
 
 export default {
   state: {
@@ -252,7 +251,6 @@ export default {
             }
           });
           context.commit({ type: "setFolloweesThatLiked", users });
-          // context.rootState.userModule.loggedInUser = res.loggedInUser;
           return users;
         });
       }
@@ -267,15 +265,12 @@ export default {
           type: "setViewedImageCollection",
           images: res.images
         });
-        // context.commit({ type: "setVisitedUserImages", images:res.images });
-        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.images;
       });
     },
     getViewedImageOwner(context, { userId }) {
       return userServices.getUserById(userId).then(res => {
         context.commit({ type: "setVisitedImageOwner", user: res.user });
-        // context.rootState.userModule.loggedInUser = res.loggedInUser;
       });
     },
     setViewedImage(context, { image }) {
@@ -293,7 +288,6 @@ export default {
       //TODO also update image in feed
       return imageServices.deleteComment(commentId, imageId).then(res => {
         context.commit({ type: "updateViewedImage", image: res.image.value });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image.value.comments;
       });
     },
@@ -305,7 +299,6 @@ export default {
             type: "updateViewedImage",
             image: res.image.value
           });
-          context.rootState.userModule.loggedInUser = res.loggedInUser;
           return res.image.value.comments;
         });
     },
@@ -317,7 +310,6 @@ export default {
             type: "updateViewedImage",
             image: res.image.value
           });
-          context.rootState.userModule.loggedInUser = res.loggedInUser;
           return res.image.value.comments;
         });
     },
@@ -330,16 +322,13 @@ export default {
           type: "setViewedImageCollection",
           images: res.images
         });
-        // context.commit({ type: "setUserFavoriteImages", images:res.images });
-        context.commit({ type: "setIsLoading", isLoading: false });
-        // context.rootState.userModule.loggedInUser = res.loggedInUser;
+
         return res.images;
       });
     },
     addUserLike(context, { imageId, userId }) {
       return imageServices.addUserLike(imageId, userId).then(res => {
         context.commit({ type: "updateViewedImage", image: res.image.value });
-        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image.value.likes;
       });
     },
@@ -347,19 +336,17 @@ export default {
       return imageServices.removeUserLike(imageId, userId).then(res => {
         context.commit({ type: "updateViewedImage", image: res.image.value });
 
-        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image.value.likes;
       });
     },
     addImage(context, { imgDetails, image }) {
       imgDetails.ownerId = context.rootState.userModule.loggedInUser._id;
       return imageServices.addImage(imgDetails, image);
-      //TODO: findout if displayedprofile is loggedinuserprofiel and update inthat case
     },
     getInitalImages(context) {
       return imageServices.getInitalImages().then(res => {
         context.commit({ type: "setInitalImages", images: res.images });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+       
       });
     },
     getAdditionalImages(context) {
@@ -372,17 +359,9 @@ export default {
         .getAdditionalImages(startingPoint, feedImages)
         .then(res => {
           context.commit({ type: "setAddionalImages", images: res.images });
-          context.rootState.userModule.loggedInUser = res.loggedInUser;
         });
     },
-    // getAdditionalUserImages(context, { userId, startingPoint }) {
-    //   return imageServices
-    //     .getAdditionalImages(startingPoint, userId)
-    //     .then(res => {
-    //       context.commit({ type: "setAdditionalUserImages", res });
-    //       return res;
-    //     });
-    // },
+
     getImagesByLocation(context, { location }) {
       context.commit({ type: "setIsLoading", isLoading: true });
       context.commit({ type: "setViewedImageCollection", images: null });
@@ -392,7 +371,7 @@ export default {
           type: "setViewedImageCollection",
           images: res.images
         });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
+        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.images;
       });
     },
@@ -405,7 +384,6 @@ export default {
           type: "setViewedImageCollection",
           images: res.images
         });
-        context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.images;
       });
     },

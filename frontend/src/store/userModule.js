@@ -55,7 +55,6 @@ export default {
     },
     getUserNamesById(context, { ids }) {
       return userServices.getUserNamesById(ids).then(res => {
-        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.users;
       });
     },
@@ -70,7 +69,6 @@ export default {
     },
     getUserById(context, { userId }) {
       return userServices.getUserById(userId).then(res => {
-        context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
         return res.user;
       });
     },

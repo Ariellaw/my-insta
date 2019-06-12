@@ -1,7 +1,9 @@
 .image-upload > input {
   display: none;
 }
-
+.instagram-logo {
+  font-family: lily;
+}
 .main-nav-bar {
   height: 6rem;
   border-bottom: 1px solid $dark-border-color;
@@ -55,9 +57,6 @@
         }
       }
 
-    }
-    .instagram-logo {
-      font-family: lily;
     }
   }
 }

@@ -7,8 +7,16 @@
       </div>
       <i class="fas fa-cog btn" @click="$emit('displayOptions')" v-if="isLoggedInUserProfile"></i>
     </div>
-    <div v-else class="nav-buttons-container page-container" 
-     :class="{'center':loginRegistrationPage, 'spaceBetween':!loginRegistrationPage}"
+    <div v-else-if="cellphoneDisplay && !navbarTitle" class="cellphone-navbar-container">
+      <div @click="goToFeed" class="instagram-logo btn">
+        <i class="fab fa-instagram btn"></i>
+        <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
+      </div>
+    </div>
+    <div
+      v-else
+      class="nav-buttons-container page-container"
+      :class="{'center':loginRegistrationPage, 'spaceBetween':!loginRegistrationPage}"
     >
       <div @click="goToFeed" class="instagram-logo btn">
         <i class="fab fa-instagram btn"></i>
@@ -171,6 +179,7 @@ export default {
       this.windowWidth = window.innerWidth;
       this.cellphoneDisplay = true;
     }
+   this.$store.dispatch({ type: "getLoggedInUser" }); 
   },
   computed: {
     loginRegistrationPage() {
@@ -207,14 +216,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(
-    //   "this.loggedInUser.userName",
-    //   this.loggedInUser.userName,
-    //   "this.$route.params.userName",
-    //   this.$route.params.userName && "this.$route.name",
-    //   this.$route.name,
-    //   this.$route.name === "user-profile"
-    // );
     this.$nextTick(() => {
       window.addEventListener("resize", () => {
         this.windowWidth = window.innerWidth;

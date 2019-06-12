@@ -133,6 +133,8 @@ export default {
   },
 
   created() {
+    this.$store.dispatch({ type: "getLoggedInUser" });
+
     window.scrollTo(0, 0);
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
@@ -403,6 +405,7 @@ export default {
   destroyed() {
     this.$store.dispatch({ type: "setViewedImage", image: null });
     this.socialMediaModule = false;
+    this.$store.dispatch({ type: "getLoggedInUser" });
   },
   watch: {
     $route() {

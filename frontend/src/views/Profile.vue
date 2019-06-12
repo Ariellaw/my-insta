@@ -185,12 +185,6 @@ export default {
        return this.loggedInUser.followees.includes(this.visitedUser._id);
       }
 },
-    // return (
-    //   this.loggedInUser.followees.findIndex(
-    //     followeeId => followeeId === this.visitedUser._id
-    //   ) > -1
-    // );
-
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
