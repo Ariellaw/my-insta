@@ -7,8 +7,8 @@
           <img :src="visitedUser.profilePic" class="profile-pic">
           <div class="column">
             <div class="numbers">
-              <p v-if="usersImages">
-                <span class="bold-reg">{{usersImages.length+" "}}</span>posts
+              <p >
+                <span class="bold-reg">{{numOfUserImages+" "}}</span>posts
               </p>
               <p>
                 <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -124,7 +124,8 @@ export default {
       filter: "album",
       cellphoneDisplay: false,
       windowWidth: null,
-      optionsModual: false
+      optionsModual: false,
+      numOfUserImages:0
     };
   },
   methods: {
@@ -138,11 +139,8 @@ export default {
           type: "getVisitedUserImages",
           userId
         })
-        .then()
-        // .catch(err => {
-        //   console.log("getVisitedUserImages ERR", err);
-        //   this.$router.push({ name: "login" });
-        // });
+        .then(res=> this.numOfUserImages = res.length )
+
     },
     getUserFavoriteImages(filter) {
       this.filter = filter;
@@ -151,9 +149,7 @@ export default {
           type: "getUserFavoriteImages",
           userId: this.visitedUser._id
         })
-        // .catch(err => {
-        //   this.$router.push({ name: "login" });
-        // });
+
     },
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
@@ -177,6 +173,7 @@ export default {
     }
   },
   computed: {
+
     usersImages() {
       return this.$store.getters.viewedImageCollection;
     },

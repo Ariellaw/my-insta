@@ -8,11 +8,12 @@
       enctype="multipart/form-data"
       @submit.prevent="updateUserDetails"
     >
-      <div v-if="loggedInUser" class="update-profile-pic-container">
-        <img :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image">
+      <div class="update-profile-pic-container">
+        <img v-if="loadingProfilePic" src="../assets/img/loading.gif" class="loading" />
+        <img v-else  :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image">
         <h3>{{loggedInUser.userName}}</h3>
         <div class="image-upload">
-          <label for="file-input-edit" class="btn">Update your Profile Picture</label>
+          <label  v-if="!loadingProfilePic" for="file-input-edit" class="btn">Update your Profile Picture</label>
 
           <input
             type="file"
@@ -95,6 +96,7 @@ export default {
     return {
       profilePicChanged: false,
       userMadeChanges: false,
+      loadingProfilePic:false
     };
   },
   created() {
@@ -112,7 +114,6 @@ export default {
       this.$store.dispatch({ type: "getLoggedInUser" });
     },
     tempUpdate(detailToUpdate, detail) {
-      console.log("edit details", detailToUpdate, detail);
       this.$store.dispatch({ type: "updateLoggedInUserTemp",  detailToUpdate, detail });
       this.userMadeChanges = true;
     },
@@ -134,6 +135,7 @@ export default {
     },
     uploadImage() {
       this.getLoggedInUser();
+      this.loadingProfilePic = true;
       var elForm = this.$refs.form;
       return this.$store
         .dispatch({
@@ -143,6 +145,7 @@ export default {
         .then(url => {
           this.loggedInUser.profilePic = url;
           this.updateUserDetails();
+          this.loadingProfilePic = false;
         });
     }
   },
@@ -153,5 +156,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.loading{
+  height: 15rem;
+  width:15rem;
+}
 </style>
 
