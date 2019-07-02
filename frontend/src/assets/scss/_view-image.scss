@@ -8,7 +8,7 @@
 .displayVertical {
   &.modal-container {
     flex-direction: column;
-    top:0;
+    top: 0;
     margin-top: 1rem;
     height: 130rem;
     @media screen and (max-height: 1800px) {
@@ -33,10 +33,10 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
     }
-    &.pop-up-image{
+    &.pop-up-image {
       // margin-top: 6rem;
       margin-bottom: 20%;
-      top:0;
+      top: 0;
     }
     .currImage {
       display: flex;
@@ -54,21 +54,23 @@
     div {
       padding: 0.5rem;
     }
-    .user-info {
+    .user-info-container {
       order: 1;
       padding: 1rem;
       height: 8%;
-      justify-content: flex-start;
       display: flex;
-      flex-direction: row;
-      align-items: center;
       border-bottom: 1px solid $lighter-font-color;
       font-size: 1.6rem;
       width: 100%;
       @media screen and (max-height: 500px) {
         height: 9%;
       }
-
+      .user-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+      }
       .profile-pic {
         @include profilePic;
         width: 5.5rem;
@@ -95,7 +97,7 @@
     }
     .likes-and-followers {
       order: 3;
-      height: fit-content;;
+      height: fit-content;
       margin-left: 0px;
       display: flex;
       flex-direction: row;
@@ -103,7 +105,7 @@
       align-items: center;
       width: 100%;
       // @media screen and (max-width: 450px) {
-      //   height: 
+      //   height:
       // }
       @media screen and (max-height: 500px) {
         display: none;
@@ -147,13 +149,13 @@
       height: 10%;
       order: 5;
       width: 100%;
-    
+
       .viewed-image-text-area {
         @include textarea;
         height: 90%;
         width: 100%;
-        margin-top: .5rem;
-        margin-bottom: .5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
       }
     }
   }
@@ -162,7 +164,6 @@
 .modal-container {
   flex-direction: column;
   max-width: 175rem;
-
 
   @media screen and (max-width: 2500px) {
     width: 90%;
@@ -198,14 +199,19 @@
     padding: 0.5rem;
     width: 35%;
   }
-  .user-info {
-    padding: 1rem;
+  .user-info-container {
     height: 10%;
-    justify-content: flex-start;
-    align-items: center;
     border-bottom: 1px solid $lighter-font-color;
     font-size: 1.6rem;
-
+    display: flex;
+    justify-content: space-between;
+    .user-info {
+      padding: 1rem;
+      justify-content: flex-start;
+      align-items: center;
+      height: 100%;
+      width: fit-content;
+    }
     .profile-pic {
       @include profilePic;
       width: 5.5rem;

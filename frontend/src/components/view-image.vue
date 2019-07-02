@@ -11,28 +11,31 @@
             <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
             <i class="fas fa-angle-right arrow btn" @click="goForward1Img" v-if="albumLength>1"></i>
           </div>
-          <div class="user-info bold-reg">
-            <img
-              @click="goToImageOwnerProfile"
-              :src="imageOwner.profilePic"
-              alt
-              class="profile-pic btn"
-            >
-            <span class="btn">
-              <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
-              <span
-                v-if="isFollowing && loggedInUser"
-                :class="followingStatusClass"
-                @click="removeFollowers(viewedImage.ownerId)"
-              >Following</span>
-              <span
-                v-else-if="loggedInUser"
-                :class="followingStatusClass"
-                class="follow"
-                @click="addFollowers(viewedImage.ownerId)"
-              >Follow</span>
-              <p @click="goToLocationImages" class="image-location">{{viewedImage.location}}</p>
-            </span>
+          <div class="user-info-container bold-reg">
+            <div class="user-info">
+              <img
+                @click="goToImageOwnerProfile"
+                :src="imageOwner.profilePic"
+                alt
+                class="profile-pic btn"
+              />
+              <span class="btn">
+                <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
+                <span
+                  v-if="isFollowing && loggedInUser"
+                  :class="followingStatusClass"
+                  @click="removeFollowers(viewedImage.ownerId)"
+                >Following</span>
+                <span
+                  v-else-if="loggedInUser"
+                  :class="followingStatusClass"
+                  class="follow"
+                  @click="addFollowers(viewedImage.ownerId)"
+                >Follow</span>
+                <p @click="goToLocationImages" class="image-location">{{viewedImage.location}}</p>
+              </span>
+            </div>
+            <i v-if="isLoggedinUser" class="fas fa-ellipsis-h edit-details"></i>
           </div>
           <social-media
             v-if="socialMediaModule"
@@ -67,31 +70,31 @@
               ></i>
               <i @click="addUserLike" v-else-if="loggedInUser" class="far fa-heart btn"></i>
             </div>
-            <span class="column" v-if="followeesThatLiked && viewedImage.likes && loggedInUser">
-              <span class="namesOfLikes" v-if="followeesThatLiked.length===1">
+            <span class="column" v-if="followeesThatLiked && viewedImage.likes">
+              <span class="namesOfLikes" v-if="followeesThatLiked.length===1 && loggedInUser">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]}}
                 <span
                   v-if="viewedImage.likes.length>1"
-                >and {{viewedImage.likes.length-1}} others</span>like this
+                >and {{viewedImage.likes.length-1}} others</span> like this
               </span>
-              <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2">
+              <span class="namesOfLikes" v-else-if="followeesThatLiked.length===2 && loggedInUser">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
                   v-if="viewedImage.likes.length>2"
-                >and {{viewedImage.likes.length-2}} others</span>like this
+                >and {{viewedImage.likes.length-2}} others</span> like this
               </span>
-              <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2">
+              <span class="namesOfLikes" v-else-if="followeesThatLiked.length > 2 && loggedInUser">
                 <i class="far fa-thumbs-up"></i>
                 {{followeesThatLiked[0]+" and "+followeesThatLiked[1]}}
                 <span
                   v-if="viewedImage.likes.length>2"
-                >and {{viewedImage.likes.length-2}} others</span>like this
+                >and {{viewedImage.likes.length-2}} others</span> like this
               </span>
 
               <span
-                v-else-if="followeesThatLiked.length===0"
+                v-else-if="followeesThatLiked.length===0 || !loggedInUser"
                 :class="{'visibilityNone':viewedImage.likes.length===0}"
                 class="num-of-likes bold-reg"
               >{{viewedImage.likes.length}}&nbsp;Likes&nbsp;</span>
@@ -343,6 +346,11 @@ export default {
     }
   },
   computed: {
+    isLoggedinUser(){
+      if(!this.loggedInUser) return false;
+      else return this.loggedInUser._id === this.imageOwner._id;
+
+    },
     followeesThatLiked() {
       var followees = this.$store.getters.followeesThatLiked;
       var idx = followees.findIndex(
@@ -429,6 +437,11 @@ export default {
   width: 100%;
   color: darkgray;
   font-weight: bold;
+}
+.edit-details {
+  color: darkgray;
+  align-self: flex-start;
+  margin-right: 1rem
 }
 </style>
 

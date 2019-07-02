@@ -22,7 +22,7 @@ const flash = require('connect-flash');
 const app = express();
 app.use(
   cors({
-    origin: ["http://10.100.102.3:3003"],
+    origin: ["http://10.100.102.4:3003"],
     credentials: true // enable set cookie
   })
 );

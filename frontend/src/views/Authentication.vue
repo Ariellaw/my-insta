@@ -35,10 +35,11 @@
             <a
               href="javascript:void(0)"
               @click="register()"
-              class="entypo-user-add register"
+              class="entypo-user-add register btn"
             >Register</a>
           </span>
         </div>
+        <a href="javascript:void(0)" class="register btn" @click="logInAsGuest">Log in as Guest</a>
       </form>
       <!-- <div class="hr">
         <div></div>
@@ -74,6 +75,10 @@ export default {
     };
   },
   methods: {
+    logInAsGuest(){
+      this.credentials.username = "Guest";
+      this.credentials.password = "33333"
+    },
     register() {
       this.$router.push({ name: "register" });
     }
@@ -105,6 +110,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
 // @import url(http://weloveiconfonts.com/api/?family=entypo);
 $green: #2ecc71;

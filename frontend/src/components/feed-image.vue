@@ -5,24 +5,30 @@
       :style="{ backgroundImage: 'url(' + image.image + ')' }"
       @click="$emit('displayFeedImage', image)"
     ></div>
-
-    <div class="user-info bold-reg">
-      <img @click="goToImageOwnerProfile" :src="imageOwner.profilePic" alt class="profile-pic btn">
-      <span class="btn">
-        <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
-        <!-- <span
+    <div class="user-info-container">
+      <div class="user-info bold-reg">
+        <img
+          @click="goToImageOwnerProfile"
+          :src="imageOwner.profilePic"
+          alt
+          class="profile-pic btn"
+        />
+        <span class="btn">
+          <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
+          <!-- <span
           v-if="isFollowing"
           :class="followingStatusClass"
           @click="removeFollowers(image.ownerId)"
-        >Following</span>-->
-        <!-- <span
+          >Following</span>-->
+          <!-- <span
           v-else
           :class="followingStatusClass"
           class="follow"
           @click="addFollowers(image.ownerId)"
-        >Follow</span>-->
-        <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
-      </span>
+          >Follow</span>-->
+          <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
+        </span>
+      </div>
     </div>
     <div class="comments">
       <user-comment

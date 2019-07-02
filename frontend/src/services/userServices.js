@@ -1,6 +1,6 @@
 import axios from "axios";
 const BASE_URL =
-  process.env.NODE_ENV !== "development" ? "/user" : "//10.100.102.3:3003/user";
+  process.env.NODE_ENV !== "development" ? "/user" : "//10.100.102.4:3003/user";
 
 function createNewUser(user) {
   return axios.post(`${BASE_URL}/newUser`, { user }).then(res => {
