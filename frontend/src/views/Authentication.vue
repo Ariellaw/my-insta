@@ -39,7 +39,7 @@
             >Register</a>
           </span>
         </div>
-        <a href="javascript:void(0)" class="register btn" @click="logInAsGuest">Log in as Guest</a>
+        <a href="javascript:void(0)" class="register btn" @click="logInAsGuest">Use Guest credentials</a>
       </form>
       <!-- <div class="hr">
         <div></div>

@@ -183,16 +183,32 @@
     background-position: center; /* Center the image */
     background-repeat: no-repeat;
     &:hover {
-      .arrow {
+      .arrow-container {
+          display: block;
+      }
+      .deleteImg {
         display: block;
+        font-size: 3rem;
       }
     }
   }
-  .arrow {
-    font-size: 7rem;
-    color: white;
+  .arrow-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     display: none;
-    margin: 3rem;
+    .arrow {
+      font-size: 7rem;
+      color: white;
+      // margin: 3rem;
+    }
+  }
+  .deleteImg {
+    color: darkgray;
+    margin-right: 1rem;
+    display: none;
+    justify-self: flex-end;
+    align-self: flex-end;
   }
   div {
     display: flex;

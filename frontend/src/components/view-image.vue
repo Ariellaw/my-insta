@@ -8,8 +8,11 @@
 
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
-            <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
-            <i class="fas fa-angle-right arrow btn" @click="goForward1Img" v-if="albumLength>1"></i>
+            <div class="arrow-container">
+              <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
+              <i class="fas fa-angle-right arrow btn" @click="goForward1Img" v-if="albumLength>1"></i>
+            </div>
+            <i v-if="isLoggedinUser" class="fas fa-trash deleteImg" @click="deleteImage"></i>
           </div>
           <div class="user-info-container bold-reg">
             <div class="user-info">
@@ -35,7 +38,6 @@
                 <p @click="goToLocationImages" class="image-location">{{viewedImage.location}}</p>
               </span>
             </div>
-            <i v-if="isLoggedinUser" class="fas fa-ellipsis-h edit-details"></i>
           </div>
           <social-media
             v-if="socialMediaModule"
@@ -151,6 +153,15 @@ export default {
   },
   //TODO: popup of all people that liked
   methods: {
+    deleteImage() {
+      this.$store.dispatch({
+        type: "deleteImage",
+        imageId: this.viewedImage._id
+      }).then(()=>{
+        this.$router.push({ params: { image: null } })
+        this.$router.go()
+      })
+    },
     goBack1Image() {
       this.socialMediaModule = false;
       this.$emit("goBack1Image");
@@ -346,10 +357,9 @@ export default {
     }
   },
   computed: {
-    isLoggedinUser(){
-      if(!this.loggedInUser) return false;
+    isLoggedinUser() {
+      if (!this.loggedInUser) return false;
       else return this.loggedInUser._id === this.imageOwner._id;
-
     },
     followeesThatLiked() {
       var followees = this.$store.getters.followeesThatLiked;
@@ -437,11 +447,6 @@ export default {
   width: 100%;
   color: darkgray;
   font-weight: bold;
-}
-.edit-details {
-  color: darkgray;
-  align-self: flex-start;
-  margin-right: 1rem
 }
 </style>
 

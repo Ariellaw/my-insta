@@ -59,6 +59,12 @@ export default {
     setViewedImageCollection(state, { images }) {
       state.viewedImageCollection = images;
     },
+    deleteImage(state, imageId){
+      var idx =  state.viewedImageCollection.findIndex(img => img._id === imageId);
+      if(idx >= 0){
+        state.viewedImageCollection.splice(idx,1);
+      }
+    },
     setVisitedUserImages(state, { images }) {
       state.visitedUserImages = images;
     },
@@ -392,6 +398,9 @@ export default {
         // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.image;
       });
+    },
+    deleteImage(context, {imageId}){
+     return imageServices.deleteImage(imageId).then(res=> context.commit({type:"deleteImage", imageId: res.value._id}))
     }
   }
 };

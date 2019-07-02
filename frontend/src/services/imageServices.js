@@ -93,6 +93,12 @@ function addImage(imgDetails, image) {
   });
 }
 
+function deleteImage(imageId){
+  return axios.delete(`${BASE_URL}/deleteImage/${imageId}`).then(res =>{
+    return res.data;
+  })
+}
+
 export default {
   getUserImages,
   getImageById,
@@ -107,4 +113,5 @@ export default {
   additionalUserImages,
   deleteComment,
   editComment,
+  deleteImage
 };

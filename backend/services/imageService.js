@@ -206,7 +206,17 @@ function deleteComment(imageId, commentId) {
       );
   });
 }
+
+function deleteImage(imgId){
+  var _id = new ObjectId(imgId);
+  return mongoService.connect().then(db =>
+    db
+      .collection(imagesDb).findOneAndDelete({ _id: _id })
+  )
+
+}
 module.exports = {
+  deleteImage,
   getImagesByUserId,
   getImageById,
   addComments,

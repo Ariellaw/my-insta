@@ -9,7 +9,7 @@ function addImageRoutes(app) {
     (req, res) => {
       const userId = req.params.userId;
       imageService.getImagesByUserId(userId).then(images => {
-        return res.json({ images});
+        return res.json({ images });
       });
     }
   );
@@ -19,7 +19,7 @@ function addImageRoutes(app) {
     (req, res) => {
       const imageId = req.params.imageId;
       imageService.getImageById(imageId).then(image => {
-        return res.json({ image});
+        return res.json({ image });
       });
     }
   );
@@ -31,7 +31,7 @@ function addImageRoutes(app) {
       const commentId = req.params.commentId;
       const newComment = req.body.newComment;
       imageService.editComment(imageId, commentId, newComment).then(image => {
-        return res.json({image,  loggedInUser: req.user});
+        return res.json({ image, loggedInUser: req.user });
       });
     }
   );
@@ -44,7 +44,7 @@ function addImageRoutes(app) {
       const writerId = req.body.writerId;
 
       imageService.addComments(imageId, newComment, writerId).then(image => {
-        return res.json({image,  loggedInUser: req.user});
+        return res.json({ image, loggedInUser: req.user });
       });
     }
   );
@@ -55,7 +55,7 @@ function addImageRoutes(app) {
       imageId = req.params.imageId;
       commentId = req.params.commentId;
       imageService.deleteComment(imageId, commentId).then(image => {
-        return res.json({image,  loggedInUser: req.user});
+        return res.json({ image, loggedInUser: req.user });
       });
     }
   );
@@ -67,7 +67,7 @@ function addImageRoutes(app) {
       const imageId = req.body.imageId;
       const userId = req.body.userId;
       imageService.addUserLike(imageId, userId).then(image => {
-        return res.json({image,  loggedInUser: req.user});
+        return res.json({ image, loggedInUser: req.user });
       });
     }
   );
@@ -79,7 +79,7 @@ function addImageRoutes(app) {
       const userId = req.params.userId;
 
       imageService.removeUserLike(imageId, userId).then(image => {
-        return res.json({image,  loggedInUser: req.user});
+        return res.json({ image, loggedInUser: req.user });
       });
     }
   );
@@ -91,7 +91,7 @@ function addImageRoutes(app) {
       const imgDetails = req.body.imgDetails;
       const image = req.body.image;
       imageService.addNewImage(imgDetails, image).then(image => {
-        return res.json({image,  loggedInUser: req.user});
+        return res.json({ image, loggedInUser: req.user });
       });
     }
   );
@@ -101,7 +101,7 @@ function addImageRoutes(app) {
     // connectEnsureLogin.ensureLoggedIn(),
     (req, res) => {
       imageService.getInitalFeedImages().then(images => {
-        return res.json({images,  loggedInUser: req.user});
+        return res.json({ images, loggedInUser: req.user });
       });
     }
   );
@@ -114,7 +114,7 @@ function addImageRoutes(app) {
       imageService
         .getAdditionalFeedImages(startingPoint, currFeedImages)
         .then(images => {
-          return res.json({images,  loggedInUser: req.user});
+          return res.json({ images, loggedInUser: req.user });
         });
     }
   );
@@ -126,7 +126,7 @@ function addImageRoutes(app) {
       const userId = req.params.userId;
 
       imageService.additionalUserImages(startingPoint, userId).then(images => {
-        return res.json({images,  loggedInUser: req.user});
+        return res.json({ images, loggedInUser: req.user });
       });
     }
   );
@@ -136,7 +136,7 @@ function addImageRoutes(app) {
     (req, res) => {
       const location = req.params.location;
       imageService.getImagesByLocation(location).then(images => {
-        return res.json({images,  loggedInUser: req.user});
+        return res.json({ images, loggedInUser: req.user });
       });
     }
   );
@@ -147,10 +147,16 @@ function addImageRoutes(app) {
       const hashtag = req.params.hashtag;
 
       imageService.getImagesByHashtag(hashtag).then(images => {
-        return res.json({images,  loggedInUser: req.user});
+        return res.json({ images, loggedInUser: req.user });
       });
     }
   );
-}
 
+  app.delete(`${BASE}/deleteImage/:imageId`, (req, res) => {
+    const imgId = req.params.imageId;
+    imageService.deleteImage(imgId).then(img => {
+      return res.json(img);
+    });
+  });
+}
 module.exports = addImageRoutes;
