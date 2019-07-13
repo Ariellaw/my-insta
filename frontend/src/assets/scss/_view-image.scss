@@ -49,6 +49,27 @@
       max-width: 100%;
       height: 54%;
       order: 2;
+      &:hover {
+        .arrow-container {
+          display: flex;
+        }
+      }
+        // .deleteImg {
+        //   display: block;
+        //   font-size: 3rem;
+        // }
+      
+
+      .arrow-container {
+        justify-content: space-between;
+        width: 100%;
+        display: none;
+        .arrow {
+          font-size: 7rem;
+          color: white;
+          margin: 1rem;
+        }
+      }
     }
 
     div {
@@ -177,39 +198,39 @@
     // object-fit: contain;
     background-size: contain;
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-items: center;
     background-color: black;
     background-position: center; /* Center the image */
     background-repeat: no-repeat;
     &:hover {
       .arrow-container {
-          display: block;
+        display: flex;
       }
-      .deleteImg {
-        display: block;
-        font-size: 3rem;
+      // .deleteImg {
+      //   display: block;
+      //   font-size: 3rem;
+      // }
+      }
+
+    .arrow-container {
+      justify-content: space-between;
+      width: 100%;
+      display: none;
+      .arrow {
+        font-size: 7rem;
+        color: white;
+        margin: 1rem;
       }
     }
   }
-  .arrow-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    display: none;
-    .arrow {
-      font-size: 7rem;
-      color: white;
-      // margin: 3rem;
-    }
-  }
-  .deleteImg {
-    color: darkgray;
-    margin-right: 1rem;
-    display: none;
-    justify-self: flex-end;
-    align-self: flex-end;
-  }
+  // .deleteImg {
+  //   color: darkgray;
+  //   margin-right: 1rem;
+  //   display: none;
+  //   justify-self: flex-end;
+  //   align-self: flex-end;
+  // }
   div {
     display: flex;
     padding: 0.5rem;

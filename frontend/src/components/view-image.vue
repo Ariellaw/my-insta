@@ -9,10 +9,10 @@
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
             <div class="arrow-container">
-              <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
+              <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"> </i>
               <i class="fas fa-angle-right arrow btn" @click="goForward1Img" v-if="albumLength>1"></i>
             </div>
-            <i v-if="isLoggedinUser" class="fas fa-trash deleteImg" @click="deleteImage"></i>
+            <!-- <i v-if="isLoggedinUser" class="fas fa-trash deleteImg" @click="deleteImage"></i> -->
           </div>
           <div class="user-info-container bold-reg">
             <div class="user-info">
