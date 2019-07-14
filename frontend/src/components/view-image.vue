@@ -1,4 +1,4 @@
-<template>
+<template >
   <transition name="modal" v-if="imageOwner && viewedImage">
     <div class="modal-mask">
       <div class="modal-wrapper">
@@ -9,7 +9,7 @@
         <div class="modal-container pop-up-image" :class="{'displayVertical':displayVertically}">
           <div class="currImage" :style="{ backgroundImage: 'url(' + viewedImage.image + ')' }">
             <div class="arrow-container">
-              <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"> </i>
+              <i class="fas fa-angle-left arrow btn" @click="goBack1Image" v-if="albumLength>1"></i>
               <i class="fas fa-angle-right arrow btn" @click="goForward1Img" v-if="albumLength>1"></i>
             </div>
             <!-- <i v-if="isLoggedinUser" class="fas fa-trash deleteImg" @click="deleteImage"></i> -->
@@ -110,7 +110,7 @@
               placeholder="Add a comment....."
               name
               @keydown="userIsTyping(loggedInUser.userName, viewedImage._id)"
-              @keyup.enter="addUserComment(newComment, viewedImage._id, loggedInUser._id)"
+              @keydown.enter="addUserComment(newComment, viewedImage._id, loggedInUser._id)"
               v-model="newComment"
             ></textarea>
           </div>
@@ -139,11 +139,15 @@ export default {
 
   created() {
     this.$store.dispatch({ type: "getLoggedInUser" });
+    window.addEventListener("keydown", this.handleKeyDown);
 
     window.scrollTo(0, 0);
     if (window.innerWidth <= 1100) {
       this.displayVertically = true;
     }
+  },
+  mounted() {
+    // console.log(e.keyCode);
   },
 
   filters: {
@@ -153,20 +157,33 @@ export default {
   },
   //TODO: popup of all people that liked
   methods: {
+    handleKeyDown(event) {
+      if (event.keyCode === 37) {
+        this.goBack1Image();
+      } else if (event.keyCode === 39) {
+        this.goForward1Img();
+      } else {
+        return;
+      }
+    },
     deleteImage() {
-      this.$store.dispatch({
-        type: "deleteImage",
-        imageId: this.viewedImage._id
-      }).then(()=>{
-        this.$router.push({ params: { image: null } })
-        this.$router.go()
-      })
+      this.$store
+        .dispatch({
+          type: "deleteImage",
+          imageId: this.viewedImage._id
+        })
+        .then(() => {
+          this.$router.push({ params: { image: null } });
+          this.$router.go();
+        });
     },
     goBack1Image() {
+      console.log("goBack1Image");
       this.socialMediaModule = false;
       this.$emit("goBack1Image");
     },
     goForward1Img() {
+      console.log("goForward1Img");
       this.socialMediaModule = false;
       this.$emit("goForward1Img");
     },
