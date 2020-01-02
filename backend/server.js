@@ -1,16 +1,19 @@
 const express = require("express");
+const nodemailer = require('nodemailer')
 const mongoService = require("./services/mongo-services");
 const imageService = require("./services/imageService");
 const userService = require("./services/userService.js")
+const contactService = require("./services/contactService");
 
 const addUserRoutes = require("./routes/user-routes");
 const addImageRoutes = require("./routes/image-routes");
+const addAuthRoutes = require("./routes/auth-routes.js");
+const addContactRoutes = require("./routes/contact-routes");
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const addAuthRoutes = require("./routes/auth-routes.js");
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');
@@ -22,12 +25,25 @@ const flash = require('connect-flash');
 const app = express();
 app.use(
   cors({
-    origin: ["http://10.100.102.4:3003"],
+    origin: ["http://10.100.102.4:3003", "http://ariellaw.github.io", "https://ariellaw.github.io", "https://ariellaw.github.io/"], 
     credentials: true // enable set cookie
   })
 );
 
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
+
+
 mongoService.initDbConnection();
+
+// app.use(bodyParser.urlencoded({extended: true}))
+//Do I really need this?
 
 app.set("view engine", "ejs");
 
@@ -99,6 +115,9 @@ app.use(flash());
 addUserRoutes(app, passport);
 addImageRoutes(app, passport);
 addAuthRoutes(app,passport);
+addContactRoutes(app);
+
+
 // app.get('/', (req, res) => {
 //     res.send('Hello World! YAY')
 // })

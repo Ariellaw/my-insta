@@ -107,6 +107,7 @@ export default {
     width: 100%;
 
     .social-media-option {
+      cursor: pointer;
       height: 14%;
       width: 100%;
       color: black;
@@ -114,7 +115,6 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      cursor: pointer;
       &:last-child {
         border-bottom: unset;
       }

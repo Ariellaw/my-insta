@@ -138,6 +138,8 @@ export default {
   },
 
   created() {
+    console.log("created");
+
     this.$store.dispatch({ type: "getLoggedInUser" });
     window.addEventListener("keydown", this.handleKeyDown);
 
@@ -147,7 +149,11 @@ export default {
     }
   },
   mounted() {
-    // console.log(e.keyCode);
+    console.log("mounted");
+  },
+  beforeDestory() {
+    console.log("beforeDestory");
+    window.removeEventListener("keydown", this.handleKeyDown);
   },
 
   filters: {
@@ -178,12 +184,10 @@ export default {
         });
     },
     goBack1Image() {
-      console.log("goBack1Image");
       this.socialMediaModule = false;
       this.$emit("goBack1Image");
     },
     goForward1Img() {
-      console.log("goForward1Img");
       this.socialMediaModule = false;
       this.$emit("goForward1Img");
     },
