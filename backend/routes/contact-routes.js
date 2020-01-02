@@ -1,9 +1,7 @@
 const contactService = require('../services/contactService')
 const BASE = '/contact'
-const connectEnsureLogin = require('connect-ensure-login')
 
 function addContactRoutes (app) {
-  console.log('ROUTES IS WORKING')
   app.post(`${BASE}`, (req, res) => {
     const name = req.body.name
     const email = req.body.email
@@ -15,11 +13,9 @@ function addContactRoutes (app) {
     contactService
       .sendMessage(myEmail, subject, emailTemplate)
       .then(mailResult => {
-        console.log('mailResult', mailResult)
-        return res.json(mailResult)
+        return res.json(mailResult.response)
       })
       .catch(err => {
-        console.log('mailResult err', err)
         return res.json(err)
       })
   })

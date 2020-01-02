@@ -355,6 +355,7 @@ export default {
       this.$router.push(
         `/search/locations/${this.image.location.toLowerCase()}`
       );
+      this.$router.go();
     },
     searchHashtagImages(word) {
       word = word.slice(1);

@@ -25,35 +25,25 @@ const flash = require('connect-flash');
 const app = express();
 app.use(
   cors({
-    origin: ["http://10.100.102.4:3003", "http://ariellaw.github.io", "https://ariellaw.github.io", "https://ariellaw.github.io/"], 
+    origin: ["http://10.100.102.4:3003", "http://ariellaw.github.io", "https://ariellaw.github.io", "https://ariellaw.github.io/", 
+  "http://127.0.0.1:5500", "https://maps.googleapis.com"],
     credentials: true // enable set cookie
   })
 );
 
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
 
 
 mongoService.initDbConnection();
 
-// app.use(bodyParser.urlencoded({extended: true}))
-//Do I really need this?
+
 
 app.set("view engine", "ejs");
 
-//
 
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(express.static("public"));
-// app.use(session({ secret: "cats" }));
 app.use(
   session({
     secret: "cats",
@@ -66,18 +56,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 passport.serializeUser(function(user, done) {
-  // console.log("serializeUser()", user._id);
   done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {
-  // console.log("deserializeUser()", id);
   userService.getById(id)
     .then(user => {
-      // console.log("deserializeUser() success", user);
       done(null, user);
     }).catch(err => {
-      // console.log("deserializeUser() err", err);
       done(err);
     })
 });
@@ -85,11 +71,9 @@ passport.deserializeUser(function (id, done) {
 
 passport.use(
   new LocalStrategy(function(username, password, done) {
-    // console.log("localstrategy first printout")
     userService
       .getUserByUsername(username)
       .then(user => {
-        // console.log("SERVER print the user", user);
         if (!user) {
           return done(null, false, { message: "Incorrect username." });
         }
@@ -99,8 +83,6 @@ passport.use(
         return done(null, user);
       })
       .catch(err => {
-        // console.log("SERVER print the error", err);
-
         return done(err);
       });
   })

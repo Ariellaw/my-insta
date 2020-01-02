@@ -25,9 +25,10 @@
 
     }
     .location-img {
-      height: 20rem;
-      width: 20rem;
+      height: 24rem;
+      width: 24rem;
       margin-right: 5rem;
+      border-radius: 18%;
       @include profilePic;
       @media screen and (max-width:700px) {
         height: 15rem;
