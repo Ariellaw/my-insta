@@ -129,8 +129,10 @@ export default {
     },
 
     getLoggedInUser(context) {
+      console.log("getLoggedInUser")
       userServices.getLoggedInUser().then(res => {
         context.commit({ type: "setLoggedInUser", user: res.loggedInUser });
+        console.log("store logged in user", res.loggedInUser, res)
         return res.loggedInUser;
       });
     }

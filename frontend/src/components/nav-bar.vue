@@ -53,7 +53,7 @@
           method="POST"
           enctype="multipart/form-data"
         >
-          <div class="image-upload">
+          <div class="image-upload"  v-if="!loginRegistrationPage">
             <label for="file-input">
               <i class="fas fa-upload btn"></i>
             </label>
@@ -70,7 +70,7 @@
         </form>
         <!-- <i class="fas fa-comment btn"></i> -->
         <!-- <i class="far fa-heart btn"></i> -->
-        <div class="userName-container btn" @click="goToLoggedInUserProfile">
+        <div class="userName-container btn" @click="goToLoggedInUserProfile" v-if="!loginRegistrationPage">
           <img :src="loggedInUser.profilePic" alt class="userImg">
           <span class="userName">{{loggedInUser.userName}}</span>
         </div>

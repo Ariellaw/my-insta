@@ -10,7 +10,7 @@
             placeholder="Username"
             v-model="credentials.username"
             required
-          >
+          />
           <label for="username" class="entypo-user"></label>
         </div>
         <div class="txt">
@@ -21,7 +21,7 @@
             placeholder="Password"
             v-model="credentials.password"
             required
-          >
+          />
           <label for="password" class="entypo-lock"></label>
         </div>
         <div class="red" v-if="showMessage">
@@ -30,7 +30,7 @@
         </div>
 
         <div class="buttons">
-          <input type="submit" value="Login">
+          <input type="submit" value="Login" />
           <span>
             <a
               href="javascript:void(0)"
@@ -39,7 +39,11 @@
             >Register</a>
           </span>
         </div>
-        <a href="javascript:void(0)" class="register btn" @click="logInAsGuest">Use Guest credentials</a>
+        <a
+          href="javascript:void(0)"
+          class="register btn"
+          @click="logInAsGuest"
+        >Use Guest credentials</a>
       </form>
       <!-- <div class="hr">
         <div></div>
@@ -75,18 +79,23 @@ export default {
     };
   },
   methods: {
-    logInAsGuest(){
+    logInAsGuest() {
       this.credentials.username = "Guest";
-      this.credentials.password = "33333"
+      this.credentials.password = "33333";
     },
     register() {
       this.$router.push({ name: "register" });
     }
   },
   created() {
-    if(this.loggedInUser){
-      this.$router.push({name:"home"});
-    }
+    console.log("login page created");
+    this.$store.dispatch({ type: "getLoggedInUser" }).then(loggedInUser => {
+      console.log("loging page", {loggedInUser}, {"this.loggedInUser":this.loggedInUser})
+      if (loggedInUser || this.loggedInUser) {
+        this.$router.push({ name: "home" });
+      }
+    });
+
     if (
       this.$route.query.success === "new-user" ||
       this.$route.query.faliure === "no-user"
@@ -97,9 +106,6 @@ export default {
       this.showMessage = true;
       this.message = "Wrong username or password!";
     }
-
-    this.$store
-      .dispatch({ type: "getLoggedInUser" })
   },
   computed: {
     loggedInUser() {
@@ -110,7 +116,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 // @import url(https://fonts.googleapis.com/css?family=Ubuntu|Courgette);
 // @import url(http://weloveiconfonts.com/api/?family=entypo);
 $green: #2ecc71;
@@ -692,13 +697,7 @@ div.loginpanel {
     }
   }
 }
-// .resp-info:before {
-//   content: "full";
-//   position: fixed;
-//   bottom: 10px;
-//   left: 10px;
-//   color: #f00;
-// }
+
 @media only screen and (max-width: 555px) {
   div.loginpanel {
     width: 90%;
