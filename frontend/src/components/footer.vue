@@ -1,6 +1,7 @@
 <template  >
-  <div class="footer" v-if="loggedInUser">
+  <div class="footer">
     <form
+      v-if="loggedInUser"
       class="update-user-cover-pic"
       ref="form"
       action
@@ -19,13 +20,21 @@
           accept="image/*"
           @change="getCloudinaryUrl()"
           required
-        >
+        />
       </div>
     </form>
 
-    <i class="fas fa-comment btn"></i>
-    <i class="far fa-heart btn"></i>
-    <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i>
+    <div v-if="!loginRegistrationPage && !loggedInUser" class="login-container btn">
+      <router-link :to="{ name: 'login'}" class="login">
+        <i class="fas fa-sign-in-alt"></i>
+
+        <p class>Login</p>
+      </router-link>
+      <!-- <router-link :to="{ name: 'register'}">Register</router-link> -->
+    </div>
+    <!-- <i class="fas fa-comment btn"></i> -->
+    <!-- <i class="far fa-heart btn"></i> -->
+    <i class="far fa-user btn" @click="goToLoggedInUserProfile" v-if="loggedInUser"></i>
   </div>
 </template>
 
@@ -60,10 +69,16 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    loginRegistrationPage() {
+      return this.$route.name === "register" || this.$route.name === "login";
     }
   }
 };
 </script>
 
 <style>
+.btn {
+  cursor: pointer;
+}
 </style>

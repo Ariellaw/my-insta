@@ -89,12 +89,11 @@ export default {
   },
   created() {
     console.log("login page created");
-    this.$store.dispatch({ type: "getLoggedInUser" }).then(loggedInUser => {
-      console.log("loging page", {loggedInUser}, {"this.loggedInUser":this.loggedInUser})
-      if (loggedInUser || this.loggedInUser) {
-        this.$router.push({ name: "home" });
-      }
-    });
+    this.$store.dispatch({ type: "getLoggedInUser" });
+
+    if (this.loggedInUser) {
+      this.$router.push({ name: "userProfile" });
+    }
 
     if (
       this.$route.query.success === "new-user" ||
@@ -106,6 +105,16 @@ export default {
       this.showMessage = true;
       this.message = "Wrong username or password!";
     }
+  },
+  mounted() {
+    console.log("mounted login logged in user", this.loggedInUser)
+    if (this.loggedInUser) {
+      this.$router.push({ name: "userProfile" });
+    }
+  },
+  destroyed() {
+    console.log("destoryed login", this.loggedInUser);
+    this.$store.dispatch({ type: "getLoggedInUser" });
   },
   computed: {
     loggedInUser() {

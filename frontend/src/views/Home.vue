@@ -1,12 +1,22 @@
 <template>
-  <div id="user-feed page-container" v-if="imagesForFeed">
+  <img
+    v-if="!imagesForFeed"
+    src="../assets/img/Loading-homepage.gif"
+    alt=""
+    class="loading-img"
+  />
+  <div v-else id="user-feed page-container">
     <div
       class="user-feed"
       v-for="image in imagesForFeed"
       :key="image._id"
-      :class="{'visibilityNone':showModal}"
+      :class="{ visibilityNone: showModal }"
     >
-      <feedImage class="image-in-feed" :image="image" @displayFeedImage="displayFeedImage(image)"></feedImage>
+      <feedImage
+        class="image-in-feed"
+        :image="image"
+        @displayFeedImage="displayFeedImage(image)"
+      ></feedImage>
     </div>
     <view-image
       @goBack1Image="goBack1Image"
@@ -166,6 +176,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.loading-img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
 .user-feed {
   @media screen and (max-width: 700px) {
     overflow: hidden;
@@ -175,4 +190,3 @@ export default {
   }
 }
 </style>
-

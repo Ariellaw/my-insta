@@ -4,10 +4,10 @@
       <user-options v-if="optionsModual" @close="optionsModual=false"></user-options>
       <section class="profile-pic-container" v-if="cellphoneDisplay">
         <div class="upperpart-of-profile">
-          <img :src="visitedUser.profilePic" class="profile-pic">
+          <img :src="visitedUser.profilePic" class="profile-pic" />
           <div class="column">
             <div class="numbers">
-              <p >
+              <p>
                 <span class="bold-reg">{{numOfUserImages+" "}}</span>posts
               </p>
               <p>
@@ -43,7 +43,7 @@
         <div class="bio">{{visitedUser.bio}}</div>
       </section>
       <section class="profile-pic-container" v-else>
-        <img :src="visitedUser.profilePic" class="profile-pic">
+        <img :src="visitedUser.profilePic" class="profile-pic" />
         <div class="user-details">
           <div class="username">
             {{visitedUser.userName}}
@@ -125,7 +125,7 @@ export default {
       cellphoneDisplay: false,
       windowWidth: null,
       optionsModual: false,
-      numOfUserImages:0
+      numOfUserImages: 0
     };
   },
   methods: {
@@ -139,17 +139,14 @@ export default {
           type: "getVisitedUserImages",
           userId
         })
-        .then(res=> this.numOfUserImages = res.length )
-
+        .then(res => (this.numOfUserImages = res.length));
     },
     getUserFavoriteImages(filter) {
       this.filter = filter;
-      this.$store
-        .dispatch({
-          type: "getUserFavoriteImages",
-          userId: this.visitedUser._id
-        })
-
+      this.$store.dispatch({
+        type: "getUserFavoriteImages",
+        userId: this.visitedUser._id
+      });
     },
     addFollowers(followeeId) {
       this.$store.dispatch({ type: "addFollowers", followeeId }).catch(err => {
@@ -173,15 +170,14 @@ export default {
     }
   },
   computed: {
-
     usersImages() {
       return this.$store.getters.viewedImageCollection;
     },
     followingVisitedUser() {
-      if(this.loggedInUser){
-       return this.loggedInUser.followees.includes(this.visitedUser._id);
+      if (this.loggedInUser) {
+        return this.loggedInUser.followees.includes(this.visitedUser._id);
       }
-},
+    },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
@@ -193,10 +189,9 @@ export default {
     const userName = this.$route.params.userName;
     this.$store
       .dispatch({ type: "getVisitedUser", userName })
-      .then(user => this.getVisitedUserImages(user._id, "album"))
+      .then(user => this.getVisitedUserImages(user._id, "album"));
 
-      this.$store.dispatch({type:"getLoggedInUser"})
-
+    this.$store.dispatch({ type: "getLoggedInUser" });
 
     if (window.innerWidth <= 700) {
       this.cellphoneDisplay = true;
@@ -204,6 +199,8 @@ export default {
   },
   destroyed() {
     this.$store.dispatch({ type: "setVisitedUser", user: null });
+    console.log("destoryed profile", this.loggedInUser);
+    this.$store.dispatch({ type: "getLoggedInUser" });
   },
   components: {
     galleryOfImages,
@@ -232,5 +229,9 @@ export default {
 .settings {
   cursor: pointer;
   font-size: 2rem;
+}
+
+.btn{
+  cursor: pointer;
 }
 </style>

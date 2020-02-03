@@ -15,4 +15,21 @@
     justify-content: space-around;
     align-items: center;
   }
+  .login-container{
+    display: flex;
+    width: 50rem;
+    max-width: 100%;
+    font-size: 3rem;
+    color: #000;
+    justify-content: center;
+
+    .login{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-decoration: none;
+      color:black;
+      cursor: pointer;
+    }
+  }
 }
