@@ -41,17 +41,6 @@ export default {
       this.showModal = false;
       this.$store.dispatch({ type: "setViewedImage", image:null});
     },
-    // scroll() {
-    //   window.onscroll = () => {
-    //     let bottomOfWindow =
-    //       document.documentElement.scrollTop + window.innerHeight >=
-    //       document.documentElement.offsetHeight - 1;
-
-    //     if (bottomOfWindow ) {
-    //       this.$emit("getAdditionalImages");
-    //     }
-    //   };
-    // },
 
     goBack1Image() {
       var idx = this.getIndexOfCurrImage();
@@ -110,7 +99,6 @@ export default {
     }
   },
   mounted() {
-    // this.scroll();
   },
   watch: {
     showModal() {

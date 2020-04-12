@@ -199,7 +199,6 @@ export default {
   },
   destroyed() {
     this.$store.dispatch({ type: "setVisitedUser", user: null });
-    console.log("destoryed profile", this.loggedInUser);
     this.$store.dispatch({ type: "getLoggedInUser" });
   },
   components: {

@@ -88,7 +88,6 @@ export default {
     }
   },
   created() {
-    console.log("login page created");
     this.$store.dispatch({ type: "getLoggedInUser" });
 
     if (this.loggedInUser) {
@@ -107,13 +106,11 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted login logged in user", this.loggedInUser)
     if (this.loggedInUser) {
       this.$router.push({ name: "userProfile" });
     }
   },
   destroyed() {
-    console.log("destoryed login", this.loggedInUser);
     this.$store.dispatch({ type: "getLoggedInUser" });
   },
   computed: {

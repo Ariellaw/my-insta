@@ -3,7 +3,6 @@ const senderMail = 'contactform333@yahoo.com'
 const password = 'ykocmkdhfczbodai'
 
 function sendMessage (mailReceivers, subject, html) {
-  console.log('the sendmessage function is working', subject, html)
   return emailTransporter.sendMail(getMailOptions(mailReceivers, subject, html))
 }
 

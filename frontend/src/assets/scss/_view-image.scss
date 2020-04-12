@@ -34,7 +34,6 @@
       margin-bottom: 1rem;
     }
     &.pop-up-image {
-      // margin-top: 6rem;
       margin-bottom: 20%;
       top: 0;
     }
@@ -54,11 +53,6 @@
           display: flex;
         }
       }
-        // .deleteImg {
-        //   display: block;
-        //   font-size: 3rem;
-        // }
-      
 
       .arrow-container {
         justify-content: space-between;
@@ -125,9 +119,8 @@
       justify-content: flex-start;
       align-items: center;
       width: 100%;
-      // @media screen and (max-width: 450px) {
-      //   height:
-      // }
+      position: relative;
+
       @media screen and (max-height: 500px) {
         display: none;
       }
@@ -165,6 +158,11 @@
           color: $darker-font-color;
         }
       }
+      .deleteImg {
+        position: absolute;
+        left: 94%;
+        cursor: pointer;
+      }
     }
     .add-a-comment {
       height: 10%;
@@ -179,9 +177,15 @@
         margin-bottom: 0.5rem;
       }
     }
+    &:hover {
+      .deleteImg {
+        display: block;
+      }
+    }
   }
 }
 
+// For big screens
 .modal-container {
   flex-direction: column;
   max-width: 175rem;
@@ -195,10 +199,8 @@
   .currImage {
     width: 65%;
     height: 100%;
-    // object-fit: contain;
     background-size: contain;
     display: flex;
-    // justify-content: space-between;
     align-items: center;
     background-color: black;
     background-position: center; /* Center the image */
@@ -207,11 +209,7 @@
       .arrow-container {
         display: flex;
       }
-      // .deleteImg {
-      //   display: block;
-      //   font-size: 3rem;
-      // }
-      }
+    }
 
     .arrow-container {
       justify-content: space-between;
@@ -224,13 +222,6 @@
       }
     }
   }
-  // .deleteImg {
-  //   color: darkgray;
-  //   margin-right: 1rem;
-  //   display: none;
-  //   justify-self: flex-end;
-  //   align-self: flex-end;
-  // }
   div {
     display: flex;
     padding: 0.5rem;
@@ -276,8 +267,9 @@
     flex-direction: column;
     margin-left: 0.5rem;
     justify-content: space-between;
+    position: relative;
     .icons {
-      width: 100%;
+      width: 95%;
       margin-bottom: 0rem;
 
       i {
@@ -305,12 +297,23 @@
         color: $darker-font-color;
       }
     }
+    .deleteImg {
+      position: absolute;
+      left: 91%;
+      cursor: pointer;
+      display: none;
+    }
   }
   .add-a-comment {
     height: 12%;
     textarea {
       @include textarea;
       width: 100%;
+    }
+  }
+  &:hover {
+    .deleteImg {
+      display: block;
     }
   }
 }
