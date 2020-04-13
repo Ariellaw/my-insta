@@ -237,10 +237,6 @@ export default {
             });
           }
         });
-      // .catch(err => {
-      //   console.log("err", err);
-      //   this.$router.push({ name: "login" });
-      // });
     },
     userIsTyping(userName, imageId) {
       this.$socket.emit("typing", { userName, imageId });

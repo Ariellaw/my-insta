@@ -57,6 +57,7 @@ $dark-border-color:darken(#fafafa, 15%);
     border-radius: 10rem;
     background-color: $lighter-layout-color;
     border: 1px solid $darker-font-color;
+    cursor: pointer;
 }
 
 @mixin profilePic{

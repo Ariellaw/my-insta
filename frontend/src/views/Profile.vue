@@ -66,7 +66,7 @@
           </div>
           <div class="numbers">
             <p v-if="usersImages">
-              <span class="bold-reg" v-if="usersImages">{{usersImages.length+" "}}</span>posts
+              <span class="bold-reg">{{usersImages.length+" "}}</span>posts
             </p>
             <p>
               <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -97,15 +97,6 @@
             <i class="far fa-star"></i>
             <h4 class="filter">&nbsp; Favorites</h4>
           </span>
-
-          <!-- <span
-          class="btn"
-          @click="changeFilter('tagged')"
-          :class="{ 'chosen-filter': filter==='tagged'}"
-        >
-          <i class="fas fa-camera-retro"></i>
-          <h4 class="filter">&nbsp;Tagged</h4>
-          </span>-->
         </div>
 
         <galleryOfImages v-show="!optionsModual"></galleryOfImages>
@@ -132,17 +123,22 @@ export default {
     displayOptions() {
       this.optionsModual = true;
     },
-    getVisitedUserImages(userId, filter) {
-      this.filter = filter;
+    getVisitedUserImages(userId, album) {
+      var isLoggedInUser = this.loggedInUser
+        ? this.loggedInUser._id === this.visitedUser._id
+        : false;
+
+      this.filter = album;
       this.$store
         .dispatch({
           type: "getVisitedUserImages",
-          userId
+          userId,
+          isLoggedInUser
         })
         .then(res => (this.numOfUserImages = res.length));
     },
-    getUserFavoriteImages(filter) {
-      this.filter = filter;
+    getUserFavoriteImages(favorites) {
+      this.filter = favorites;
       this.$store.dispatch({
         type: "getUserFavoriteImages",
         userId: this.visitedUser._id
@@ -171,7 +167,9 @@ export default {
   },
   computed: {
     usersImages() {
-      return this.$store.getters.viewedImageCollection;
+      return this.loggedInUser && this.loggedInUser._id === this.visitedUser._id && this.filter==="album"
+        ? this.$store.getters.loggedInUserImages
+        : this.$store.getters.viewedImageCollection;
     },
     followingVisitedUser() {
       if (this.loggedInUser) {
@@ -230,7 +228,7 @@ export default {
   font-size: 2rem;
 }
 
-.btn{
+.btn {
   cursor: pointer;
 }
 </style>

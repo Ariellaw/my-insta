@@ -6,6 +6,7 @@ export default {
   state: {
     isLoading: false,
     visitedUserImages: null,
+    loggedInUserImagess: [],
     viewedImage: null,
     viewedImageOwner: null,
     userFavoriteImages: [],
@@ -18,6 +19,9 @@ export default {
   getters: {
     viewedImageCollection: state => {
       return state.viewedImageCollection
+    },
+    loggedInUserImages:state=>{
+      return state.loggedInUserImages
     },
     followeesThatLiked: state => {
       return state.followeesThatLiked
@@ -58,6 +62,9 @@ export default {
     setViewedImageCollection (state, { images }) {
       state.viewedImageCollection = images
     },
+    setLoggedInUsersImages (state, { images }) {
+      state.loggedInUserImages = images
+    },
     deleteImage (state, { imageId }) {
       var idx = state.viewedImageCollection.findIndex(
         img => img._id === imageId
@@ -66,8 +73,18 @@ export default {
         state.viewedImageCollection.splice(idx, 1)
       }
     },
+    addToLoggedInUserAlbum(state, {image}){
+      console.log("state.loggedInUserImages", state.loggedInUserImages)
+
+      if(state.loggedInUserImages.findIndex(img => img._id===image._id)===-1){
+        state.loggedInUserImages.splice(0,0,image)
+      }
+    },
     setVisitedUserImages (state, { images }) {
       state.visitedUserImages = images
+    },
+    addToVisitedUserImages (state, { image, loggedInUserId }) {
+      state.visitedUserImages.splice(0, image)
     },
     setAdditionalUserImages (state, { res }) {
       var length = state.visitedUserImages.length
@@ -252,7 +269,8 @@ export default {
         })
       }
     },
-    getVisitedUserImages (context, { userId }) {
+    getVisitedUserImages (context, { userId, isLoggedInUser=false}) {
+      console.log("getVisitedUserImages", userId, isLoggedInUser)
       context.commit({ type: 'setIsLoading', isLoading: true })
       context.commit({ type: 'setViewedImageCollection', images: null })
 
@@ -262,6 +280,10 @@ export default {
           type: 'setViewedImageCollection',
           images: res.images
         })
+        if (isLoggedInUser) {
+          console.log("getVisitedUserImages isLoggedInUser", isLoggedInUser)
+          context.commit({ type: 'setLoggedInUsersImages', images: res.images })
+        }
         return res.images
       })
     },
@@ -337,9 +359,16 @@ export default {
       })
     },
     addImage (context, { imgDetails, image }) {
+      console.log("add image", imgDetails)
       imgDetails.ownerId = context.rootState.userModule.loggedInUser._id
-      return imageServices.addImage(imgDetails, image)
+      return imageServices.addImage(imgDetails, image).then(res => {
+        const image = res.image.ops[0]
+        console.log("add image promise", image._id)
+        context.commit({ type: 'addToLoggedInUserAlbum', image })
+
+      })
     },
+
     getInitalImages (context) {
       return imageServices.getInitalImages().then(res => {
         context.commit({ type: 'setInitalImages', images: res.images })

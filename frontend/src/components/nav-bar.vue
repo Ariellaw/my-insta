@@ -150,7 +150,6 @@ export default {
           elForm
         })
         .then(url => {
-          // this.image.file = url;
           if (url) {
             this.$emit("addnewimage", url);
           }
