@@ -8,7 +8,7 @@
           <div class="column">
             <div class="numbers">
               <p>
-                <span class="bold-reg">{{numOfUserImages+" "}}</span>posts
+                <span class="bold-reg">{{userAlbumLength+" "}}</span>posts
               </p>
               <p>
                 <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -66,7 +66,7 @@
           </div>
           <div class="numbers">
             <p v-if="usersImages">
-              <span class="bold-reg">{{usersImages.length+" "}}</span>posts
+              <span class="bold-reg">{{userAlbumLength+" "}}</span>posts
             </p>
             <p>
               <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -116,7 +116,7 @@ export default {
       cellphoneDisplay: false,
       windowWidth: null,
       optionsModual: false,
-      numOfUserImages: 0
+      userAlbumLength: 0
     };
   },
   methods: {
@@ -135,7 +135,10 @@ export default {
           userId,
           isLoggedInUser
         })
-        .then(res => (this.numOfUserImages = res.length));
+        .then(res => {
+          console.log("getVisitedUserImages res", res)
+          this.userAlbumLength = res.length
+        });
     },
     getUserFavoriteImages(favorites) {
       this.filter = favorites;
@@ -167,9 +170,10 @@ export default {
   },
   computed: {
     usersImages() {
-      return this.loggedInUser && this.loggedInUser._id === this.visitedUser._id && this.filter==="album"
+      var images = this.loggedInUser && this.loggedInUser._id === this.visitedUser._id && this.filter==="album"
         ? this.$store.getters.loggedInUserImages
         : this.$store.getters.viewedImageCollection;
+      return images
     },
     followingVisitedUser() {
       if (this.loggedInUser) {

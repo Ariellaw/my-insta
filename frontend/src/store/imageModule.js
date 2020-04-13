@@ -6,7 +6,7 @@ export default {
   state: {
     isLoading: false,
     visitedUserImages: null,
-    loggedInUserImagess: [],
+    loggedInUserImages: [],
     viewedImage: null,
     viewedImageOwner: null,
     userFavoriteImages: [],
@@ -74,7 +74,6 @@ export default {
       }
     },
     addToLoggedInUserAlbum(state, {image}){
-      console.log("state.loggedInUserImages", state.loggedInUserImages)
 
       if(state.loggedInUserImages.findIndex(img => img._id===image._id)===-1){
         state.loggedInUserImages.splice(0,0,image)
@@ -83,7 +82,7 @@ export default {
     setVisitedUserImages (state, { images }) {
       state.visitedUserImages = images
     },
-    addToVisitedUserImages (state, { image, loggedInUserId }) {
+    addToVisitedUserImages (state, { image }) {
       state.visitedUserImages.splice(0, image)
     },
     setAdditionalUserImages (state, { res }) {
@@ -270,7 +269,6 @@ export default {
       }
     },
     getVisitedUserImages (context, { userId, isLoggedInUser=false}) {
-      console.log("getVisitedUserImages", userId, isLoggedInUser)
       context.commit({ type: 'setIsLoading', isLoading: true })
       context.commit({ type: 'setViewedImageCollection', images: null })
 
@@ -281,7 +279,6 @@ export default {
           images: res.images
         })
         if (isLoggedInUser) {
-          console.log("getVisitedUserImages isLoggedInUser", isLoggedInUser)
           context.commit({ type: 'setLoggedInUsersImages', images: res.images })
         }
         return res.images
