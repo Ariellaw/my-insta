@@ -8,7 +8,7 @@
           <div class="column">
             <div class="numbers">
               <p>
-                <span class="bold-reg">{{userAlbumLength+" "}}</span>posts
+                <span v-if="album" class="bold-reg">{{album.length+" "}}</span>posts
               </p>
               <p>
                 <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -65,8 +65,8 @@
             </div>
           </div>
           <div class="numbers">
-            <p v-if="usersImages">
-              <span class="bold-reg">{{userAlbumLength+" "}}</span>posts
+            <p>
+              <span v-if="album" class="bold-reg">{{album.length+" "}}</span>posts
             </p>
             <p>
               <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
@@ -99,7 +99,7 @@
           </span>
         </div>
 
-        <galleryOfImages v-show="!optionsModual"></galleryOfImages>
+        <galleryOfImages :displayedImages="filter==='album'?album:favorites" v-show="!optionsModual"></galleryOfImages>
       </section>
     </div>
   </div>
@@ -115,8 +115,7 @@ export default {
       filter: "album",
       cellphoneDisplay: false,
       windowWidth: null,
-      optionsModual: false,
-      userAlbumLength: 0
+      optionsModual: false
     };
   },
   methods: {
@@ -124,21 +123,13 @@ export default {
       this.optionsModual = true;
     },
     getVisitedUserImages(userId, album) {
-      var isLoggedInUser = this.loggedInUser
-        ? this.loggedInUser._id === this.visitedUser._id
-        : false;
-
       this.filter = album;
       this.$store
         .dispatch({
           type: "getVisitedUserImages",
-          userId,
-          isLoggedInUser
+          userId
         })
-        .then(res => {
-          console.log("getVisitedUserImages res", res)
-          this.userAlbumLength = res.length
-        });
+        .then(res => {});
     },
     getUserFavoriteImages(favorites) {
       this.filter = favorites;
@@ -169,16 +160,11 @@ export default {
     }
   },
   computed: {
-    usersImages() {
-      var images = this.loggedInUser && this.loggedInUser._id === this.visitedUser._id && this.filter==="album"
-        ? this.$store.getters.loggedInUserImages
-        : this.$store.getters.viewedImageCollection;
-      return images
+    album() {
+      return this.$store.getters.viewedImageCollection;
     },
-    followingVisitedUser() {
-      if (this.loggedInUser) {
-        return this.loggedInUser.followees.includes(this.visitedUser._id);
-      }
+    favorites(){
+      return this.$store.getters.userFavoriteImages
     },
     loggedInUser() {
       return this.$store.getters.loggedInUser;

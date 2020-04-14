@@ -27,8 +27,8 @@
 <script>
 import viewImage from "./view-image.vue";
 export default {
-  name: "image-gallery",
-  // props: ["displayedImages"],
+  name: "image-gallery",  
+  props: ["displayedImages"],
   data() {
     return {
       showModal: false,
@@ -79,9 +79,13 @@ export default {
     }
   },
   computed: {
-    displayedImages() {
-      return this.$store.getters.viewedImageCollection;
-    },
+    // displayedImages() {
+    //  if(this.displayFavorites){
+    //     return this.$store.getters.userFavoriteImages;
+    //  }else{
+    //     return this.$store.getters.viewedImageCollection;
+    //  }
+    // },
     isLoading() {
       return this.$store.getters.isLoading;
     },

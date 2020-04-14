@@ -6,7 +6,8 @@ export default {
   state: {
     isLoading: false,
     visitedUserImages: null,
-    loggedInUserImages: [],
+    // loggedInUserImages: [],
+    searchedResults:[],
     viewedImage: null,
     viewedImageOwner: null,
     userFavoriteImages: [],
@@ -20,9 +21,12 @@ export default {
     viewedImageCollection: state => {
       return state.viewedImageCollection
     },
-    loggedInUserImages:state=>{
-      return state.loggedInUserImages
+    searchedResults:state=>{
+      return state.searchedResults
     },
+    // loggedInUserImages:state=>{
+    //   return state.loggedInUserImages
+    // },
     followeesThatLiked: state => {
       return state.followeesThatLiked
     },
@@ -56,15 +60,18 @@ export default {
     }
   },
   mutations: {
+    setSearchedResults(state, {images}){
+      state.searchedResults = images
+    },
     setFolloweesThatLiked (state, { users }) {
       state.followeesThatLiked = users
     },
     setViewedImageCollection (state, { images }) {
       state.viewedImageCollection = images
     },
-    setLoggedInUsersImages (state, { images }) {
-      state.loggedInUserImages = images
-    },
+    // setLoggedInUsersImages (state, { images }) {
+    //   state.loggedInUserImages = images
+    // },
     deleteImage (state, { imageId }) {
       var idx = state.viewedImageCollection.findIndex(
         img => img._id === imageId
@@ -73,12 +80,12 @@ export default {
         state.viewedImageCollection.splice(idx, 1)
       }
     },
-    addToLoggedInUserAlbum(state, {image}){
+    // addToLoggedInUserAlbum(state, {image}){
 
-      if(state.loggedInUserImages.findIndex(img => img._id===image._id)===-1){
-        state.loggedInUserImages.splice(0,0,image)
-      }
-    },
+    //   if(state.loggedInUserImages.findIndex(img => img._id===image._id)===-1){
+    //     state.loggedInUserImages.splice(0,0,image)
+    //   }
+    // },
     setVisitedUserImages (state, { images }) {
       state.visitedUserImages = images
     },
@@ -270,7 +277,7 @@ export default {
     },
     getVisitedUserImages (context, { userId, isLoggedInUser=false}) {
       context.commit({ type: 'setIsLoading', isLoading: true })
-      context.commit({ type: 'setViewedImageCollection', images: null })
+      // context.commit({ type: 'setViewedImageCollection', images: null })
 
       return imageServices.getUserImages(userId).then(res => {
         context.commit({ type: 'setIsLoading', isLoading: false })
@@ -278,9 +285,9 @@ export default {
           type: 'setViewedImageCollection',
           images: res.images
         })
-        if (isLoggedInUser) {
-          context.commit({ type: 'setLoggedInUsersImages', images: res.images })
-        }
+        // if (isLoggedInUser) {
+        //   context.commit({ type: 'setLoggedInUsersImages', images: res.images })
+        // }
         return res.images
       })
     },
@@ -331,11 +338,11 @@ export default {
     },
     getUserFavoriteImages (context, { userId }) {
       context.commit({ type: 'setIsLoading', isLoading: true })
-      context.commit({ type: 'setViewedImageCollection', images: null })
+      // context.commit({ type: 'setUserFavoriteImages', images: null })
 
       return userServices.getImagesByImageId(userId).then(res => {
         context.commit({
-          type: 'setViewedImageCollection',
+          type: 'setUserFavoriteImages',
           images: res.images
         })
 
@@ -356,12 +363,10 @@ export default {
       })
     },
     addImage (context, { imgDetails, image }) {
-      console.log("add image", imgDetails)
       imgDetails.ownerId = context.rootState.userModule.loggedInUser._id
       return imageServices.addImage(imgDetails, image).then(res => {
         const image = res.image.ops[0]
-        console.log("add image promise", image._id)
-        context.commit({ type: 'addToLoggedInUserAlbum', image })
+        // context.commit({ type: 'addToLoggedInUserAlbum', image })
 
       })
     },
@@ -386,24 +391,23 @@ export default {
 
     getImagesByLocation (context, { location }) {
       context.commit({ type: 'setIsLoading', isLoading: true })
-      context.commit({ type: 'setViewedImageCollection', images: null })
+      // context.commit({ type: 'setViewedImageCollection', images: null })
       return imageServices.getImagesByLocation(location).then(res => {
         context.commit({ type: 'setIsLoading', isLoading: false })
         context.commit({
-          type: 'setViewedImageCollection',
+          type: 'setSearchedResults',
           images: res.images
         })
-        // context.rootState.userModule.loggedInUser = res.loggedInUser;
         return res.images
       })
     },
     getImagesByHashtag (context, { hashtag }) {
       context.commit({ type: 'setIsLoading', isLoading: true })
-      context.commit({ type: 'setViewedImageCollection', images: null })
+      // context.commit({ type: 'setViewedImageCollection', images: null })
       return imageServices.getImagesByHashtag(hashtag).then(res => {
         context.commit({ type: 'setIsLoading', isLoading: false })
         context.commit({
-          type: 'setViewedImageCollection',
+          type: 'setSearchedResults',
           images: res.images
         })
         return res.images

@@ -12,7 +12,7 @@
         </h3>
         <h3 v-else class="location-name">{{ '#' + hashtag }}</h3>
       </div>
-      <gallary-of-images :displayedImages="images"></gallary-of-images>
+      <gallary-of-images :displayedImages="searchedResults"></gallary-of-images>
     </div>
   </div>
 </template>
@@ -54,7 +54,11 @@ export default {
   computed: {
     loggedInUser () {
       return this.$store.getters.loggedInUser
+    },
+    searchedResults(){
+      return this.$store.getters.searchedResults
     }
+    
   },
   methods: {
     getLocation (keyword) {
