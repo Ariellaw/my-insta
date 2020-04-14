@@ -6,8 +6,8 @@ export default {
   state: {
     isLoading: false,
     visitedUserImages: null,
-    // loggedInUserImages: [],
-    searchedResults:[],
+    loggedInUserImages: [],
+    searchedResults: [],
     viewedImage: null,
     viewedImageOwner: null,
     userFavoriteImages: [],
@@ -21,12 +21,12 @@ export default {
     viewedImageCollection: state => {
       return state.viewedImageCollection
     },
-    searchedResults:state=>{
+    searchedResults: state => {
       return state.searchedResults
     },
-    // loggedInUserImages:state=>{
-    //   return state.loggedInUserImages
-    // },
+    loggedInUserImages:state=>{
+      return state.loggedInUserImages
+    },
     followeesThatLiked: state => {
       return state.followeesThatLiked
     },
@@ -60,7 +60,7 @@ export default {
     }
   },
   mutations: {
-    setSearchedResults(state, {images}){
+    setSearchedResults (state, { images }) {
       state.searchedResults = images
     },
     setFolloweesThatLiked (state, { users }) {
@@ -69,9 +69,9 @@ export default {
     setViewedImageCollection (state, { images }) {
       state.viewedImageCollection = images
     },
-    // setLoggedInUsersImages (state, { images }) {
-    //   state.loggedInUserImages = images
-    // },
+    setLoggedInUsersImages (state, { images }) {
+      state.loggedInUserImages = images
+    },
     deleteImage (state, { imageId }) {
       var idx = state.viewedImageCollection.findIndex(
         img => img._id === imageId
@@ -80,12 +80,13 @@ export default {
         state.viewedImageCollection.splice(idx, 1)
       }
     },
-    // addToLoggedInUserAlbum(state, {image}){
-
-    //   if(state.loggedInUserImages.findIndex(img => img._id===image._id)===-1){
-    //     state.loggedInUserImages.splice(0,0,image)
-    //   }
-    // },
+    addToUserAlbum (state, { image }) {
+      if (
+        state.loggedInUserImages.findIndex(img => img._id === image._id) === -1
+      ) {
+        state.loggedInUserImages.splice(0, 0, image)
+      }
+    },
     setVisitedUserImages (state, { images }) {
       state.visitedUserImages = images
     },
@@ -275,7 +276,7 @@ export default {
         })
       }
     },
-    getVisitedUserImages (context, { userId, isLoggedInUser=false}) {
+    getVisitedUserImages (context, { userId, isLoggedInUser = false }) {
       context.commit({ type: 'setIsLoading', isLoading: true })
       // context.commit({ type: 'setViewedImageCollection', images: null })
 
@@ -285,9 +286,9 @@ export default {
           type: 'setViewedImageCollection',
           images: res.images
         })
-        // if (isLoggedInUser) {
-        //   context.commit({ type: 'setLoggedInUsersImages', images: res.images })
-        // }
+        if (isLoggedInUser) {
+          context.commit({ type: 'setLoggedInUsersImages', images: res.images })
+        }
         return res.images
       })
     },
@@ -366,8 +367,7 @@ export default {
       imgDetails.ownerId = context.rootState.userModule.loggedInUser._id
       return imageServices.addImage(imgDetails, image).then(res => {
         const image = res.image.ops[0]
-        // context.commit({ type: 'addToLoggedInUserAlbum', image })
-
+          context.commit({ type: 'addToUserAlbum', image })        
       })
     },
 

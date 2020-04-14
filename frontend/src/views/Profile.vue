@@ -99,7 +99,10 @@
           </span>
         </div>
 
-        <galleryOfImages :displayedImages="filter==='album'?album:favorites" v-show="!optionsModual"></galleryOfImages>
+        <galleryOfImages
+          :displayedImages="filter==='album'?album:favorites"
+          v-show="!optionsModual"
+        ></galleryOfImages>
       </section>
     </div>
   </div>
@@ -124,10 +127,13 @@ export default {
     },
     getVisitedUserImages(userId, album) {
       this.filter = album;
+      const isLoggedInUser =
+        this.loggedInUser && this.loggedInUser._id === this.visitedUser._id;
       this.$store
         .dispatch({
           type: "getVisitedUserImages",
-          userId
+          userId,
+          isLoggedInUser
         })
         .then(res => {});
     },
@@ -161,10 +167,13 @@ export default {
   },
   computed: {
     album() {
-      return this.$store.getters.viewedImageCollection;
+      return this.isLoggedInUser &&
+        this.isLoggedInUser._id === this.visitedUser._id
+        ? this.$store.getters.loggedInUserImages
+        : this.$store.getters.viewedImageCollection;
     },
-    favorites(){
-      return this.$store.getters.userFavoriteImages
+    favorites() {
+      return this.$store.getters.userFavoriteImages;
     },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
