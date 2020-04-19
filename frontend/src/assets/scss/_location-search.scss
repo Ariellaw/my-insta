@@ -1,49 +1,54 @@
+#myMap {
+  height: 20rem;
+  width: 100%;
+  margin: 0 auto;
 
-  #myMap {
-    height: 20rem;
-    width: 100%;
-    margin: 0 auto;
-    @media screen and (max-width:700px) {
-      margin-bottom: 3rem;
+  @media screen and (max-width: 700px) {
+    margin-bottom: 3rem;
+  }
+}
+
+.location-info-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-left: 3rem;
+  height: fit-content;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 700px) {}
+
+  @media screen and (max-width: 500px) {
+    justify-content: center;
+  }
+
+  .location-img {
+    height: 22rem;
+    width: 22rem;
+    margin-right: 5rem;
+    margin-bottom: 1rem;
+    @include profilePic;
+
+    @media screen and (max-width: 700px) {
+      height: 19rem;
+      width: 19rem;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 15rem;
+      width: 15rem;
+      margin-right: 2rem;
     }
   }
-  .location-info-container {
- 
-    height: 30rem;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: flex-start;
-    height:  30rem;
-    padding-left:3rem;
-    @media screen and (max-width:700px) {
-      height:  20rem;
-    }
-    @media screen and (max-width:500px) {
-      height:  12rem;
-      justify-content: center;
 
-    }
-    .location-img {
-      height: 24rem;
-      width: 24rem;
-      margin-right: 5rem;
-      border-radius: 18%;
-      @include profilePic;
-      @media screen and (max-width:700px) {
-        height: 15rem;
-        width: 15rem;
-      }
-      @media screen and (max-width:500px) {
-        height: 9rem;
-        width: 9rem;
-        margin-right: 2rem;
-
-
-      }
-    }
+  .location-name-container {
+    width: fit-content;
     .location-name {
       font-size: 3rem;
       font-weight: 100;
     }
   }
+}

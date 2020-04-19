@@ -117,7 +117,9 @@ export default {
     setAddionalImages (state, { images }) {
       state.imagesForFeed = state.imagesForFeed.concat(images)
     },
-
+    addAdditionalImageToFeed(state, {image}){
+      state.imagesForFeed.splice(0,0,image)
+    },
     SOCKET_CONNECT (state) {
       state.isConnected = true
     },
@@ -367,7 +369,8 @@ export default {
       imgDetails.ownerId = context.rootState.userModule.loggedInUser._id
       return imageServices.addImage(imgDetails, image).then(res => {
         const image = res.image.ops[0]
-          context.commit({ type: 'addToUserAlbum', image })        
+          context.commit({ type: 'addToUserAlbum', image })
+          context.commit({type:'addAdditionalImageToFeed', image})        
       })
     },
 

@@ -3,6 +3,7 @@ $darker-layout-clr: darken(#fafafa, 2%);
 $darker-font-color:darkgray;
 $lighter-font-color: lightgray;
 $dark-border-color:darken(#fafafa, 15%);
+$button-blue: #3897f0;
 
 @mixin popup-button{
     float: right;
@@ -67,8 +68,8 @@ $dark-border-color:darken(#fafafa, 15%);
 }
 
 @mixin submit-btn{
-    background-color: #3897f0;
-    border: 1px solid #3897f0;
+    background-color: $button-blue;
+    border: 1px solid $button-blue;
     border-radius: 10px;
     color: #fff;
     font-weight: bolder;

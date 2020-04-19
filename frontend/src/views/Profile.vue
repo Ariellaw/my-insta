@@ -22,17 +22,25 @@
               <section v-if="loggedInUser._id === visitedUser._id">
                 <button @click="editProfile" class="edit-profile-or-following-btn btn">Edit Profile</button>
               </section>
-              <div v-else-if="followingVisitedUser">
+              <!-- <div v-else-if="followingVisitedUser">
                 <button class="mobile-following message">
                   <i class="far fa-envelope"></i>
                 </button>
                 <button class="mobile-following">
                   <i class="fas fa-user-check" @click="removeFollowers(visitedUser._id)"></i>
                 </button>
+              </div>-->
+              <div v-else-if="followingVisitedUser">
+                <!-- <button class="mobile-following message">
+                  <i class="far fa-envelope"></i>
+                </button> -->
+                <button class="mobile-following">
+                  <i class="fas fa-user-check" @click="removeFollowers(visitedUser._id)"></i>
+                </button>
               </div>
               <button
                 @click="addFollowers(visitedUser._id)"
-                v-else
+                v-else-if="!followingVisitedUser"
                 class="follower-user-btn btn"
               >Follow</button>
             </div>
@@ -180,13 +188,20 @@ export default {
     },
     visitedUser() {
       return this.$store.getters.visitedUser;
+    },
+    followingVisitedUser() {
+      const idx = this.visitedUser.followers.findIndex(
+        followerId => followerId === this.loggedInUser._id
+      );
+      console.log("followingVisitedUser", idx >= 0, this.loggedInUser._id, this.visitedUser.followees, this.visitedUser);
+      return idx >= 0;
     }
   },
   created() {
     const userName = this.$route.params.userName;
-    this.$store
-      .dispatch({ type: "getVisitedUser", userName })
-      .then(user => this.getVisitedUserImages(user._id, "album"));
+    this.$store.dispatch({ type: "getVisitedUser", userName }).then(user => {
+      this.getVisitedUserImages(user._id, "album");
+    });
 
     this.$store.dispatch({ type: "getLoggedInUser" });
 

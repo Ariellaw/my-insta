@@ -30,7 +30,7 @@
         </div>
 
         <div class="buttons">
-          <input type="submit" value="Login" />
+          <input class="submit-btn" type="submit" value="Login" />
           <span>
             <a
               href="javascript:void(0)"
@@ -515,6 +515,9 @@ div.loginpanel {
 
   div.buttons {
     display: flex;
+    .submit-btn{
+      cursor: pointer;
+    }
 
     input {
       flex: 1;

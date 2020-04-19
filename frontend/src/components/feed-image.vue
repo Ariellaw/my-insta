@@ -15,17 +15,6 @@
         />
         <span class="btn">
           <span @click="goToImageOwnerProfile">{{imageOwner.userName}} &nbsp;&nbsp;</span>
-          <!-- <span
-          v-if="isFollowing"
-          :class="followingStatusClass"
-          @click="removeFollowers(image.ownerId)"
-          >Following</span>-->
-          <!-- <span
-          v-else
-          :class="followingStatusClass"
-          class="follow"
-          @click="addFollowers(image.ownerId)"
-          >Follow</span>-->
           <p @click="goToLocationImages" class="image-location">{{image.location}}</p>
         </span>
       </div>
@@ -244,19 +233,6 @@ export default {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
-    // imageOwner() {
-    //   return this.$store.getters.viewedImageOwner;
-    // },
-    // isFollowing() {
-    //   if (this.loggedInUser.followees) {
-    //     return this.loggedInUser.followees.includes(this.imageOwner._id);
-    //   }
-    // },
-    // followingStatusClass() {
-    //   return {
-    //     displayNone: this.loggedInUser._id === this.imageOwner._id
-    //   };
-    // },
     inUserFavorites() {
       if (this.loggedInUser) {
         return this.loggedInUser.favorites.includes(this.image._id);

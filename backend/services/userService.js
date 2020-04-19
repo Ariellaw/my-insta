@@ -2,7 +2,6 @@ const mongoService = require("./mongo-services");
 const userDb = "user";
 const imagesDb = "post";
 const ObjectId = require("mongodb").ObjectId;
-const ImageService = require("./imageService");
 
 function getUserNamesById(ids) {
   for (var i = 0; i < ids.length; i++) {
@@ -43,8 +42,6 @@ function getUserByUsername(userName) {
     return db
       .collection(userDb)
       .findOne({ userName: { $regex: `^${userName}$`, $options: "i" } });
-
-    // return db.collection(userDb).findOne({ userName });
   });
 }
 
@@ -91,7 +88,6 @@ function removeFollowers(followeeId, followerId) {
       var idx = followerIds.findIndex(id => {
         return id === followerId;
       });
-
       if (idx !== -1) {
         followerIds.splice(idx, 1);
       }
