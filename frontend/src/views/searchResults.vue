@@ -8,8 +8,8 @@
       <div class="location-info-container">
         <img :src="mainImage" :alt="city" class="location-img" />
         <div v-if="type === 'locations'" class="location-name-container">
-          <h3 class="location-name">{{ city }},</h3><h3 class="location-name">{{" "+country }}</h3>
-           
+          <h3 class="location-name">{{ city }},</h3>
+          <h3 class="location-name">{{" "+country }}</h3>
         </div>
         <h3 v-else class="location-name">{{ "#" + hashtag }}</h3>
       </div>
@@ -111,8 +111,13 @@ export default {
       )
         .then(res => res.json())
         .then(contents => {
-          this.mainImage = contents
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${contents.results[0].photos[0].photo_reference}&key=${this.googleAPI}`
+          const result =
+            contents.results[
+              Math.floor(Math.random() * contents.results.length)
+            ];
+          const photos = result.photos;
+          this.mainImage = photos
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photos[0].photo_reference}&key=${this.googleAPI}`
             : defaultLocationImage;
         })
         .catch(() =>

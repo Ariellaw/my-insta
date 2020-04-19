@@ -193,7 +193,6 @@ export default {
       const idx = this.visitedUser.followers.findIndex(
         followerId => followerId === this.loggedInUser._id
       );
-      console.log("followingVisitedUser", idx >= 0, this.loggedInUser._id, this.visitedUser.followees, this.visitedUser);
       return idx >= 0;
     }
   },
