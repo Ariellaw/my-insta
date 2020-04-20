@@ -2,6 +2,8 @@
   <div :class="{'darkScreen':optionsModual}">
     <div class="profile page-container" v-if="visitedUser">
       <user-options v-if="optionsModual" @close="optionsModual=false"></user-options>
+
+
       <section class="profile-pic-container" v-if="cellphoneDisplay">
         <div class="upperpart-of-profile">
           <img :src="visitedUser.profilePic" class="profile-pic" />
@@ -22,18 +24,7 @@
               <section v-if="loggedInUser._id === visitedUser._id">
                 <button @click="editProfile" class="edit-profile-or-following-btn btn">Edit Profile</button>
               </section>
-              <!-- <div v-else-if="followingVisitedUser">
-                <button class="mobile-following message">
-                  <i class="far fa-envelope"></i>
-                </button>
-                <button class="mobile-following">
-                  <i class="fas fa-user-check" @click="removeFollowers(visitedUser._id)"></i>
-                </button>
-              </div>-->
               <div v-else-if="followingVisitedUser">
-                <!-- <button class="mobile-following message">
-                  <i class="far fa-envelope"></i>
-                </button> -->
                 <button class="mobile-following">
                   <i class="fas fa-user-check" @click="removeFollowers(visitedUser._id)"></i>
                 </button>
@@ -50,6 +41,9 @@
 
         <div class="bio">{{visitedUser.bio}}</div>
       </section>
+
+
+
       <section class="profile-pic-container" v-else>
         <img :src="visitedUser.profilePic" class="profile-pic" />
         <div class="user-details">
@@ -87,6 +81,9 @@
           <div class="bio">{{visitedUser.bio}}</div>
         </div>
       </section>
+
+
+
       <section class="posts-container">
         <div class="filter-nav">
           <span
@@ -204,7 +201,7 @@ export default {
 
     this.$store.dispatch({ type: "getLoggedInUser" });
 
-    if (window.innerWidth <= 700) {
+    if (window.innerWidth <= 600) {
       this.cellphoneDisplay = true;
     }
   },
@@ -225,7 +222,7 @@ export default {
   },
   watch: {
     windowWidth() {
-      if (this.windowWidth <= 700) {
+      if (this.windowWidth <= 600) {
         this.cellphoneDisplay = true;
       } else {
         this.cellphoneDisplay = false;

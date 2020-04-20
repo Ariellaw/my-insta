@@ -93,12 +93,11 @@
     }
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 600px) {
     .profile-pic-container {
       height: 35%;
       margin-top: 0.5rem;
-      // margin-bottom: 1rem;
-      // padding: 1rem;
+
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -116,6 +115,7 @@
         margin-bottom: 1rem;
         height: 40%;
         width: 100%;
+        margin-top:2rem;
 
         .profile-pic {
           @include profilePic;
@@ -146,9 +146,6 @@
             width: 100%;
             height: 50%;
             overflow: hidden;
-            // border-bottom: 1px solid $dark-border-color;
-            // border-top: 1px solid $dark-border-color;
-            // background-color: darken(#fafafa, 5%);
             padding: 0.5rem;
 
             p {
@@ -159,20 +156,12 @@
             }
           }
 
-          // .username {
-          //   font-size: 2.2rem;
-          //   margin-bottom: 1rem;
-          //   @media only screen and (max-width: 500px) {
-          //     margin-bottom: 0.5rem;
-          //   }
-          // }
-
           .edit-profile-or-following-btn {
             @include general-button;
             height: 3rem;
             width: 9rem;
 
-            @media only screen and (max-width: 700px) {
+            @media only screen and (max-width: 600px) {
               width: 100%;
             }
           }
@@ -239,7 +228,7 @@
     color: $darker-font-color;
     height: 70%;
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 600px) {
       height: 65%;
     }
 
@@ -252,7 +241,7 @@
       display: flex;
       justify-content: space-around;
 
-      @media screen and (max-width: 700px) {
+      @media screen and (max-width: 600px) {
         border: 0px;
       }
 
@@ -263,7 +252,7 @@
         flex-direction: row;
         align-items: center;
 
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 600px) {
           font-size: 2rem;
 
           .filter {
@@ -277,7 +266,7 @@
       color: black;
       font-weight: bold;
 
-      @media screen and (min-width: 700px) {
+      @media screen and (min-width: 600px) {
         border-top: 1px solid #262626;
       }
 
