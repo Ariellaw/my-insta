@@ -3,11 +3,11 @@
   grid-template-columns: 24% 24% 24% 24%;
   grid-gap: 1rem;
   margin-bottom:7rem;
-  @media only screen and (max-width: 700px) {
+  @media only screen and (max-width: $mobile-screen) {
     grid-gap: .5rem;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $mobile-screen) {
     grid-template-columns: 33% 33% 33%;
   }
 

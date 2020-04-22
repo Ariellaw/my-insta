@@ -5,6 +5,8 @@ $lighter-font-color: lightgray;
 $dark-border-color:darken(#fafafa, 15%);
 $button-blue: #3897f0;
 
+$mobile-screen:700px;
+
 @mixin popup-button{
     float: right;
     background-color: rgba(0, 0, 0, 0);

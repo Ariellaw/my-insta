@@ -17,7 +17,7 @@
       @media screen and (max-width: 900px) {
         flex-direction: column;
       }
-      @media screen and (max-width: 700px) {
+      @media screen and (max-width: $mobile-screen) {
         width: 90vw;
         height: 120vh;
       }

@@ -31,7 +31,7 @@ export default {
   border-bottom: solid 1px darken(#fafafa, 15%);
   display: flex;
   flex-direction: row;
-  height: 68px;
+  height: fit-content;
   padding: 8px 14px;
   align-items: center;
   background-color: #fafafa;
@@ -45,8 +45,8 @@ export default {
     border-radius: 50%;
     border: 1px solid black;
     object-fit: cover;
-    height: 40px;
-    width: 40px;
+    height: 4rem;
+    width: 4rem;
     margin-right: 1rem;
   }
   .search-result-name {

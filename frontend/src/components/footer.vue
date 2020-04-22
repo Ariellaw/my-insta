@@ -30,11 +30,10 @@
 
         <p class>Login</p>
       </router-link>
-      <!-- <router-link :to="{ name: 'register'}">Register</router-link> -->
     </div>
     <!-- <i class="fas fa-comment btn"></i> -->
     <!-- <i class="far fa-heart btn"></i> -->
-    <i class="far fa-user btn" @click="goToLoggedInUserProfile" v-if="loggedInUser"></i>
+    <img class="profile-pic" :src="loggedInUser.profilePic" :alt="loggedInUser.firstName"  @click="goToLoggedInUserProfile" v-if="loggedInUser">
   </div>
 </template>
 

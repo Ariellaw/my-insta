@@ -1,89 +1,78 @@
 <template>
-  <nav class="main-nav-bar">
-    <div v-if="cellphoneDisplay && navbarTitle" class="cellphone-navbar-container">
-      <div class="cellphone-navbar" @click="goBackToLastWindow()">
-        <i class="fas fa-arrow-left btn"></i>
-        <h3 class="navbar-title">{{navbarTitle}}</h3>
-      </div>
-      <i class="fas fa-cog btn" @click="$emit('displayOptions')" v-if="isLoggedInUserProfile"></i>
-    </div>
-    <div v-else-if="cellphoneDisplay && !navbarTitle" class="cellphone-navbar-container">
-      <div @click="goToFeed" class="instagram-logo btn">
-        <i class="fab fa-instagram btn"></i>
-        <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
-      </div>
-    </div>
+  <nav class="main-navbar" :class="[loginRegistrationPage?'center':'spaceBetween']">
     <div
-      v-else
-      class="nav-buttons-container page-container"
-      :class="{'center':loginRegistrationPage, 'spaceBetween':!loginRegistrationPage}"
+      class="cellphone-navbar"
+      @click="goBackToLastWindow()"
+      v-if="cellphoneDisplay && navbarTitle"
     >
-      <div @click="goToFeed" class="instagram-logo btn">
-        <i class="fab fa-instagram btn"></i>
-        <span class="ariella-logo">&nbsp;|&nbsp; AriellaGram</span>
-      </div>
-      <ul v-if="!loginRegistrationPage">
-        <li class="dropdown">
-          <a href="javascript:void(0)" class="dropbtn">
-            <input
-              type="text"
-              autocapitalize="none"
-              size="45"
-              placeholder="Search....."
-              v-model="keyword"
-              @keyup="findRelevantUsers"
-              class="search-users-field"
-            >
-          </a>
-          <div class="dropdown-content" :class="{'display-content':keyword}">
-            <search-result
-              @resetKeyword="resetKeyword"
-              v-for="user in searchedUsers"
-              :key="user._id"
-              :user="user"
-            ></search-result>
-          </div>
-        </li>
-      </ul>
-      <div v-if="loggedInUser" class="menu-icons">
-        <form
-          class="update-user-cover-pic"
-          ref="form"
-          action
-          method="POST"
-          enctype="multipart/form-data"
-        >
-          <div class="image-upload"  v-if="!loginRegistrationPage">
-            <label for="file-input">
-              <i class="fas fa-upload btn"></i>
-            </label>
+      <i class="fas fa-arrow-left btn"></i>
+      <h3 class="navbar-title">{{navbarTitle}}</h3>
+      <i class="fas fa-cog btn" @click="$emit('displayOptions')"></i>
+    </div>
 
-            <input
-              type="file"
-              name="pic"
-              id="file-input"
-              accept="image/*"
-              @change="getCloudinaryUrl()"
-              required
-            >
-          </div>
-        </form>
-        <!-- <i class="fas fa-comment btn"></i> -->
-        <!-- <i class="far fa-heart btn"></i> -->
-        <div class="userName-container btn" @click="goToLoggedInUserProfile" v-if="!loginRegistrationPage">
-          <img :src="loggedInUser.profilePic" alt class="userImg">
-          <span class="userName">{{loggedInUser.userName}}</span>
+    <div v-else class="home-button">
+      <span @click="goToFeed" class="logo-text">AriellaGram</span>
+      <i @click="goToFeed" class="fab fa-instagram"></i>
+    </div>
+
+    <ul v-if="!loginRegistrationPage">
+      <li class="dropdown">
+        <a href="javascript:void(0)" class="dropbtn">
+          <input
+            type="text"
+            autocapitalize="none"
+            size="45"
+            placeholder="Search....."
+            v-model="keyword"
+            @keyup="findRelevantUsers"
+            class="search-users-field"
+          />
+        </a>
+        <div class="dropdown-content" :class="{'display-content':keyword}">
+          <search-result
+            @resetKeyword="resetKeyword"
+            v-for="user in searchedUsers"
+            :key="user._id"
+            :user="user"
+          ></search-result>
         </div>
-        <!-- <i class="far fa-user btn" @click="goToLoggedInUserProfile"></i> -->
-      </div>
-      <div v-if="!loginRegistrationPage && !loggedInUser" class="loginReg">
-        <router-link :to="{ name: 'login'}">Login/</router-link>
-        <router-link :to="{ name: 'register'}">Register</router-link>
-      </div>
+      </li>
+    </ul>
+
+    <div v-if="loggedInUser && !cellphoneDisplay" class="icons">
+      <form
+        class="update-user-cover-pic"
+        ref="form"
+        action
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="image-upload" v-if="!loginRegistrationPage">
+          <label for="file-input">
+            <i class="fas fa-upload btn"></i>
+          </label>
+
+          <input
+            type="file"
+            name="pic"
+            id="file-input"
+            accept="image/*"
+            @change="getCloudinaryUrl()"
+            required
+          />
+        </div>
+      </form>
+      <img :src="loggedInUser.profilePic" alt class="userImg" @click="goToLoggedInUserProfile" />
+    </div>
+
+    <div class="login-container">
+      <router-link :to="{ name: 'login'}" v-if="!loginRegistrationPage && !loggedInUser">
+        <i class="fas fa-sign-in-alt"></i>
+      </router-link>
+      <p>Login</p>
     </div>
   </nav>
 </template>
-
 
 <script>
 import searchResult from "./search-result.vue";
@@ -178,7 +167,7 @@ export default {
       this.windowWidth = window.innerWidth;
       this.cellphoneDisplay = true;
     }
-   this.$store.dispatch({ type: "getLoggedInUser" }); 
+    this.$store.dispatch({ type: "getLoggedInUser" });
   },
   computed: {
     loginRegistrationPage() {
@@ -205,13 +194,7 @@ export default {
       this.getNavBarTitle();
     },
     windowWidth() {
-      if (this.windowWidth <= 700) {
-        // this.newImage = false;
-
-        this.cellphoneDisplay = true;
-      } else {
-        this.cellphoneDisplay = false;
-      }
+      this.cellphoneDisplay = this.windowWidth <= 700;
     }
   },
   mounted() {
@@ -228,62 +211,5 @@ export default {
 </script>
 
  <style lang="scss" scoped>
-.loginReg {
-  margin-right: 1rem;
-  cursor: pointer;
-}
-.cellphone-navbar-container {
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  .cellphone-navbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-
-    .navbar-title {
-      margin-right: 0.5rem;
-    }
-  }
-}
-.center {
-  justify-content: center;
-}
-.spaceBetween {
-  justify-content: space-between;
-}
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #fafafa;
-  width: 250px;
-  max-height: 60vh;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 10000003;
-  margin: 0px 50px;
-  overflow-y: auto;
-}
-
-.display-content {
-  display: block;
-  margin: 0 auto;
-  z-index: 999999;
-}
-
-.search-users-field {
-  width: 250px;
-  height: 30px;
-  font-size: 2rem;
-  font-family: cursive;
-}
 </style>
 

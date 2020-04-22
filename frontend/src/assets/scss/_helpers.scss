@@ -13,6 +13,20 @@
   float: right;
 }
 
+.center {
+  justify-content: center;
+}
+.spaceBetween {
+  justify-content: space-between;
+}
+.flex{
+  display:flex
+}
+
+.wrap{
+  flex-wrap: wrap;
+}
+
 .displayNone {
   display: none;
 }

@@ -200,14 +200,6 @@ function updateUserDetails(userDetails) {
   var userId = userDetails._id;
   const _id = new ObjectId(userId);
 
-  // return getById(userId).then(user => {
-  //   var firstName = userDetails.firstName || user.firstName;
-  //   var lastName = userDetails.lastName || user.lastName;
-  //   var email = userDetails.email || user.email;
-  //   var userName = userDetails.userName || user.userName;
-  //   var profilePic = userDetails.profilePic || user.profilePic;
-  //   var bio = userDetails.bio||user.bio;
-
     return mongoService.connect().then(db =>
       db.collection(userDb).findOneAndUpdate(
         { _id: _id },

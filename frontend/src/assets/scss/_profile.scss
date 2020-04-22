@@ -25,6 +25,7 @@
       line-height: 4rem;
       width: 70%;
       height: 100%;
+      padding:1rem;
 
       div {
         display: flex;
@@ -209,19 +210,6 @@
         display: none;
       }
     }
-
-    // .posts-container {
-    //   .filter-nav {
-    //     border-top: 1px solid $lighter-font-color;
-    //     display: flex;
-    //     span {
-    //       font-size: 1.5rem;
-    //       padding: 1rem;
-    //       @media screen and ( max-width: 500px){
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   .posts-container {

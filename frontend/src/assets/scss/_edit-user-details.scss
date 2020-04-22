@@ -18,7 +18,7 @@
     @media screen and (max-height:800px) {
       height:120vh;
     }
-    @media screen and (max-height:700px) {
+    @media screen and (max-height:$mobile-screen) {
       height:130vh;
     }
     .edit-profile-label {
@@ -32,7 +32,7 @@
         display: flex;
         justify-content: flex-end;
         font-size: 2rem;
-        @media screen and (max-width:700px) {
+        @media screen and (max-width:$mobile-screen) {
           width: 100%;
           justify-content: flex-start;
         }
@@ -50,7 +50,7 @@
         width: 72%;
         max-width:70rem;
         justify-content: flex-end;
-        @media screen and (max-width:700px) {
+        @media screen and (max-width:$mobile-screen) {
           width: 100%;
           justify-content: flex-start;          
         }
