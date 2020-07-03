@@ -2,7 +2,6 @@
   <div class="options-container">
     <div class="option">Change Password</div>
     <div class="option">Change Settings</div>
-    <!-- <router-link  to="//logout">Log out</router-link> -->
     <div class="option" @click="logOut()">Log Out</div>
     <div class="option" @click="$emit('close')">Cancel</div>
   </div>

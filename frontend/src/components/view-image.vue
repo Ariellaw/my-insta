@@ -111,7 +111,11 @@
                 }}
               </span>
             </span>
-            <i v-if="loggedInUser && loggedInUser._id===imageOwner._id" class="fas fa-trash deleteImg" @click="deleteImage"></i>
+            <i
+              v-if="loggedInUser && loggedInUser._id===imageOwner._id"
+              class="fas fa-trash deleteImg"
+              @click="deleteImage"
+            ></i>
           </div>
           <div class="add-a-comment">
             <textarea
@@ -186,7 +190,7 @@ export default {
           imageId: this.viewedImage._id
         })
         .then(() => {
-          this.goForward1Img()
+          this.goForward1Img();
         });
     },
     goBack1Image() {
@@ -362,9 +366,11 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
-      this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
+      const path = `/search/hashtag/${word.toLowerCase()}`;
+      if (this.$route.path !== path) this.$router.push(path);
       this.$router.go();
     },
+
     goToUserProfile(word) {
       this.$store
         .dispatch({ type: "getUserByUsername", userName: word })

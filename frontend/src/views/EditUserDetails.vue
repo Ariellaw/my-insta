@@ -10,10 +10,14 @@
     >
       <div class="update-profile-pic-container">
         <img v-if="loadingProfilePic" src="../assets/img/loading.gif" class="loading" />
-        <img v-else  :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image">
+        <img v-else :src="loggedInUser.profilePic" alt="profile-picture" class="edit-image" />
         <h3>{{loggedInUser.userName}}</h3>
         <div class="image-upload">
-          <label  v-if="!loadingProfilePic" for="file-input-edit" class="btn">Update your Profile Picture</label>
+          <label
+            v-if="!loadingProfilePic"
+            for="file-input-edit"
+            class="btn"
+          >Update your Profile Picture</label>
 
           <input
             type="file"
@@ -21,7 +25,7 @@
             id="file-input-edit"
             accept="image/*"
             @change="uploadImage"
-          >
+          />
         </div>
       </div>
       <label class="edit-profile-label" for="idFName">
@@ -33,7 +37,7 @@
           placeholder="First name...."
           :value="loggedInUser.firstName"
           @keyup="tempUpdate('firstName',$event.target.value)"
-        >
+        />
       </label>
       <label for="idLName" class="edit-profile-label">
         <h3>Last Name:</h3>
@@ -44,7 +48,7 @@
           :value="loggedInUser.lastName"
           @keyup="tempUpdate('lastName',$event.target.value)"
           placeholder="Last name...."
-        >
+        />
       </label>
       <label for="idUName" class="edit-profile-label">
         <h3>Username:</h3>
@@ -55,7 +59,7 @@
           :value="loggedInUser.userName"
           @keyup="tempUpdate('userName',$event.target.value)"
           placeholder="Username...."
-        >
+        />
       </label>
       <label for="idEmail" class="edit-profile-label">
         <h3>Email:</h3>
@@ -66,7 +70,7 @@
           :value="loggedInUser.email"
           @keyup="tempUpdate('email',$event.target.value)"
           placeholder="Email...."
-        >
+        />
       </label>
       <label class="edit-profile-label">
         <h3>Bio:</h3>
@@ -80,15 +84,15 @@
       <input
         type="submit"
         value="Update"
-        class="sumbit-btn btn"
+        class="submit-btn btn"
+        :disabled="!userMadeChanges"
         :class="{'sumbit-btn-after-changes':userMadeChanges }"
-      >
+      />
     </form>
   </div>
 </template>
 
 <script>
-//
 
 export default {
   name: "edit-user-details",
@@ -96,25 +100,32 @@ export default {
     return {
       profilePicChanged: false,
       userMadeChanges: false,
-      loadingProfilePic:false
+      loadingProfilePic: false
     };
   },
   created() {
-    this.getLoggedInUser();
+    const userName = this.$route.params.userName;
+    if (!this.loggedInUser) {
+      this.$router.push({ name: "login" });
+    } else if (userName !== this.loggedInUser.firstName) {
+      this.$router.push({ name: "home" });
+    }
   },
-  mounted() {},
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
-    },
-
+    }
   },
   methods: {
     getLoggedInUser() {
       this.$store.dispatch({ type: "getLoggedInUser" });
     },
     tempUpdate(detailToUpdate, detail) {
-      this.$store.dispatch({ type: "updateLoggedInUserTemp",  detailToUpdate, detail });
+      this.$store.dispatch({
+        type: "updateLoggedInUserTemp",
+        detailToUpdate,
+        detail
+      });
       this.userMadeChanges = true;
     },
     updateUserDetails() {
@@ -125,11 +136,10 @@ export default {
         })
         .then(() => {
           this.userMadeChanges = false;
-          // this.getLoggedInUser();
           this.$router.go();
         })
         .catch(err => {
-          console.log("getVisitedUserImages ERR", err);
+          console.log("updateUserDetails ERR", err);
           this.$router.push({ name: "login" });
         });
     },
@@ -149,17 +159,14 @@ export default {
         });
     }
   },
-  watched: {
-    // input() {}
-  }
+
 };
 </script>
 
 <style lang="scss">
-
-.loading{
+.loading {
   height: 15rem;
-  width:15rem;
+  width: 15rem;
 }
 </style>
 

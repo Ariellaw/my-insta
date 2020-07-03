@@ -1,18 +1,17 @@
 <template>
-  <nav class="main-navbar" :class="[loginRegistrationPage?'center':'spaceBetween']">
-    <div
-      class="cellphone-navbar"
-      @click="goBackToLastWindow()"
-      v-if="cellphoneDisplay && navbarTitle"
-    >
-      <i class="fas fa-arrow-left btn"></i>
-      <h3 class="navbar-title">{{navbarTitle}}</h3>
+  <nav class="main-navbar" :class="[loginRegistrationPage ? 'center' : 'spaceBetween']">
+    <div class="cellphone-navbar" v-if="cellphoneDisplay && navbarTitle">
+      <i class="fas fa-arrow-left btn" @click="goBackToLastWindow()"></i>
+      <h3 class="navbar-title" @click="goBackToLastWindow()">{{ navbarTitle }}</h3>
       <i class="fas fa-cog btn" @click="$emit('displayOptions')"></i>
     </div>
 
-    <div v-else class="home-button">
+    <div v-else-if="!loginRegistrationPage" class="home-button">
       <span @click="goToFeed" class="logo-text">AriellaGram</span>
       <i @click="goToFeed" class="fab fa-instagram"></i>
+    </div>
+    <div v-else>
+      <span @click="goToFeed" class="logo-text">AriellaGram</span>
     </div>
 
     <ul v-if="!loginRegistrationPage">
@@ -28,7 +27,7 @@
             class="search-users-field"
           />
         </a>
-        <div class="dropdown-content" :class="{'display-content':keyword}">
+        <div class="dropdown-content" :class="{ 'display-content': keyword }">
           <search-result
             @resetKeyword="resetKeyword"
             v-for="user in searchedUsers"
@@ -65,11 +64,14 @@
       <img :src="loggedInUser.profilePic" alt class="userImg" @click="goToLoggedInUserProfile" />
     </div>
 
-    <div class="login-container">
-      <router-link :to="{ name: 'login'}" v-if="!loginRegistrationPage && !loggedInUser">
+    <div
+      class="login-container"
+      v-if="!loginRegistrationPage && !loggedInUser && !cellphoneDisplay"
+    >
+      <router-link :to="{ name: 'login' }" class="link">
         <i class="fas fa-sign-in-alt"></i>
+        <p>Login</p>
       </router-link>
-      <p>Login</p>
     </div>
   </nav>
 </template>
@@ -128,7 +130,8 @@ export default {
       }
     },
     goToFeed() {
-      this.$router.push({ name: "home" });
+      const home = "home"
+      if (this.$route.name !== home) this.$router.push({name:home});   
     },
     getCloudinaryUrl() {
       var elForm = this.$refs.form;
@@ -210,6 +213,4 @@ export default {
 };
 </script>
 
- <style lang="scss" scoped>
-</style>
-
+<style lang="scss" scoped></style>

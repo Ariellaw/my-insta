@@ -15,7 +15,10 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100vh;
-    @media screen and (max-height:800px) {
+    @media screen and (max-height:1000px) {
+      height:110vh;
+    }
+    @media screen and (max-height:900px) {
       height:120vh;
     }
     @media screen and (max-height:$mobile-screen) {
@@ -82,9 +85,9 @@
         color: #3897f0;
       }
     }
-    .sumbit-btn {
+    .submit-btn {
       @include submit-btn;
-      opacity: .3;  
+      opacity: .3; 
       height: 4rem;
       width: 10rem;
       align-self: center;

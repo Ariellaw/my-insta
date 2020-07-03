@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-container" v-if="commentOwner && words && comment && nickName">
+  <div class="comment-container" v-if="commentOwner && words && comment">
     <div class="comment-container" v-if="commentTextArea">
       <textarea
         v-model="editedComment"
@@ -9,23 +9,27 @@
       ></textarea>
     </div>
     <span v-else class="comment">
-      <span class="comment-owner bold-reg">{{nickName+": "}}</span>
+      <span class="comment-owner bold-reg">{{ nickName + ": " }}</span>
       <span
-        :class="{'hashtag':word[0]==='#'|| word[0]==='@'}"
+        :class="{ hashtag: word[0] === '#' || word[0] === '@' }"
         @click="findHashtagImages(word)"
         v-for="(word, index) in words"
         :key="index"
-      >{{word+' '}}</span>
+      >{{ word + " " }}</span>
     </span>
     <span
       class="icons"
       v-if="viewedImage && loggedInUser"
-      :class="{'canEdit':comment.writerId===loggedInUser._id}"
+      :class="{ canEdit: comment.writerId === loggedInUser._id }"
     >
       <i class="far fa-edit" @click="showTextArea()"></i>
       <i class="fas fa-times" @click="$emit('deleteComment', comment.id)"></i>
     </span>
-    <span v-if="viewedImage" class="time" :class="CEtime">{{ comment.timeStamp | moment }}</span>
+    <span v-if="viewedImage" class="time" :class="CEtime">
+      {{
+      comment.timeStamp | moment
+      }}
+    </span>
   </div>
 </template>
 
@@ -37,19 +41,20 @@ export default {
   data() {
     return {
       commentOwner: null,
-      nickName: null,
       words: null,
       commentTextArea: false,
-      editedComment: null
+      editedComment: null,
+      nickName:null
     };
   },
   created() {
-    if (this.comment.writerId) {
-      this.getNickName();
-    }
+    this.getNickName(this.comment.writerId);
     if (this.comment.comment) {
       this.words = this.comment.comment.split(" ");
     }
+  },
+  mounted() {
+
   },
   filters: {
     moment: function(date) {
@@ -65,7 +70,7 @@ export default {
     CETime() {
       if (this.loggedInUser) {
         return this.commentOwner._id === this.loggedInUser._id;
-      } else return false;
+      }
     },
     loggedInUser() {
       return this.$store.getters.loggedInUser;
@@ -77,19 +82,19 @@ export default {
     }
   },
   methods: {
-    getNickName() {
-      this.$store
-        .dispatch({ type: "getUserById", userId: this.comment.writerId })
-        .then(res => {
-          this.commentOwner = res;
-          if (this.loggedInUser) {
-            if (this.commentOwner._id === this.loggedInUser._id) {
-              this.nickName = "You";
-            }
-          } else {
-            this.nickName = res.userName;
-          }
-        });
+    getNickName(writerId) {
+      if (writerId) {
+        this.$store
+          .dispatch({ type: "getUserById", userId: writerId })
+          .then(res => {
+            this.commentOwner = res;
+            this.nickName =
+              this.loggedInUser &&
+              this.commentOwner._id === this.loggedInUser._id
+                ? "You"
+                : this.commentOwner.firstName;
+          });
+      }
     },
     showTextArea() {
       this.commentTextArea = !this.commentTextArea;
@@ -173,5 +178,3 @@ textarea {
   font-family: monospace;
 }
 </style>
-
-

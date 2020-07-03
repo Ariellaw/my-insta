@@ -9,7 +9,7 @@
         <img :src="mainImage" :alt="city" class="location-img" />
         <div v-if="type === 'locations'" class="location-name-container">
           <h3 class="location-name">{{ city }},</h3>
-          <h3 class="location-name">{{" "+country }}</h3>
+          <h3 class="location-name">{{ " " + country }}</h3>
         </div>
         <h3 v-else class="location-name">{{ "#" + hashtag }}</h3>
       </div>
@@ -64,13 +64,14 @@ export default {
   },
   methods: {
     getLocation(keyword) {
+
       this.getCountryInfo(keyword);
       this.city = keyword.charAt(0).toUpperCase() + keyword.slice(1);
       this.$store
         .dispatch({ type: "getImagesByLocation", location: keyword })
         .then(images => (this.images = images))
         .catch(err => {
-          console.log("getVisitedUserImages ERR", err);
+          console.log("getVisitedUserImages location ERR", err);
           this.$router.push({ name: "login" });
         });
     },
@@ -81,10 +82,11 @@ export default {
         .dispatch({ type: "getImagesByHashtag", hashtag })
         .then(images => {
           this.images = images;
-          this.mainImage = images[0].image;
+          this.mainImage =
+            this.images.length > 0 ? this.images[0].image : defaultLocationImage;
         })
         .catch(err => {
-          console.log("getVisitedUserImages ERR", err);
+          console.log("getHashtagImages  ERR", err);
           this.$router.push({ name: "login" });
         });
     },
@@ -120,24 +122,25 @@ export default {
             ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photos[0].photo_reference}&key=${this.googleAPI}`
             : defaultLocationImage;
         })
-        .catch(() =>
-          console.log("Can’t access + response. Blocked by browser?")
-        );
+        .catch(() => {
+          this.mainImage = defaultLocationImage;
+          console.log("Can’t access + response. Blocked by browser?");
+        });
     },
 
     getCountryInfo(location) {
       axios
         .get(
-          `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${this.opencagedataAPI} `
+          `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${this.opencagedataAPI}`
         )
         .then(res => {
           var searchResult = res.data.results[0];
+          this.country = searchResult.components.country;
           this.loadMap(searchResult.geometry.lat, searchResult.geometry.lng);
           this.getImageOfCity(
             searchResult.geometry.lat,
             searchResult.geometry.lng
           );
-          this.country = searchResult.components.country;
         });
     }
   }

@@ -88,16 +88,16 @@
         <div class="filter-nav">
           <span
             class="btn"
-            @click="getVisitedUserImages(visitedUser._id,'album')"
-            :class="{ 'chosen-filter': filter==='album'}"
+            @click="getVisitedUserImages(visitedUser._id)"
+            :class="{ 'chosen-filter': filter===imageOptions.album}"
           >
             <i class="far fa-images"></i>
             <h4 class="filter">&nbsp;My Images</h4>
           </span>
           <span
             class="btn"
-            @click="getUserFavoriteImages('favorites')"
-            :class="{ 'chosen-filter': filter==='favorites'}"
+            @click="getUserFavoriteImages(visitedUser._id)"
+            :class="{ 'chosen-filter': filter===imageOptions.favorites}"
           >
             <i class="far fa-star"></i>
             <h4 class="filter">&nbsp; Favorites</h4>
@@ -123,15 +123,19 @@ export default {
       filter: "album",
       cellphoneDisplay: false,
       windowWidth: null,
-      optionsModual: false
+      optionsModual: false,
+      imageOptions:{
+        album:'album',
+        favorites:'favorites'
+      }
     };
   },
   methods: {
     displayOptions() {
       this.optionsModual = true;
     },
-    getVisitedUserImages(userId, album) {
-      this.filter = album;
+    getVisitedUserImages(userId) {
+      this.filter = this.imageOptions.album;
       const isLoggedInUser =
         this.loggedInUser && this.loggedInUser._id === this.visitedUser._id;
       this.$store
@@ -142,11 +146,11 @@ export default {
         })
         .then(res => {});
     },
-    getUserFavoriteImages(favorites) {
-      this.filter = favorites;
+    getUserFavoriteImages(visitedUserId) {
+      this.filter = this.imageOptions.filter;
       this.$store.dispatch({
         type: "getUserFavoriteImages",
-        userId: this.visitedUser._id
+        userId: visitedUserId
       });
     },
     addFollowers(followeeId) {
@@ -172,10 +176,11 @@ export default {
   },
   computed: {
     album() {
-      return this.isLoggedInUser &&
+      var images =  this.isLoggedInUser &&
         this.isLoggedInUser._id === this.visitedUser._id
         ? this.$store.getters.loggedInUserImages
         : this.$store.getters.viewedImageCollection;
+        return images
     },
     favorites() {
       return this.$store.getters.userFavoriteImages;
@@ -196,7 +201,7 @@ export default {
   created() {
     const userName = this.$route.params.userName;
     this.$store.dispatch({ type: "getVisitedUser", userName }).then(user => {
-      this.getVisitedUserImages(user._id, "album");
+      this.getVisitedUserImages(user._id);
     });
 
     this.$store.dispatch({ type: "getLoggedInUser" });

@@ -75,5 +75,9 @@ $mobile-screen:700px;
     border-radius: 10px;
     color: #fff;
     font-weight: bolder;
+    outline: none;
+    &:active{
+        outline: none;
+    }
 
   }

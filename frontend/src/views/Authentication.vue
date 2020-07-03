@@ -71,8 +71,8 @@ export default {
   data() {
     return {
       credentials: {
-        username: "",
-        password: ""
+        username: "Guest",
+        password: "33333"
       },
       message: null,
       showMessage: false

@@ -152,7 +152,9 @@ export default {
     },
     searchHashtagImages(word) {
       word = word.slice(1);
-      this.$router.push(`/search/hashtag/${word.toLowerCase()}`);
+      const path = `/search/hashtag/${word.toLowerCase()}`;
+
+      if (this.$route.path !== path) this.$router.push(path);
       this.$router.go();
     },
 

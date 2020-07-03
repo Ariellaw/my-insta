@@ -1,10 +1,5 @@
 <template>
-  <img
-    v-if="!imagesForFeed"
-    src="../assets/img/Loading-homepage.gif"
-    alt=""
-    class="loading-img"
-  />
+  <img v-if="!imagesForFeed" src="../assets/img/Loading-homepage.gif" alt class="loading-img" />
   <div v-else id="user-feed page-container">
     <div
       class="user-feed"
@@ -12,11 +7,7 @@
       :key="image._id"
       :class="{ visibilityNone: showModal }"
     >
-      <feedImage
-        class="image-in-feed"
-        :image="image"
-        @displayFeedImage="displayFeedImage(image)"
-      ></feedImage>
+      <feedImage class="image-in-feed" :image="image" @displayFeedImage="displayFeedImage(image)"></feedImage>
     </div>
     <view-image
       @goBack1Image="goBack1Image"
@@ -122,8 +113,6 @@ export default {
     }
   },
   created() {
-    // window.scrollTo(0, 0);
-    this.$store.dispatch({ type: "getLoggedInUser" });
 
     this.getInitalImages();
     const imageId = this.$route.params.image;
@@ -137,11 +126,9 @@ export default {
         })
         .catch(err => {
           console.log("getImageById ERR", err);
-          this.$router.push({ name: "login" });
         });
     }
   },
-  beforeMount() {},
   mounted() {
     this.scroll();
   },

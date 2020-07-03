@@ -29,7 +29,10 @@ function getUserByUsername(userName) {
 function getLoggedInUser() {
   return axios.get(`${BASE_URL}/loggedInUser`).then(res => {
     return res.data;
-  });
+  }).catch(err => {
+    //TODO - error page
+    return null
+  })
 }
 
 function addFollowers(followeeId, followerId) {
@@ -77,7 +80,6 @@ function updateUserDetails(userDetails) {
 function authenticateUser(credentials) {
   return axios
     .post("/login", { credentials })
-
     .then(res => {
       return res.data;
     });

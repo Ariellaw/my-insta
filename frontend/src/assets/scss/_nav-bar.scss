@@ -2,12 +2,15 @@
   display: none;
 }
 
+.logo-text {
+  font-family: lily;
+  cursor: pointer;
+}
+
 .home-button {
   .logo-text {
     display: none;
-
     @media screen and (min-width: 500px) {
-      font-family: lily;
       display: block;
     }
   }
@@ -17,7 +20,6 @@
 
     @media screen and (min-width: 500px) {
       display: none;
-
     }
   }
 }
@@ -42,6 +44,10 @@
     height: 100%;
     align-items: center;
     flex-direction: row;
+
+    .fa-cog {
+      margin-left: 0.5rem;
+    }
   }
 
   ul {
@@ -49,14 +55,15 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    width: 23rem;
-    @media screen and (min-width:$mobile-screen) {
+    width: 25rem;
+
+    @media screen and (min-width: $mobile-screen) {
       width: 30rem;
     }
 
-
     .dropdown {
       width: 100%;
+
       .search-users-field {
         height: 4rem;
         font-size: 2.5rem;
@@ -69,13 +76,13 @@
         display: none;
         position: absolute;
         background-color: #fafafa;
-        width: 23rem;
+        width: 25rem;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         overflow-y: auto;
-        @media screen and (min-width:$mobile-screen) {
+
+        @media screen and (min-width: $mobile-screen) {
           width: 30rem;
         }
-
       }
 
       .display-content {
@@ -87,7 +94,7 @@
   }
 
   .icons {
-    width: 15rem;
+    width: fit-content;
     justify-content: space-evenly;
     align-content: center;
     display: flex;
@@ -95,6 +102,7 @@
 
     .image-upload {
       height: 100%;
+      margin-right: 0.5rem;
 
       label {
         display: flex;
@@ -108,20 +116,27 @@
       @include profilePic;
       width: 5.5rem;
       height: 5.5rem;
+      cursor: pointer;
     }
-
   }
 
   .login-container {
-    display: flex;
-    color: black;
     width: fit-content;
-    @media screen and (max-width:$mobile-screen) {
+
+    @media screen and (max-width: $mobile-screen) {
       display: none;
     }
-    i{
-      color:black
+
+    i {
+      color: black;
+    }
+
+    .link {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      text-decoration: none;
+      color: black;
     }
   }
-
 }

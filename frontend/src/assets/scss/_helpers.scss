@@ -19,11 +19,11 @@
 .spaceBetween {
   justify-content: space-between;
 }
-.flex{
-  display:flex
+.flex {
+  display: flex;
 }
 
-.wrap{
+.wrap {
   flex-wrap: wrap;
 }
 
@@ -32,6 +32,9 @@
 }
 .visibilityNone {
   visibility: hidden;
+}
+.displayBlock {
+  display: block;
 }
 .red {
   color: red;
