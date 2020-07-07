@@ -9,13 +9,13 @@
           <img :src="visitedUser.profilePic" class="profile-pic" />
           <div class="column">
             <div class="numbers">
-              <p>
-                <span v-if="album" class="bold-reg">{{album.length+" "}}</span>posts
+              <p v-if="album">
+                <span  class="bold-reg">{{album.length+" "}}</span>posts
               </p>
-              <p>
+              <p v-if="visitedUser.followers">
                 <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
               </p>
-              <p>
+              <p v-if="visitedUser.followees">
                 <span class="bold-reg">{{visitedUser.followees.length+" "}}</span>following
               </p>
             </div>
@@ -67,13 +67,13 @@
             </div>
           </div>
           <div class="numbers">
-            <p>
+            <p v-if="album">
               <span v-if="album" class="bold-reg">{{album.length+" "}}</span>posts
             </p>
-            <p>
+            <p v-if="visitedUser.followers">
               <span class="bold-reg">{{visitedUser.followers.length+" "}}</span>followers
             </p>
-            <p>
+            <p v-if="visitedUser.followees">
               <span class="bold-reg">{{visitedUser.followees.length+" "}}</span>following
             </p>
           </div>

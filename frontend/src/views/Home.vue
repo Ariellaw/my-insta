@@ -12,7 +12,7 @@
     <view-image
       @goBack1Image="goBack1Image"
       @goForward1Img="goForward1Img"
-      v-if="showModal"
+      v-if="showModal && userImages"
       :image="chosenImage"
       @close="closeModal()"
       :albumLength="userImages.length"
