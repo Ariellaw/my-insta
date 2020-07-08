@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+  <script>
 import gallaryOfImages from "../components/gallary-of-images.vue";
 import secrets from "../../secrets.js";
 import axios from "axios";
@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     getLocation(keyword) {
-
       this.getCountryInfo(keyword);
       this.city = keyword.charAt(0).toUpperCase() + keyword.slice(1);
       this.$store
@@ -83,7 +82,9 @@ export default {
         .then(images => {
           this.images = images;
           this.mainImage =
-            this.images.length > 0 ? this.images[0].image : defaultLocationImage;
+            this.images.length > 0
+              ? this.images[0].image
+              : defaultLocationImage;
         })
         .catch(err => {
           console.log("getHashtagImages  ERR", err);
@@ -117,14 +118,20 @@ export default {
             contents.results[
               Math.floor(Math.random() * contents.results.length)
             ];
+
           const photos = result.photos;
-          this.mainImage = photos
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photos[0].photo_reference}&key=${this.googleAPI}`
+          if (!photos) {
+            this.mainImage = this.defaultLocationImage;
+            return;
+          }
+          const googleApiImage = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photos[0].photo_reference}&key=${this.googleAPI}`;
+          this.mainImage = googleApiImage
+            ? googleApiImage
             : defaultLocationImage;
         })
-        .catch(() => {
+        .catch(error => {
           this.mainImage = defaultLocationImage;
-          console.log("Can’t access + response. Blocked by browser?");
+          console.log("Can’t access + response. Blocked by browser?", error);
         });
     },
 
@@ -137,6 +144,7 @@ export default {
           var searchResult = res.data.results[0];
           this.country = searchResult.components.country;
           this.loadMap(searchResult.geometry.lat, searchResult.geometry.lng);
+          this.mainImage = defaultLocationImage;
           this.getImageOfCity(
             searchResult.geometry.lat,
             searchResult.geometry.lng
@@ -146,3 +154,4 @@ export default {
   }
 };
 </script>
+</template>
