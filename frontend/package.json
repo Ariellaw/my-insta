@@ -7,7 +7,7 @@
     "build": "vue-cli-service build --dest ../backend/public"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "cloudinary-core": "^2.10.1",
     "lodash.update": "^4.10.2",
     "moment": "^2.27.0",
